@@ -133,9 +133,14 @@ export default function Closet() {
                             onChangeText={setBrand}
                             value={brand}
                         />
-                        {image ? 
-                            <Image className="self-center mb-4" source={{ uri: image.uri }} style={{ width: 200, height: 200 }} />
-                        : (
+                        {image ? (
+                            <View className="flex flex-col items-center">
+                                <Image className="self-center mb-2" source={{ uri: image.uri }} style={{ width: 200, height: 200 }} />
+                                <Pressable className="p-2 border rounded-sm border-neutral-200 mb-4" onPress={() => setImage(null)}>
+                                    <Ionicons name="close-outline" color="rgb(239, 68, 68)" size={24}  />
+                                </Pressable>
+                            </View>
+                        ) : (
                             <View className="flex flex-row justify-between w-full">
                                 <Pressable
                                     className="flex items-center flex-col py-2 px-3 border rounded-sm border-neutral-200 mb-4 w-[48%]"
