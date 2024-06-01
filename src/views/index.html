@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Outfit Designer</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" type="text/css" href="/css/index.css">
+		<script src="/js/htmx.min.js"></script>
+	</head>
+	<body>
+		<header class="flex flex-row justify-center items-center p-2 w-full border-b fixed top-0 left-0 bg-white">
+			<section class="flex flex-row justify-between items-center w-full max-w-2xl">
+				<a href="/" class="font-bold">Outfit Designer</a>
+				<nav class="flex items-center">
+					<a href="/" class="text-sm text-zinc-600 hover:text-zinc-950 ml-5">About</a>
+					<a href="/" class="text-sm text-zinc-600 hover:text-zinc-950 ml-5">Screenshots</a>
+					<a href="#log-in" id="log-in" class="text-sm text-center font-medium text-white ml-5 p-2 bg-zinc-950 hover:bg-zinc-800 rounded min-w-16">Log In</a>
+				</nav>
+			</section>
+		</header>
+		<main class="flex justify-center items-center w-full h-screen">
+			<section class="p-2">
+				<h1 class="text-2xl font-bold">Design your closet</h1>
+			</section>
+		</main>
+		<section class="flex justify-center items-center w-full h-screen fixed top-0 left-0 bg-zinc-950/50 hidden" id="login-dialog">
+			<section class="flex flex-col p-4 bg-white rounded w-full max-w-xs">
+				<button class="ml-auto close">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">
+						<path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z" />
+					</svg>
+				</button>
+
+				<h2 class="text-xl font-medium">Log In</h2>	
+				<p>Welcome back to Outfit Designer.</p>
+
+				<form class="flex flex-col mt-3">
+					<label for="email-input" class="text-sm font-medium mb-1">E-mail</label>
+					<input type="email" id="email-input" name="email" class="text-sm p-2 border border-zinc-400 rounded mb-2">
+					<label for="password-input" class="text-sm font-medium mb-1">Password</label>
+					<input type="Password" id="password-input" name="password" class="text-sm p-2 border border-zinc-400 rounded mb-2">
+					<button class="w-full p-2 bg-zinc-950 text-white font-medium text-sm rounded hover:bg-zinc-800 mt-2" hx-post="/log-in">Submit</button>
+				</form>
+				<a href="#sign-up" class="text-sm text-center mt-2 text-zinc-600 hover:text-zinc-950" id="signup-toggle">New here? Sign Up</a>
+			</section>	
+		</section>
+		<section class="flex justify-center items-center w-full h-screen fixed top-0 left-0 bg-zinc-950/50 hidden" id="signup-dialog">
+			<section class="flex flex-col p-4 bg-white rounded w-full max-w-xs">
+				<button class="ml-auto close">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">
+						<path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z" />
+					</svg>
+				</button>
+
+				<h2 class="text-xl font-medium">Sign Up</h2>	
+				<p>Welcome to Outfit Designer.</p>
+
+				<form class="flex flex-col mt-3">
+					<label for="name-input" class="text-sm font-medium mb-1">Name</label>
+					<input type="text" id="name-input" name="name" class="text-sm p-2 border border-zinc-400 rounded mb-2">
+					<label for="email-input" class="text-sm font-medium mb-1">E-mail</label>
+					<input type="email" id="email-input" name="email" class="text-sm p-2 border border-zinc-400 rounded mb-2">
+					<label for="password-input" class="text-sm font-medium mb-1">Password</label>
+					<input type="Password" id="password-input" name="password" class="text-sm p-2 border border-zinc-400 rounded mb-2">
+					<button class="w-full p-2 bg-zinc-950 text-white font-medium text-sm rounded hover:bg-zinc-800 mt-2" hx-post="/sign-up">Submit</button>
+				</form>
+				<a href="#log-in" class="text-sm text-center mt-2 text-zinc-600 hover:text-zinc-950" id="login-toggle">Already have an account? Log In</a>
+			</section>	
+		</section>
+	</body>
+	<script src="/js/index.js"></script>
+</html>

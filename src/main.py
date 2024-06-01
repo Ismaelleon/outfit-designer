@@ -1,0 +1,27 @@
+import os
+from flask import Flask
+from flask_pymongo import PyMongo
+from flask_session import Session
+from routes import setup_router 
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
+
+# Init flask app 
+app = Flask(__name__, template_folder="views")
+
+# Setup mongo client
+app.config["MONGO_URI"] = os.environ["MONGO_URI"]
+mongo = PyMongo(app)
+
+# Setup server sessions
+app.config["SESSION_PERMANENT"] = True 
+app.config["SESSION_TYPE"] = "mongodb" 
+app.config["SESSION_MONGODB"] = mongo 
+app.config["SESSION_MONGODB_DB"] = os.environ["MONGO_DB"] 
+app.config["SESSION_MONGODB_COLLECTION"] = "sessions" 
+Session(app)
+
+# Setup routes
+setup_router(app, mongo)
