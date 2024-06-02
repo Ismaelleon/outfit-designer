@@ -36,7 +36,11 @@ def setup_router (app, mongo):
     def closet ():
         # If user logged in render template
         if session.get("id"):
-            return render_template('closet.html')
+            # Get user document
+            user_id = session.get("id")
+            user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
+
+            return render_template('closet.html', closet=user['closet'])
 
         # Otherwise, redirect to the home page
         return redirect("/")
@@ -66,8 +70,8 @@ def setup_router (app, mongo):
             image_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
             # Upload image to cloudinary
-            cloudinary.uploader.upload(os.path.join(os.getcwd(), f'static/images/{filename}'), public_id=filename, overwrite=False)
-            image_src = CloudinaryImage(filename).build_url()
+            result = cloudinary.uploader.upload(os.path.join(os.getcwd(), f'static/images/{filename}'), public_id=filename, overwrite=False)
+            image_src = result['secure_url']
 
             # Get user document
             user_id = session.get("id")

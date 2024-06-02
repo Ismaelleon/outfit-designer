@@ -55,10 +55,11 @@
 					</section>
 				</header>
 				<section class="grid grid-cols-3 gap-2 mt-4" id="outfits-list">
+					{% for clothing_item in closet %}
 					<section class="flex flex-col p-3 rounded border">
-						<img src="https://elevennewyork.com/wp-content/uploads/2018/02/02_white-tee_back-scaled.jpg" alt="" class="w-full rounded mb-2">	
+						<img src="{{ clothing_item['image'] }}" alt="" class="w-full rounded mb-2">	
 						<header class="flex flex-row justify-between items-center">
-							<a href="/outfits/id-goes-here" class="text-base font-bold">White T-Shirt</a>
+							<a href="/outfits/id-goes-here" class="text-base font-bold">{{ clothing_item['name'] }}</a>
 							<button class="p-1 relative">
 								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
 									<path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
@@ -74,11 +75,11 @@
 								</ul>
 							</button>
 						</header>
-						<span class="text-sm">Brand: Renner</span>
-						<span class="text-sm">Type: T-shirt</span>
-						<span class="text-sm">Colors: White</span>
-						<span class="text-sm">Added: 12/06/2024 </span>
+						<span class="text-sm">Brand: {{ clothing_item['brand'] }}</span>
+						<span class="text-sm">Type: {{ clothing_item['type'].capitalize() }}</span>
+						<span class="text-sm">Colors: {{ clothing_item['colors'].capitalize() }}</span>
 					</section>	
+					{% endfor %}
 				</section>
 			</section>
 		</main>
