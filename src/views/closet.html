@@ -54,12 +54,12 @@
 						</a>
 					</section>
 				</header>
-				<section class="grid grid-cols-3 gap-2 mt-4" id="outfits-list">
+				<section class="grid grid-cols-3 gap-2 mt-4" id="clothing-list">
 					{% for clothing_item in closet %}
 					<section class="flex flex-col p-3 rounded border">
 						<img src="{{ clothing_item['image'] }}" alt="" class="w-full rounded mb-2">	
 						<header class="flex flex-row justify-between items-center">
-							<a href="/outfits/id-goes-here" class="text-base font-bold">{{ clothing_item['name'] }}</a>
+							<a href="/closet/{{ clothing_item['_id'] }}" class="text-base font-bold">{{ clothing_item['name'] }}</a>
 							<button class="p-1 relative">
 								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
 									<path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
@@ -84,5 +84,5 @@
 			</section>
 		</main>
 	</body>
-	<script src="/js/outfits.js"></script>
+	<script src="/js/closet.js"></script>
 </html>
