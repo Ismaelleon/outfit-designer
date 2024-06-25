@@ -8,32 +8,7 @@
 		<script src="/js/htmx.min.js"></script>
 	</head>
 	<body>
-		<header class="flex flex-row justify-center items-center p-2 w-full border-b fixed top-0 left-0 bg-white">
-			<section class="flex flex-row justify-between items-center w-full max-w-3xl">
-				<a href="/" class="font-bold">Outfit Designer</a>
-				<nav class="flex items-center">
-					<a href="/outfits" class="text-sm text-zinc-600 hover:text-zinc-950 ml-5 flex flex-row items-center py-2 font-medium">
-						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5 -translate-x-1">
-							<path fill-rule="evenodd" d="M9.293 2.293a1 1 0 0 1 1.414 0l7 7A1 1 0 0 1 17 11h-1v6a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-6H3a1 1 0 0 1-.707-1.707l7-7Z" clip-rule="evenodd" />
-						</svg>
-						Outfits
-					</a>
-					<a href="/closet" class="text-sm text-zinc-950 hover:text-zinc-950 ml-5 flex flex-row items-center py-2">
-						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5 -translate-x-1">
-							<path d="M3.75 3A1.75 1.75 0 0 0 2 4.75v3.26a3.235 3.235 0 0 1 1.75-.51h12.5c.644 0 1.245.188 1.75.51V6.75A1.75 1.75 0 0 0 16.25 5h-4.836a.25.25 0 0 1-.177-.073L9.823 3.513A1.75 1.75 0 0 0 8.586 3H3.75ZM3.75 9A1.75 1.75 0 0 0 2 10.75v4.5c0 .966.784 1.75 1.75 1.75h12.5A1.75 1.75 0 0 0 18 15.25v-4.5A1.75 1.75 0 0 0 16.25 9H3.75Z" />
-						</svg>
-						Closet
-					</a>
-					<a href="/profile" class="text-sm text-zinc-600 hover:text-zinc-950 ml-5 flex flex-row items-center py-2">
-						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5 -translate-x-1">
-							<path fill-rule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-5.5-2.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0ZM10 12a5.99 5.99 0 0 0-4.793 2.39A6.483 6.483 0 0 0 10 16.5a6.483 6.483 0 0 0 4.793-2.11A5.99 5.99 0 0 0 10 12Z" clip-rule="evenodd" />
-						</svg>
-
-						Profile
-					</a>
-				</nav>
-			</section>
-		</header>
+		{% include 'components/navbar.html' %}
 		<main class="flex justify-center w-full pt-[53px] p-2">
 			<section class="w-full max-w-3xl pt-4">
 				<header class="flex flex-row justify-between items-center">
@@ -118,25 +93,8 @@
 								<label for="color-cyan">Cyan</label>
 							</p>
 						</fieldset>
-						<section class="flex flex-col hidden col-start-2 col-end-3 row-start-1 row-end-6" id="image-preview">
-							<img src="" class="rounded mb-2 self-center max-h-[380px]">
-							<button class="self-end p-2 rounded-3xl border border-zinc-400 hover:bg-zinc-400">
-								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">
-									<path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z" />
-								</svg>
-							</button>
-						</section>
+						{% include 'components/image-input.html' %}
 						<button class="w-full p-2 bg-zinc-950 text-white font-medium text-sm rounded hover:bg-zinc-800 mt-2 col-start-1 col-end-2">Submit</button>
-						<p class="col-start-2 col-end-3 row-start-1 row-end-3 flex flex-col">
-							<label for="image-input" class="flex flex-row justify-center items-center border border-dashed border-zinc-400 rounded w-full p-4 text-sm my-1 font-medium min-h-32">
-
-								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4 mr-1">
-									<path fill-rule="evenodd" d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
-								</svg>
-								Add Image
-							</label>
-							<input type="file" name="image" id="image-input" accept="image/jpg, image/jpeg, image/png" class="hidden">
-						</p>
 					</form>
 				</section>
 			</section>

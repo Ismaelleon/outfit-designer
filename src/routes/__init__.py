@@ -18,7 +18,12 @@ def setup_router (app, mongo):
     def outfits ():
         # If user logged in render template
         if session.get("id"):
-            return render_template('outfits.html')
+            # Get user document 
+            user_id = session.get("id")
+            user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
+            outfits = user['outfits']
+
+            return render_template('outfits.html', outfits=outfits)
 
         # Otherwise, redirect to the home page
         return redirect("/")
@@ -36,6 +41,21 @@ def setup_router (app, mongo):
             name = request.form['name']
             season = request.form['season']
             clothes = request.form.getlist('clothes')
+            image_file = request.files['image']
+            print(name)
+
+            # If user does not select a file or some inputs are not valid
+            if image_file.filename == '' or name == '' or len(clothes) == 0:
+                pass
+
+            # Save image file
+            filename = secure_filename(str(uuid.uuid4()))
+            image_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+            # Upload image to cloudinary
+            result = cloudinary.uploader.upload(os.path.join(os.getcwd(), f'static/images/{filename}'), public_id=filename, overwrite=False)
+            image_src = result['secure_url']
+            
 
             # Get user document
             user_id = session.get("id")
@@ -48,6 +68,7 @@ def setup_router (app, mongo):
                 '_id': new_outfit_id,
                 'name': name,
                 'season': season,
+                'image': image_src,
                 'clothes': clothes,
                 'created': datetime.datetime.now().strftime("%d/%m/%y"),
             })
@@ -70,6 +91,53 @@ def setup_router (app, mongo):
 
         # Otherwise, redirect to the home page
         return redirect("/")
+
+    @app.route("/outfits/delete/<string:outfit_id>", methods=['DELETE'])
+    def delete_outfits (outfit_id):
+        if request.method == 'DELETE':
+            if session.get("id"):
+                # Get user document
+                user_id = session.get("id")
+                user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
+
+                # Remove clothes from closet list 
+                outfits = user['outfits']
+                for outfit in outfits:
+                    if str(outfit['_id']) == outfit_id:
+                        outfits.remove(outfit)
+
+                # Save updated closet
+                result = mongo.db.users.update_one({"_id": ObjectId(user_id)}, {"$set": {"outfits": outfits}})
+
+                # Return closet html
+                html = ''
+                for outfit in outfits: 
+                    html += f'''
+                        <section class="flex flex-col p-3 rounded border">
+                            <img src={ outfit['image'] } alt="" class="w-full rounded mb-2">	
+                            <header class="flex flex-row justify-between items-center">
+                                <a href={ '/outfits/{}'.format(outfit['_id']) } class="text-base font-bold">{ outfit['name'] }</a>
+                                <button class="p-1 relative">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
+                                    </svg>
+                                    <ul class="absolute right-0 top-8 min-w-36 bg-white rounded border hidden">
+                                        <li class="flex justify-between items-center text-sm font-medium w-full p-2 hover:bg-zinc-200" hx-delete={ '/outfits/delete/{}'.format(outfit['_id']) }>
+                                            Delete Outfit
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="red" class="size-4">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                            </svg>
+                                        </li>
+                                    </ul>
+                                </button>
+                            </header>
+                            <span class="text-sm">Clothes: { outfit['clothes']|length }</span>
+                            <span class="text-sm">Season: { outfit['season'] } </span>
+                            <span class="text-sm">Created: { outfit['created'] } </span>
+                        </section>	
+                    '''
+
+                return html
 
     @app.route("/closet")
     def closet ():
