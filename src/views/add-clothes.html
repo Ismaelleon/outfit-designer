@@ -40,12 +40,12 @@
 					<h2 class="text-base font-bold">Add clothes</h2>
 				</header>
 				<section class="w-full mt-4">
-					<form class="grid grid-cols-4 flex-col" hx-post="/closet/new" hx-encoding="multipart/form-data">
-						<p class="col-start-1 col-end-3 flex flex-col">
+					<form class="grid grid-cols-2 gap-3 flex-col" hx-post="/closet/new" hx-encoding="multipart/form-data">
+						<p class="col-start-1 col-end-2 flex flex-col">
 							<label for="name-input" class="text-sm font-medium mb-1">Name</label>
 							<input type="text" id="name-input" name="name" class="text-sm p-2 border border-zinc-400 rounded mb-2">
 						</p>
-						<p class="col-start-1 col-end-3 flex flex-col">
+						<p class="col-start-1 col-end-2 flex flex-col">
 							<label for="type-input" class="text-sm font-medium mb-1">Type</label>
 							<select class="text-sm p-2 border border-zinc-400 rounded mb-2 bg-white" name="type" id="type-input">
 								<option value="cap">Cap</option>
@@ -63,11 +63,11 @@
 								<option value="t-shirt">T-Shirt</option>
 							</select>
 						</p>
-						<p class="col-start-1 col-end-3 flex flex-col">
+						<p class="col-start-1 col-end-2 flex flex-col">
 							<label for="brand-input" class="text-sm font-medium mb-1">Brand</label>
 							<input type="text" id="brand-input" name="brand" class="text-sm p-2 border border-zinc-400 rounded mb-2">
 						</p>
-						<fieldset class="grid grid-cols-3 gap-1 flex-col items-start mb-2 col-start-1 col-end-3">
+						<fieldset class="grid grid-cols-3 gap-1 flex-col items-start mb-2 col-start-1 col-end-2">
 							<legend class="text-sm font-medium mb-1">Colors</legend>
 							<p class="text-sm">
 								<input type="checkbox" name="color" value="white" id="color-white" class="accent-zinc-200">
@@ -118,8 +118,17 @@
 								<label for="color-cyan">Cyan</label>
 							</p>
 						</fieldset>
-						<p class="col-start-1 col-end-3 flex flex-col">
-							<label for="image-input" class="flex flex-row justify-center items-center border border-dashed border-zinc-400 rounded w-full p-4 text-sm my-1 font-medium">
+						<section class="flex flex-col hidden col-start-2 col-end-3 row-start-1 row-end-6" id="image-preview">
+							<img src="" class="rounded mb-2 self-center max-h-[380px]">
+							<button class="self-end p-2 rounded-3xl border border-zinc-400 hover:bg-zinc-400">
+								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">
+									<path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z" />
+								</svg>
+							</button>
+						</section>
+						<button class="w-full p-2 bg-zinc-950 text-white font-medium text-sm rounded hover:bg-zinc-800 mt-2 col-start-1 col-end-2">Submit</button>
+						<p class="col-start-2 col-end-3 row-start-1 row-end-3 flex flex-col">
+							<label for="image-input" class="flex flex-row justify-center items-center border border-dashed border-zinc-400 rounded w-full p-4 text-sm my-1 font-medium min-h-32">
 
 								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4 mr-1">
 									<path fill-rule="evenodd" d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
@@ -128,15 +137,6 @@
 							</label>
 							<input type="file" name="image" id="image-input" accept="image/jpg, image/jpeg, image/png" class="hidden">
 						</p>
-						<section class="flex flex-col hidden col-start-1 col-end-3" id="image-preview">
-							<img src="" class="rounded mb-2">
-							<button class="self-end p-2 rounded-3xl border border-zinc-400 hover:bg-zinc-400">
-								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">
-									<path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z" />
-								</svg>
-							</button>
-						</section>
-						<button class="w-full p-2 bg-zinc-950 text-white font-medium text-sm rounded hover:bg-zinc-800 mt-2 col-start-1 col-end-3">Submit</button>
 					</form>
 				</section>
 			</section>
