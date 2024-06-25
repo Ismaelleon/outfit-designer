@@ -1,4 +1,4 @@
-import os, bcrypt, cloudinary, cloudinary.uploader
+import os, bcrypt, cloudinary, cloudinary.uploader, uuid
 from flask import send_from_directory, render_template, redirect, request, make_response, session
 from cloudinary import CloudinaryImage
 from werkzeug.utils import secure_filename
@@ -86,7 +86,7 @@ def setup_router (app, mongo):
                 return make_response({'msg': 'Bad Request'}, 400)
 
             # Save image file
-            filename = secure_filename(image_file.filename)
+            filename = secure_filename(str(uuid.uuid4()))
             image_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
             # Upload image to cloudinary
