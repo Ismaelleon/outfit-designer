@@ -1,4 +1,4 @@
-import os, bcrypt, cloudinary, cloudinary.uploader, uuid
+import os, bcrypt, cloudinary, cloudinary.uploader, uuid, datetime
 from flask import send_from_directory, render_template, redirect, request, make_response, session
 from cloudinary import CloudinaryImage
 from werkzeug.utils import secure_filename
@@ -23,8 +23,43 @@ def setup_router (app, mongo):
         # Otherwise, redirect to the home page
         return redirect("/")
 
-    @app.route("/outfits/new")
+    @app.route("/outfits/new", methods=['POST', 'GET'])
     def create_outfit ():
+        if request.method == 'POST':
+            # If user not logged in
+            if not session.get("id"):
+                res = make_response({"msg": "Unauthorized"}, 401)
+                res.headers['HX-Redirect'] = '/outfits'
+                return res
+
+            # Get request body 
+            name = request.form['name']
+            season = request.form['season']
+            clothes = request.form.getlist('clothes')
+
+            # Get user document
+            user_id = session.get("id")
+            user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
+
+            # Update closet array 
+            outfits = user['outfits']
+            new_outfit_id = ObjectId()
+            outfits.append({
+                '_id': new_outfit_id,
+                'name': name,
+                'season': season,
+                'clothes': clothes,
+                'created': datetime.datetime.now().strftime("%d/%m/%y"),
+            })
+
+            # Update document with updated closet array
+            result = mongo.db.users.update_one({"_id": ObjectId(user_id)}, {"$set": {"outfits": outfits}})
+            
+            res = make_response({'msg': 'OK'}, 200)
+            res.headers['HX-Redirect'] = f'/outfits/{new_outfit_id}'
+            return res
+            
+
         # If user logged in render template
         if session.get("id"):
             # Get user document

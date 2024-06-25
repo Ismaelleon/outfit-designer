@@ -586,56 +586,32 @@ video {
   grid-column-start: 1;
 }
 
-.col-start-3 {
-  grid-column-start: 3;
-}
-
 .col-start-2 {
   grid-column-start: 2;
-}
-
-.col-end-3 {
-  grid-column-end: 3;
-}
-
-.col-end-5 {
-  grid-column-end: 5;
 }
 
 .col-end-2 {
   grid-column-end: 2;
 }
 
-.row-span-1 {
-  grid-row: span 1 / span 1;
-}
-
-.row-span-2 {
-  grid-row: span 2 / span 2;
+.col-end-3 {
+  grid-column-end: 3;
 }
 
 .row-start-1 {
   grid-row-start: 1;
 }
 
-.row-end-2 {
-  grid-row-end: 2;
-}
-
-.row-end-auto {
-  grid-row-end: auto;
-}
-
-.row-end-5 {
-  grid-row-end: 5;
+.row-end-3 {
+  grid-row-end: 3;
 }
 
 .row-end-6 {
   grid-row-end: 6;
 }
 
-.row-end-3 {
-  grid-row-end: 3;
+.row-end-5 {
+  grid-row-end: 5;
 }
 
 .my-1 {
@@ -675,10 +651,6 @@ video {
   margin-top: 1rem;
 }
 
-.mt-5 {
-  margin-top: 1.25rem;
-}
-
 .flex {
   display: flex;
 }
@@ -689,10 +661,6 @@ video {
 
 .hidden {
   display: none;
-}
-
-.aspect-\[3\/4\] {
-  aspect-ratio: 3/4;
 }
 
 .size-4 {
@@ -718,32 +686,40 @@ video {
   height: 100vh;
 }
 
-.max-h-\[424px\] {
-  max-height: 424px;
-}
-
-.max-h-\[386px\] {
-  max-height: 386px;
-}
-
 .max-h-\[380px\] {
   max-height: 380px;
+}
+
+.max-h-\[583px\] {
+  max-height: 583px;
+}
+
+.max-h-32 {
+  max-height: 8rem;
+}
+
+.max-h-64 {
+  max-height: 16rem;
+}
+
+.max-h-96 {
+  max-height: 24rem;
+}
+
+.max-h-\[80\%\] {
+  max-height: 80%;
+}
+
+.max-h-\[100\%\] {
+  max-height: 100%;
 }
 
 .min-h-32 {
   min-height: 8rem;
 }
 
-.min-h-64 {
-  min-height: 16rem;
-}
-
 .w-full {
   width: 100%;
-}
-
-.w-auto {
-  width: auto;
 }
 
 .min-w-16 {
@@ -779,16 +755,20 @@ video {
   cursor: pointer;
 }
 
-.grid-cols-3 {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+.auto-rows-auto {
+  grid-auto-rows: auto;
 }
 
-.grid-cols-4 {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+.auto-rows-max {
+  grid-auto-rows: max-content;
 }
 
 .grid-cols-2 {
   grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.grid-cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .flex-row {
@@ -805,10 +785,6 @@ video {
 
 .items-center {
   align-items: center;
-}
-
-.justify-start {
-  justify-content: flex-start;
 }
 
 .justify-center {
@@ -831,10 +807,6 @@ video {
   gap: 0.75rem;
 }
 
-.self-start {
-  align-self: flex-start;
-}
-
 .self-end {
   align-self: flex-end;
 }
@@ -845,6 +817,10 @@ video {
 
 .overflow-hidden {
   overflow: hidden;
+}
+
+.overflow-scroll {
+  overflow: scroll;
 }
 
 .rounded {
