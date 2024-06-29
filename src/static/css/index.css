@@ -570,16 +570,8 @@ video {
   left: 0px;
 }
 
-.right-0 {
-  right: 0px;
-}
-
 .top-0 {
   top: 0px;
-}
-
-.top-8 {
-  top: 2rem;
 }
 
 .col-start-1 {
@@ -600,14 +592,6 @@ video {
 
 .row-start-1 {
   grid-row-start: 1;
-}
-
-.row-end-3 {
-  grid-row-end: 3;
-}
-
-.row-end-6 {
-  grid-row-end: 6;
 }
 
 .row-end-5 {
@@ -686,48 +670,12 @@ video {
   height: 100vh;
 }
 
-.max-h-\[380px\] {
-  max-height: 380px;
-}
-
-.max-h-\[583px\] {
-  max-height: 583px;
-}
-
 .max-h-32 {
   max-height: 8rem;
 }
 
-.max-h-64 {
-  max-height: 16rem;
-}
-
-.max-h-96 {
-  max-height: 24rem;
-}
-
 .max-h-\[80\%\] {
   max-height: 80%;
-}
-
-.max-h-\[100\%\] {
-  max-height: 100%;
-}
-
-.max-h-8 {
-  max-height: 2rem;
-}
-
-.min-h-32 {
-  min-height: 8rem;
-}
-
-.min-h-16 {
-  min-height: 4rem;
-}
-
-.min-h-8 {
-  min-height: 2rem;
 }
 
 .w-full {
@@ -736,10 +684,6 @@ video {
 
 .min-w-16 {
   min-width: 4rem;
-}
-
-.min-w-36 {
-  min-width: 9rem;
 }
 
 .max-w-2xl {
@@ -758,17 +702,8 @@ video {
   max-width: 20rem;
 }
 
-.-translate-x-1 {
-  --tw-translate-x: -0.25rem;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
-}
-
 .cursor-pointer {
   cursor: pointer;
-}
-
-.auto-rows-auto {
-  grid-auto-rows: auto;
 }
 
 .auto-rows-max {
@@ -819,18 +754,6 @@ video {
   gap: 0.75rem;
 }
 
-.self-start {
-  align-self: flex-start;
-}
-
-.self-end {
-  align-self: flex-end;
-}
-
-.self-center {
-  align-self: center;
-}
-
 .overflow-hidden {
   overflow: hidden;
 }
@@ -841,10 +764,6 @@ video {
 
 .rounded {
   border-radius: 0.25rem;
-}
-
-.rounded-3xl {
-  border-radius: 1.5rem;
 }
 
 .border {
@@ -882,10 +801,6 @@ video {
   background-color: rgb(9 9 11 / 0.5);
 }
 
-.p-1 {
-  padding: 0.25rem;
-}
-
 .p-2 {
   padding: 0.5rem;
 }
@@ -896,11 +811,6 @@ video {
 
 .p-4 {
   padding: 1rem;
-}
-
-.py-2 {
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
 }
 
 .pt-4 {
@@ -955,11 +865,6 @@ video {
 .text-zinc-600 {
   --tw-text-opacity: 1;
   color: rgb(82 82 91 / var(--tw-text-opacity));
-}
-
-.text-zinc-950 {
-  --tw-text-opacity: 1;
-  color: rgb(9 9 11 / var(--tw-text-opacity));
 }
 
 .accent-black {
@@ -1058,11 +963,6 @@ video {
 .hover\:bg-zinc-200:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(228 228 231 / var(--tw-bg-opacity));
-}
-
-.hover\:bg-zinc-400:hover {
-  --tw-bg-opacity: 1;
-  background-color: rgb(161 161 170 / var(--tw-bg-opacity));
 }
 
 .hover\:bg-zinc-800:hover {
