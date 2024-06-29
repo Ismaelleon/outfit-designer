@@ -18,7 +18,7 @@
 		</button>
 	</header>
 	<span class="text-sm">Clothes: {{ outfit['clothes']|length }}</span>
-	<span class="text-sm">Season: {{ outfit['name'] }} </span>
+	<span class="text-sm">Season: {{ outfit['season'].capitalize() }} </span>
 	<span class="text-sm">Created: {{ outfit['created'] }} </span>
 </section>	
 {% endfor %}
