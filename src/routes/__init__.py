@@ -111,7 +111,7 @@ def setup_router (app, mongo):
 
                 # Return closet html
                 html = ''
-                if len(outfits) < 1:
+                if len(outfits) > 0:
                     for outfit in outfits: 
                         html += f'''
                             <section class="flex flex-col p-3 rounded border">
@@ -132,7 +132,7 @@ def setup_router (app, mongo):
                                         </ul>
                                     </button>
                                 </header>
-                                <span class="text-sm">Clothes: { outfit['clothes']|length }</span>
+                                <span class="text-sm">Clothes: { len(outfit['clothes']) }</span>
                                 <span class="text-sm">Season: { outfit['season'] } </span>
                                 <span class="text-sm">Created: { outfit['created'] } </span>
                             </section>	
@@ -252,8 +252,7 @@ def setup_router (app, mongo):
 
                 # Return closet html
                 html = ''
-
-                if len(closet) < 1:
+                if len(closet) > 0:
                     for clothing_item in closet: 
                         html += f'''
                             <section class="flex flex-col p-3 rounded border" id={ clothing_item['_id'] }>

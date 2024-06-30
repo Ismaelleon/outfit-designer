@@ -722,20 +722,12 @@ video {
   max-width: 48rem;
 }
 
-.max-w-96 {
-  max-width: 24rem;
-}
-
 .max-w-sm {
   max-width: 24rem;
 }
 
 .max-w-xs {
   max-width: 20rem;
-}
-
-.max-w-36 {
-  max-width: 9rem;
 }
 
 .-translate-x-1 {
@@ -749,10 +741,6 @@ video {
 
 .auto-rows-max {
   grid-auto-rows: max-content;
-}
-
-.auto-rows-min {
-  grid-auto-rows: min-content;
 }
 
 .grid-cols-2 {
