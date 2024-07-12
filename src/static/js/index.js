@@ -25,3 +25,11 @@ logInButton.addEventListener('click', () => toggleDialog('log-in'));
 signUpToggleLink.addEventListener('click', () => toggleDialog('sign-up'));
 logInToggleLink.addEventListener('click', () => toggleDialog('log-in'));
 closeButtons.forEach(el => el.addEventListener('click', () => toggleDialog('all')))
+
+function toggleMenu () {
+	document.getElementById('menu').classList.toggle('hidden');
+	document.getElementById('menu').classList.toggle('flex');
+}
+
+document.getElementById('menu-open').addEventListener('click', toggleMenu);
+document.getElementById('menu-close').addEventListener('click', toggleMenu);

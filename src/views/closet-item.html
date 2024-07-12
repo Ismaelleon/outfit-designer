@@ -1,24 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<title>Outfit Designer</title>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<link rel="stylesheet" type="text/css" href="/css/index.css">
-		<script src="/js/htmx.min.js"></script>
-	</head>
+	{% include 'components/head.html' %}
 	<body>
 		{% include 'components/navbar.html' %}
-		<main class="flex justify-center w-full pt-[53px] p-2">
+		<main class="flex justify-center w-full pt-[53px] px-4">
 			<section class="w-full max-w-3xl pt-4">
 				<header class="flex flex-row justify-between items-center mb-2">
-					<h2 class="text-base font-bold">{{ clothing_item['name'].capitalize() }}</h2>
+					<h2 class="text-lg font-bold">{{ clothing_item['name'].capitalize() }}</h2>
 				</header>
 				<section class="flex flex-col">
-					<img src="{{ clothing_item['image'] }}" class="max-w-sm mb-2">
-					<span class="text-sm"><span class="font-medium">Brand</span>: {{ clothing_item['brand'].capitalize() }}</span>
-					<span class="text-sm"><span class="font-medium">Type</span>: {{ clothing_item['type'].capitalize() }}</span>
-					<span class="text-sm"><span class="font-medium">Colors</span>: {{ clothing_item['colors'].capitalize() }}</span>
+					<img src="{{ clothing_item['image'] }}" class="max-w-xs mb-2 rounded">
+					<span><span class="font-medium">Brand</span>: {{ clothing_item['brand'].capitalize() }}</span>
+					<span><span class="font-medium">Type</span>: {{ clothing_item['type'].capitalize() }}</span>
+					<span><span class="font-medium">Colors</span>: {{ clothing_item['colors'].capitalize() }}</span>
 				</section>
 			</section>
 		</main>
