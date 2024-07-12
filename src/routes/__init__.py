@@ -28,6 +28,22 @@ def setup_router (app, mongo):
         # Otherwise, redirect to the home page
         return redirect("/")
 
+    @app.route("/outfits/<string:outfit_id>")
+    def outfit (outfit_id):
+        # If user is logged in
+        if session.get("id"):
+            # Get user data
+            user_id = session.get("id")
+            user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
+
+            # Find outfit
+            outfit = {}
+            for outfit in user['outfits']:
+                if outfit['_id'] == outfit_id:
+                    outfit = outfit 
+
+            return render_template('outfit.html', outfit=outfit)
+
     @app.route("/outfits/new", methods=['POST', 'GET'])
     def create_outfit ():
         if request.method == 'POST':
@@ -288,7 +304,17 @@ def setup_router (app, mongo):
                     '''
 
                 return html
-            
+
+    @app.route("/profile")
+    def profile ():
+        # If user logged in render template
+        if session.get("id"):
+            # Get user document 
+            user_id = session.get("id")
+            user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
+
+        return render_template('profile.html', user=user)
+
 
     # Controllers
     @app.route("/sign-up", methods=['POST'])

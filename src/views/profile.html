@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+	{% include 'components/head.html' %}
+	<body>
+		{% include 'components/navbar.html' %}
+		<main class="flex justify-center w-full pt-[53px] px-4">
+			<section class="w-full max-w-3xl pt-4">
+				<header class="flex flex-row justify-between items-center pt-2">
+					<h2 class="text-lg sm:text-base font-bold">Your Profile</h2>
+				</header>
+				<section class="flex flex-col mt-4">
+					<i class="las la-user-circle text-4xl"></i>
+					<p class="font-medium sm:text-sm">{{ user['name'] }}</p>
+				</section>
+			</section>
+		</main>
+	</body>
+</html>
