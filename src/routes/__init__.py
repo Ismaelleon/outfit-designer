@@ -3,6 +3,7 @@ from flask import send_from_directory, render_template, redirect, request, make_
 from cloudinary import CloudinaryImage
 from werkzeug.utils import secure_filename
 from bson.objectid import ObjectId
+from rembg import remove
 
 def setup_router (app, mongo):
     # Static files
@@ -65,8 +66,15 @@ def setup_router (app, mongo):
                 pass
 
             # Save image file
-            filename = secure_filename(str(uuid.uuid4()))
-            image_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            image_filename = secure_filename(str(uuid.uuid4()))
+            image_file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            image_file.save(image_file_path)
+
+            # Remove image background
+            image_file = open(image_file_path, 'rb').read()
+            image_bg_removed = remove(image_file)
+            image_file = open(image_file_path, 'wb')
+            image_file.write(image_bg_removed)
 
             # Upload image to cloudinary
             result = cloudinary.uploader.upload(os.path.join(os.getcwd(), f'static/images/{filename}'), public_id=filename, overwrite=False)
@@ -178,11 +186,18 @@ def setup_router (app, mongo):
                 return make_response({'msg': 'Bad Request'}, 400)
 
             # Save image file
-            filename = secure_filename(str(uuid.uuid4()))
-            image_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            image_filename = secure_filename(str(uuid.uuid4()))
+            image_file_path = os.path.join(app.config['UPLOAD_FOLDER'], image_filename)
+            image_file.save(image_file_path)
+
+            # Remove image background
+            image_file = open(image_file_path, 'rb').read()
+            image_bg_removed = remove(image_file)
+            image_file = open(image_file_path, 'wb')
+            image_file.write(image_bg_removed)
 
             # Upload image to cloudinary
-            result = cloudinary.uploader.upload(os.path.join(os.getcwd(), f'static/images/{filename}'), public_id=filename, overwrite=False)
+            result = cloudinary.uploader.upload(os.path.join(os.getcwd(), f'static/images/{image_filename}'), public_id=image_filename, overwrite=False)
             image_src = result['secure_url']
 
             # Get user document
