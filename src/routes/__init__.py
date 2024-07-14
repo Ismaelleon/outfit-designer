@@ -101,7 +101,7 @@ def setup_router (app, mongo):
             result = mongo.db.users.update_one({"_id": ObjectId(user_id)}, {"$set": {"outfits": outfits}})
             
             res = make_response({'msg': 'OK'}, 200)
-            res.headers['HX-Redirect'] = f'/outfits/{new_outfit_id}'
+            res.headers['HX-Redirect'] = f'/outfits/{new_outfit_id}?redirect'
             return res
             
 
@@ -220,7 +220,7 @@ def setup_router (app, mongo):
             result = mongo.db.users.update_one({"_id": ObjectId(user_id)}, {"$set": {"closet": closet}})
             
             res = make_response({'msg': 'OK'}, 200)
-            res.headers['HX-Redirect'] = f'/closet/{new_clothing_id}'
+            res.headers['HX-Redirect'] = f'/closet/{new_clothing_id}?redirect'
             return res
 
         # If user logged in render template
