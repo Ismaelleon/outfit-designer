@@ -53,7 +53,16 @@
 								</header>
 								<span class="text-sm"><span class="font-medium">Brand</span>: {{ clothing_item['brand'].capitalize() }}</span>
 								<span class="text-sm"><span class="font-medium">Type</span>: {{ clothing_item['type'].capitalize() }}</span>
-								<span class="text-sm"><span class="font-medium">Colors</span>: {{ clothing_item['colors'].capitalize() }}</span>
+								<span class="text-sm">
+									<span class="font-medium">Colors</span>:
+									{% for color in clothing_item['colors'] %}
+										{% if loop.index < clothing_item['colors']|length: %}
+											{{ color.capitalize() }}, 
+										{% else %}
+											{{ color.capitalize() }}
+										{% endif %}
+									{% endfor %}
+								</span>
 								<section class="absolute left-0 top-0 w-full h-full bg-green-600/75 flex flex-col justify-center items-center text-white hidden">
 									<i class="las la-check-circle text-2xl"></i>
 									<p>Item selected</p>
