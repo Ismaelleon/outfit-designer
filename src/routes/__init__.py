@@ -77,9 +77,11 @@ def setup_router (app, mongo):
             image_file.write(image_bg_removed)
 
             # Upload image to cloudinary
-            result = cloudinary.uploader.upload(os.path.join(os.getcwd(), f'static/images/{image_filename}'), public_id=image_filename, overwrite=False)
+            result = cloudinary.uploader.upload(os.path.join(os.getcwd(), f'static/images/{image_filename}'), public_id=image_filename, overwrite=False, folder=os.environ['CLOUDINARY_OUTFIT_FOLDER'])
             image_src = result['secure_url']
             
+            # Delete image file
+            os.remove(image_file_path)
 
             # Get user document
             user_id = session.get("id")
@@ -197,8 +199,11 @@ def setup_router (app, mongo):
             image_file.write(image_bg_removed)
 
             # Upload image to cloudinary
-            result = cloudinary.uploader.upload(os.path.join(os.getcwd(), f'static/images/{image_filename}'), public_id=image_filename, overwrite=False)
+            result = cloudinary.uploader.upload(os.path.join(os.getcwd(), f'static/images/{image_filename}'), public_id=image_filename, overwrite=False, folder=os.environ['CLOUDINARY_CLOSET_FOLDER'])
             image_src = result['secure_url']
+
+            # Delete image file
+            os.remove(image_file_path)
 
             # Get user document
             user_id = session.get("id")
