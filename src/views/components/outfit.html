@@ -4,7 +4,7 @@
 		<img src={{ outfit['image'] }} alt="" class="w-full rounded mb-2">	
 		<header class="flex flex-row justify-between items-center">
 			<a href={{ '/outfits/{}'.format(outfit['_id']) }} class="text-base font-bold">{{ outfit['name'] }}</a>
-			<button class="p-1 relative z-0">
+			<button class="p-1 relative z-0" onclick="toggleMenu(event)">
 				<i class="las la-ellipsis-v text-xl"></i>
 				<ul class="absolute right-0 top-8 min-w-36 bg-white rounded border hidden">
 					<li class="flex justify-between items-center text-sm font-medium w-full p-2 hover:bg-zinc-200" hx-delete={{ '/outfits/delete/{}'.format(outfit['_id']) }} hx-swap="innerHTML" hx-target="#outfits-list">
@@ -22,3 +22,4 @@
 {% else %}
 	<h3 class="font-medium col-start-1 col-end-3 sm:col-start-2 sm:col-end-3 text-center">You haven't created an outfit yet!</h3>
 {% endif %}
+<script src="js/outfits.js"></script>
