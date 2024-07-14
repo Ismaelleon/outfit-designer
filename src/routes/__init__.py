@@ -77,7 +77,7 @@ def setup_router (app, mongo):
             image_file.write(image_bg_removed)
 
             # Upload image to cloudinary
-            result = cloudinary.uploader.upload(os.path.join(os.getcwd(), f'static/images/{image_filename}'), public_id=image_filename, overwrite=False, folder=os.environ['CLOUDINARY_OUTFIT_FOLDER'])
+            result = cloudinary.uploader.upload(os.path.join(os.getcwd(), f'static/images/{image_filename}'), public_id=image_filename, overwrite=False, folder=os.environ['CLOUDINARY_OUTFITS_FOLDER'])
             image_src = result['secure_url']
             
             # Delete image file
@@ -126,16 +126,21 @@ def setup_router (app, mongo):
                 user_id = session.get("id")
                 user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
 
-                # Remove clothes from closet list 
+
+                # Remove outfits from outfits list 
                 outfits = user['outfits']
                 for outfit in outfits:
                     if str(outfit['_id']) == outfit_id:
+                        # Remove image from cloudinary
+                        image_public_id = outfit['image'].split('/')[-1].split('.')[0]
+                        cloudinary.uploader.destroy(os.path.join(os.environ['CLOUDINARY_OUTFITS_FOLDER'], image_public_id))
+
                         outfits.remove(outfit)
 
-                # Save updated closet
+                # Save updated outfits 
                 result = mongo.db.users.update_one({"_id": ObjectId(user_id)}, {"$set": {"outfits": outfits}})
 
-                # Return closet html
+                # Return outfits html
                 return render_template('components/outfit.html', outfits=outfits)
 
     @app.route("/closet")
@@ -247,6 +252,9 @@ def setup_router (app, mongo):
                 closet = user['closet']
                 for item in closet:
                     if str(item['_id']) == clothing_id:
+                        # Remove image from cloudinary
+                        image_public_id = item['image'].split('/')[-1].split('.')[0]
+                        cloudinary.uploader.destroy(os.path.join(os.environ['CLOUDINARY_CLOSET_FOLDER'], image_public_id))
                         closet.remove(item)
 
                 # Save updated closet
