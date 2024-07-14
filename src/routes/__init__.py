@@ -67,7 +67,7 @@ def setup_router (app, mongo):
 
             # Save image file
             image_filename = secure_filename(str(uuid.uuid4()))
-            image_file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            image_file_path = os.path.join(app.config['UPLOAD_FOLDER'], image_filename)
             image_file.save(image_file_path)
 
             # Remove image background
@@ -77,7 +77,7 @@ def setup_router (app, mongo):
             image_file.write(image_bg_removed)
 
             # Upload image to cloudinary
-            result = cloudinary.uploader.upload(os.path.join(os.getcwd(), f'static/images/{filename}'), public_id=filename, overwrite=False)
+            result = cloudinary.uploader.upload(os.path.join(os.getcwd(), f'static/images/{image_filename}'), public_id=image_filename, overwrite=False)
             image_src = result['secure_url']
             
 
