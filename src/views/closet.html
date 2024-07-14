@@ -21,9 +21,7 @@
 				</header>
 				<section class="grid grid-cols-2 gap-2 mt-4 sm:grid-cols-3 w-full" id="clothing-list">
 					{% if closet|length != 0 %}
-						{% for clothing_item in closet %}
-							{% include 'components/clothing-item.html' %}
-						{% endfor %}
+						{% include 'components/clothing-item.html' %}
 					{% else %}
 						<h3 class="font-medium col-start-1 col-end-3 sm:col-start-2 sm:col-end-3 text-center">
 							You haven't added clothes yet!
