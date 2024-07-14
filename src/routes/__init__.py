@@ -126,41 +126,7 @@ def setup_router (app, mongo):
                 result = mongo.db.users.update_one({"_id": ObjectId(user_id)}, {"$set": {"outfits": outfits}})
 
                 # Return closet html
-                html = ''
-                if len(outfits) > 0:
-                    for outfit in outfits: 
-                        html += f'''
-                            <section class="flex flex-col p-3 rounded border">
-                                <img src={ outfit['image'] } alt="" class="w-full rounded mb-2">	
-                                <header class="flex flex-row justify-between items-center">
-                                    <a href={ '/outfits/{}'.format(outfit['_id']) } class="text-base font-bold">{ outfit['name'] }</a>
-                                    <button class="p-1 relative">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
-                                        </svg>
-                                        <ul class="absolute right-0 top-8 min-w-36 bg-white rounded border hidden">
-                                            <li class="flex justify-between items-center text-sm font-medium w-full p-2 hover:bg-zinc-200" hx-delete={ '/outfits/delete/{}'.format(outfit['_id']) }>
-                                                Delete Outfit
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="red" class="size-4">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                                                </svg>
-                                            </li>
-                                        </ul>
-                                    </button>
-                                </header>
-                                <span class="text-sm">Clothes: { len(outfit['clothes']) }</span>
-                                <span class="text-sm">Season: { outfit['season'] } </span>
-                                <span class="text-sm">Created: { outfit['created'] } </span>
-                            </section>	
-                        '''
-                else:
-                    html = '''
-                        <h3 class="font-medium col-start-2 col-end-3 text-center">
-                            You haven't created an outfit yet!
-						</h3>
-                    '''
-
-                return html
+                return render_template('components/outfit.html', outfits=outfits)
 
     @app.route("/closet")
     def closet ():
@@ -204,7 +170,7 @@ def setup_router (app, mongo):
             name = request.form['name']
             clothing_type = request.form['type']
             brand = request.form['brand']
-            colors = request.form['color']
+            colors = request.form.getlist('color')
             image_file = request.files['image']
 
             # If user does not select a file
@@ -267,43 +233,7 @@ def setup_router (app, mongo):
                 result = mongo.db.users.update_one({"_id": ObjectId(user_id)}, {"$set": {"closet": closet}})
 
                 # Return closet html
-                html = ''
-                if len(closet) > 0:
-                    for clothing_item in closet: 
-                        html += f'''
-                            <section class="flex flex-col p-3 rounded border" id={ clothing_item['_id'] }>
-                                <img src="{ clothing_item['image'] }" alt="" class="w-full rounded mb-2">	
-                                <header class="flex flex-row justify-between items-center">
-                                    <a href="/closet/{ clothing_item['_id'] }" class="text-base font-bold">{ clothing_item['name'].capitalize() }</a>
-                                    <button class="p-1 relative" onclick="toggleMenu(event)">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
-                                        </svg>
-                                        <ul class="absolute right-0 top-8 min-w-36 bg-white rounded border hidden">
-                                            <li class="flex justify-between items-center text-sm font-medium w-full p-2 hover:bg-zinc-200" 
-                                                hx-delete={ '/closet/delete/{}'.format(clothing_item['_id']) } hx-swap="innerHTML" hx-target="#clothing-list">
-                                                Delete clothing 
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="red" class="size-4">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                                                </svg>
-
-                                            </li>
-                                        </ul>
-                                    </button>
-                                </header>
-                                <span class="text-sm"><span class="font-medium">Brand</span>: { clothing_item['brand'].capitalize() }</span>
-                                <span class="text-sm"><span class="font-medium">Type</span>: { clothing_item['type'].capitalize() }</span>
-                                <span class="text-sm"><span class="font-medium">Colors</span>: { clothing_item['colors'].capitalize() }</span>
-                            </section>	
-                        '''
-                else:
-                    html = '''
-                        <h3 class="font-medium col-start-2 col-end-3 text-center">
-							You haven't added clothes yet!
-						</h3> 
-                    '''
-
-                return html
+                return render_template('components/clothing-item.html', closet=closet)
 
     @app.route("/profile")
     def profile ():
