@@ -43,6 +43,12 @@ def setup_router (app, mongo):
                 if outfit['_id'] == outfit_id:
                     outfit = outfit 
 
+            # Get outfit clothes
+            for index, clothing_id in enumerate(outfit['clothes']):
+                for clothing_item in user['closet']:
+                    if str(clothing_item['_id']) == clothing_id:
+                        outfit['clothes'][index] = clothing_item 
+
             return render_template('outfit.html', outfit=outfit)
 
     @app.route("/outfits/new", methods=['POST', 'GET'])
