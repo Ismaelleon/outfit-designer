@@ -344,3 +344,13 @@ def setup_router (app, mongo):
         res.headers['HX-Redirect'] = '/outfits'
         return res 
 
+    @app.route("/log-out", methods=["POST"])
+    def log_out ():
+        if session.get("id"):
+            # Remove user session
+            session.pop("id", None)
+
+            # Redirect user to index page
+            res = make_response({ 'message': 'OK' }, 200)
+            res.headers['HX-Redirect'] = '/'
+            return res
