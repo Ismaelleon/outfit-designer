@@ -13,6 +13,10 @@ def setup_router (app, mongo):
 
     @app.route("/")
     def index ():
+        # If user logged in, redirect to outfits page 
+        if session.get("id"):
+            return redirect("/outfits")
+
         return render_template('index.html')
 
     @app.route("/outfits")
@@ -62,7 +66,7 @@ def setup_router (app, mongo):
 
             # If required properties not added
             if 'name' not in request.form or 'season' not in request.form or 'clothes' not in request.form or 'image' not in request.form:
-                return render_template('create-outfit.html', data={ 'closet': user['closet'], 'error': True })
+                return render_template('create-outfit.html', data={ 'error': True })
 
             # Get request body 
             name = request.form['name']
@@ -248,7 +252,7 @@ def setup_router (app, mongo):
 
         # If user logged in render template
         if session.get("id"):
-            return render_template('add-clothes.html')
+            return render_template('add-clothes.html', data={ 'error': False })
 
         # Otherwise, redirect to the home page
         return redirect("/")
@@ -284,7 +288,7 @@ def setup_router (app, mongo):
             user_id = session.get("id")
             user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
 
-        return render_template('profile.html', user=user)
+        return render_template('profile.html', data={ 'user': user })
 
 
     # Controllers
