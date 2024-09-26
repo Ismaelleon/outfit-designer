@@ -15,7 +15,7 @@
 					<span><span class="font-medium">Type</span>: {{ clothing_item['type'].capitalize() }}</span>
 					<span>
 						<span class="font-medium">Colors</span>:
-						{% for color in clothing_item['colors'] %}
+						{% for color in data['clothing_item']['colors'] %}
 							{% if loop.index < clothing_item['colors']|length: %}
 								{{ color.capitalize() }}, 
 							{% else %}

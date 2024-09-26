@@ -24,7 +24,7 @@ def setup_router (app, mongo):
             user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
             outfits = user['outfits']
 
-            return render_template('outfits.html', outfits=outfits)
+            return render_template('outfits.html', data={ 'outfits': outfits })
 
         # Otherwise, redirect to the home page
         return redirect("/")
@@ -49,7 +49,7 @@ def setup_router (app, mongo):
                     if str(clothing_item['_id']) == clothing_id:
                         outfit['clothes'][index] = clothing_item 
 
-            return render_template('outfit.html', outfit=outfit)
+            return render_template('outfit.html', data={ 'outfit': outfit })
 
     @app.route("/outfits/new", methods=['POST', 'GET'])
     def create_outfit ():
@@ -60,12 +60,15 @@ def setup_router (app, mongo):
                 res.headers['HX-Redirect'] = '/outfits'
                 return res
 
+            # If required properties not added
+            if 'name' not in request.form or 'season' not in request.form or 'clothes' not in request.form or 'image' not in request.form:
+                return render_template('create-outfit.html', data={ 'closet': user['closet'], 'error': True })
+
             # Get request body 
             name = request.form['name']
             season = request.form['season']
             clothes = request.form.getlist('clothes')
             image_file = request.files['image']
-            print(name)
 
             # If user does not select a file or some inputs are not valid
             if image_file.filename == '' or name == '' or len(clothes) == 0:
@@ -119,7 +122,7 @@ def setup_router (app, mongo):
             user_id = session.get("id")
             user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
 
-            return render_template('create-outfit.html', closet=user['closet'])
+            return render_template('create-outfit.html', data={ 'closet': user['closet'] })
 
         # Otherwise, redirect to the home page
         return redirect("/")
@@ -147,7 +150,7 @@ def setup_router (app, mongo):
                 result = mongo.db.users.update_one({"_id": ObjectId(user_id)}, {"$set": {"outfits": outfits}})
 
                 # Return outfits html
-                return render_template('components/outfit.html', outfits=outfits)
+                return render_template('components/outfit.html', data={ 'outfits': outfits })
 
     @app.route("/closet")
     def closet ():
@@ -157,7 +160,7 @@ def setup_router (app, mongo):
             user_id = session.get("id")
             user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
 
-            return render_template('closet.html', closet=user['closet'])
+            return render_template('closet.html', data={ 'closet': user['closet'] })
 
         # Otherwise, redirect to the home page
         return redirect("/")
@@ -176,7 +179,7 @@ def setup_router (app, mongo):
                 if clothing_item['_id'] == clothing_id:
                     clothing_item = clothing_item
 
-            return render_template('closet-item.html', clothing_item=clothing_item)
+            return render_template('closet-item.html', data={ 'clothing_item': clothing_item })
 
     @app.route("/closet/new", methods=['POST', 'GET'])
     def add_clothes ():
@@ -186,6 +189,10 @@ def setup_router (app, mongo):
                 res = make_response({"msg": "Unauthorized"}, 401)
                 res.headers['HX-Redirect'] = '/outfits'
                 return res
+
+            # If required properties not added
+            if 'name' not in request.form or 'type' not in request.form or 'colors' not in request.form or 'image' not in request.form:
+                return render_template('add-clothes.html', data={ 'error': True })
 
             # Get request body 
             name = request.form['name']
@@ -267,7 +274,7 @@ def setup_router (app, mongo):
                 result = mongo.db.users.update_one({"_id": ObjectId(user_id)}, {"$set": {"closet": closet}})
 
                 # Return closet html
-                return render_template('components/clothing-item.html', closet=closet)
+                return render_template('components/clothing-item.html', data={ 'closet': closet })
 
     @app.route("/profile")
     def profile ():

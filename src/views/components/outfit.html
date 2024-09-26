@@ -1,5 +1,5 @@
 {% if outfits|length != 0 %}
-	{% for outfit in outfits %}
+	{% for outfit in data['outfits'] %}
 	<section class="flex flex-col p-3 rounded border border-zinc-200">
 		<img src={{ outfit['image'] }} alt="" class="w-full rounded mb-2">	
 		<header class="flex flex-row justify-between items-center">

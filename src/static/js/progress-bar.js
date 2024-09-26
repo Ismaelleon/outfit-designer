@@ -1,10 +1,10 @@
 const progressBar = document.getElementById('progress-bar');
 
-function updateProgress () {
+function updateProgress() {
 	progressBar.style.width = '75%';
 }
 
-function finishProgress () {
+function finishProgress() {
 	progressBar.style.width = '100%';
 	setTimeout(() => {
 		progressBar.style.opacity = '0';

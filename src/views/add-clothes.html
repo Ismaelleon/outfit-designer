@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	{% include 'components/head.html' %}
-	<body>
+	<body id="body">
 		{% include 'components/navbar.html' %}
 		{% include 'components/progress-bar.html' %}
 		<main class="flex justify-center w-full pt-[53px] px-4">
@@ -10,14 +10,25 @@
 					<h2 class="text-lg sm:text-base font-bold">Add clothes</h2>
 				</header>
 				<section class="mt-4">
-					<form class="flex sm:grid sm:grid-cols-2 gap-3 flex-col" hx-post="/closet/new" hx-encoding="multipart/form-data">
+				{% block form %}
+					<form class="flex sm:grid sm:grid-cols-2 gap-3 flex-col" hx-post="/closet/new" hx-encoding="multipart/form-data" hx-swap="outerHTML" hx-target="#body" hx-on::after-request="updateProgress()">
 						<p class="col-start-1 col-end-2 flex flex-col">
 							<label for="name-input" class="sm:text-sm font-medium mb-1">Name</label>
-							<input type="text" id="name-input" name="name" class="sm:text-sm p-2 border border-zinc-400 rounded mb-2">
+							<input type="text" id="name-input" name="name" 
+								{% if data['error'] == True %}
+									class="sm:text-sm p-2 border border-red-500 rounded mb-2">
+								{% else %}
+									class="sm:text-sm p-2 border border-zinc-400 rounded mb-2">
+								{% endif %}
 						</p>
 						<p class="col-start-1 col-end-2 flex flex-col">
 							<label for="type-input" class="sm:text-sm font-medium mb-1">Type</label>
-							<select class="sm:text-sm p-2 border border-zinc-400 rounded mb-2 bg-white" name="type" id="type-input">
+							<select name="type" id="type-input"
+								{% if data['error'] == True %}
+									class="sm:text-sm p-2 border border-red-500 rounded mb-2 bg-white">
+								{% else %}
+									class="sm:text-sm p-2 border border-zinc-400 rounded mb-2 bg-white">
+								{% endif %}
 								<option value="cap">Cap</option>
 								<option value="coat">Coat</option>
 								<option value="dress">Dress</option>
@@ -35,7 +46,12 @@
 						</p>
 						<p class="col-start-1 col-end-2 flex flex-col">
 							<label for="brand-input" class="sm:text-sm font-medium mb-1">Brand</label>
-							<input type="text" id="brand-input" name="brand" class="sm:text-sm p-2 border border-zinc-400 rounded mb-2">
+							<input type="text" id="brand-input" name="brand" 
+								{% if data['error'] == True %}
+									class="sm:text-sm p-2 border border-red-500 rounded mb-2">
+								{% else %}
+									class="sm:text-sm p-2 border border-zinc-400 rounded mb-2">
+								{% endif %}
 						</p>
 						<fieldset class="grid grid-cols-3 gap-1 flex-col items-start mb-2 col-start-1 col-end-2">
 							<legend class="sm:text-sm font-medium mb-1">Colors</legend>
@@ -89,8 +105,12 @@
 							</p>
 						</fieldset>
 						{% include 'components/image-input.html' %}
-						<button class="w-full p-2 bg-zinc-950 text-white font-medium sm:text-sm rounded hover:bg-zinc-800 mt-2 col-start-1 col-end-2" onclick="updateProgress()">Submit</button>
+						{% if data['error'] == True %}
+							<p class="text-sm text-red-500 col-start-1 col-end-2">Required parameters not filled</p>
+						{% endif %}
+						<button class="w-full p-2 bg-zinc-950 text-white font-medium sm:text-sm rounded hover:bg-zinc-800 mt-2 col-start-1 col-end-2">Submit</button>
 					</form>
+				{% endblock %}
 				</section>
 			</section>
 		</main>

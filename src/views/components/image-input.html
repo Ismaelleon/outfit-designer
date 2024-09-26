@@ -5,7 +5,12 @@
 	</button>
 </section>
 <p class="col-start-2 col-end-3 row-start-1 row-end-3 flex flex-col mb-2">
-	<label for="image-input" class="flex flex-row justify-center items-center border border-dashed border-zinc-400 rounded w-full p-4 sm:text-sm font-medium min-h-32 h-full cursor-pointer">
+	<label for="image-input" 
+	{% if data['error'] == True %}
+		class="flex flex-row justify-center items-center border border-dashed border-red-500 rounded w-full p-4 sm:text-sm font-medium min-h-32 h-full cursor-pointer">
+	{% else %}
+		class="flex flex-row justify-center items-center border border-dashed border-zinc-400 rounded w-full p-4 sm:text-sm font-medium min-h-32 h-full cursor-pointer">
+	{% endif %}
 
 		<i class="las la-file-image text-2xl mr-1"></i>
 		Add Image
