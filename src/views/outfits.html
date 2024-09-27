@@ -1,31 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-	{% include 'components/head.html' %}
-	<body>
-		{% include 'components/navbar.html' %}
-		<main class="flex justify-center w-full pt-[53px] px-4">
-			<section class="w-full max-w-3xl pt-4">
-				<header class="flex flex-row justify-between items-center">
-					<h2 class="text-lg sm:text-base font-bold">Your Outfits</h2>
+{% extends "base.html" %}
+{% block content %}
+	<section class="w-full max-w-3xl pt-4">
+		<header class="flex flex-row justify-between items-center">
+			<h2 class="text-lg sm:text-base font-bold">Your Outfits</h2>
 
-					<section class="flex flex-row">
-						<button class="flex flex-row items-center text-sm p-2 hover:bg-zinc-200 rounded min-w-16">
-							<i class="las la-filter text-xl mr-1"></i>
-							Filters
-						</button>	
-						<a href="/outfits/new" class="text-sm text-center font-medium text-white ml-5 p-2 bg-zinc-950 hover:bg-zinc-800 rounded min-w-16 flex flex-row items-center">
-							<i class="las la-plus text-xl mr-1"></i>
-							Create outfit
-						</a>
-					</section>
-				</header>
-				<section class="grid grid-cols-2 gap-2 mt-4 sm:grid-cols-3" id="outfits-list">
-					{% with outfits=outfits %}
-						{% include 'components/outfit.html' %}
-					{%  endwith %}
-				</section>
+			<section class="flex flex-row">
+				<button class="flex flex-row items-center text-sm p-2 hover:bg-zinc-200 rounded min-w-16">
+					<i class="las la-filter text-xl mr-1"></i>
+					Filters
+				</button>	
+				<a href="/outfits/new" class="text-sm text-center font-medium text-white ml-5 p-2 bg-zinc-950 hover:bg-zinc-800 rounded min-w-16 flex flex-row items-center">
+					<i class="las la-plus text-xl mr-1"></i>
+					Create outfit
+				</a>
 			</section>
-		</main>
-	</body>
-	<script src="/js/outfits.js"></script>
-</html>
+		</header>
+		<section class="grid grid-cols-2 gap-2 mt-4 sm:grid-cols-3" id="outfits-list">
+			{% with outfits=outfits %}
+				{% include 'components/outfit.html' %}
+			{%  endwith %}
+		</section>
+	</section>
+{% endblock %}

@@ -1,30 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-	{% include 'components/head.html' %}
-	<body>
-		{% include 'components/navbar.html' %}
-		<main class="flex justify-center w-full pt-[53px] px-4">
-			<section class="w-full max-w-3xl pt-4">
-				<header class="flex flex-row justify-between items-center pt-2">
-					<h2 class="text-lg sm:text-base font-bold">Your Profile</h2>
-				</header>
-				<section class="flex flex-row justify-between items-start mt-4">
-					<section class="flex flex-col">
-						<i class="las la-user-circle text-4xl"></i>
-						<p class="font-medium">{{ user['name'] }}</p>
-					</section>
-					<section class="flex flex-row gap-2">
-						<button class="flex flex-row items-center text-sm p-2 hover:bg-zinc-200 rounded min-w-16">
-							<i class="las la-edit text-xl mr-1"></i>
-							Edit Profile
-						</button>
-						<button class="text-sm text-center font-medium text-white p-2 bg-zinc-950 hover:bg-zinc-800 rounded min-w-16 flex flex-row items-center" id="log-out-button" hx-post="/log-out">
-							<i class="las la-sign-out-alt text-xl mr-1"></i>
-							Log Out
-						</button>	
-					</section>
-				</section>
+{% extends "base.html" %}
+{% block content %}
+	<section class="w-full max-w-3xl pt-4">
+		<header class="flex flex-row justify-between items-center pt-2">
+			<h2 class="text-lg sm:text-base font-bold">Your Profile</h2>
+		</header>
+		<section class="flex flex-row justify-between items-start mt-4">
+			<section class="flex flex-col">
+				<i class="las la-user-circle text-4xl"></i>
+				<p class="font-medium">{{ data['user']['name'] }}</p>
 			</section>
-		</main>
-	</body>
-</html>
+			<section class="flex flex-row gap-2">
+				<button class="flex flex-row items-center text-sm p-2 hover:bg-zinc-200 rounded min-w-16">
+					<i class="las la-edit text-xl mr-1"></i>
+					Edit Profile
+				</button>
+				<button class="text-sm text-center font-medium text-white p-2 bg-zinc-950 hover:bg-zinc-800 rounded min-w-16 flex flex-row items-center" id="log-out-button" hx-post="/log-out">
+					<i class="las la-sign-out-alt text-xl mr-1"></i>
+					Log Out
+				</button>	
+			</section>
+		</section>
+	</section>
+{% endblock %}

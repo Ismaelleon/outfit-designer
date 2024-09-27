@@ -1,30 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-	{% include 'components/head.html' %}
-	<body>
-		{% include 'components/navbar.html' %}
-		{% include 'components/progress-bar.html' %}
-		<main class="flex justify-center w-full pt-[53px] px-4">
-			<section class="w-full max-w-3xl pt-4">
-				<header class="flex flex-row justify-between items-center mb-2">
-					<h2 class="text-lg font-bold">{{ clothing_item['name'].capitalize() }}</h2>
-				</header>
-				<section class="flex flex-col">
-					<img src="{{ clothing_item['image'] }}" class="max-w-xs mb-2 rounded">
-					<span><span class="font-medium">Brand</span>: {{ clothing_item['brand'].capitalize() }}</span>
-					<span><span class="font-medium">Type</span>: {{ clothing_item['type'].capitalize() }}</span>
-					<span>
-						<span class="font-medium">Colors</span>:
-						{% for color in data['clothing_item']['colors'] %}
-							{% if loop.index < clothing_item['colors']|length: %}
-								{{ color.capitalize() }}, 
-							{% else %}
-								{{ color.capitalize() }}
-							{% endif %}
-						{% endfor %}
-					</span>
-				</section>
-			</section>
-		</main>
-	</body>
-</html>
+{% extends "base.html" %}
+{% block content %}
+	<section class="w-full max-w-3xl pt-4">
+		<header class="flex flex-row justify-between items-center mb-2">
+			<h2 class="text-lg font-bold">{{ clothing_item['name'].capitalize() }}</h2>
+		</header>
+		<section class="flex flex-col">
+			<img src="{{ clothing_item['image'] }}" class="max-w-xs mb-2 rounded">
+			<span><span class="font-medium">Brand</span>: {{ clothing_item['brand'].capitalize() }}</span>
+			<span><span class="font-medium">Type</span>: {{ clothing_item['type'].capitalize() }}</span>
+			<span>
+				<span class="font-medium">Colors</span>:
+				{% for color in data['clothing_item']['colors'] %}
+					{% if loop.index < clothing_item['colors']|length: %}
+						{{ color.capitalize() }}, 
+					{% else %}
+						{{ color.capitalize() }}
+					{% endif %}
+				{% endfor %}
+			</span>
+		</section>
+	</section>
+{% endblock %}
