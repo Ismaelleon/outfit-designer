@@ -2,10 +2,10 @@
 {% block content %}
 	<section class="w-full max-w-3xl pt-4">
 		<header class="flex flex-row justify-between items-center mb-2">
-			<h2 class="text-lg font-bold">{{ outfit['name'].capitalize() }}</h2>
+			<h2 class="text-lg font-bold">{{ data['outfit']['name'].capitalize() }}</h2>
 		</header>
 		<section class="flex flex-col">
-			<img src="{{ outfit['image'] }}" class="max-w-xs mb-2 rounded">
+			<img src="{{ data['outfit']['image'] }}" class="max-w-xs mb-2 rounded">
 			<section class="flex flex-row gap-2 mb-2">
 				{% for clothing in data['outfit']['clothes'] %}
 					<a href="/closet/{{ clothing['_id'] }}">
@@ -13,7 +13,7 @@
 					</a>
 				{% endfor %}
 			</section>
-			<span><span class="font-medium">Season:</span> {{ outfit['season'].capitalize() }}</span>
+			<span><span class="font-medium">Season:</span> {{ data['outfit']['season'].capitalize() }}</span>
 		</section>
 	</section>
 {% endblock %}

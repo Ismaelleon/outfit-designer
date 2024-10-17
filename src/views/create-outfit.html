@@ -4,7 +4,7 @@
 		<header class="flex flex-row justify-between items-center mt-2">
 			<h2 class="text-lg sm:text-base font-bold">Create outfit</h2>
 		</header>
-		<section class="mt-4">
+		<section class="my-4">
 			<form class="flex flex-col sm:grid sm:gap-3 sm:grid-cols-2" hx-post="/outfits/new" hx-encoding="multipart/form-data" hx-swap="outerHTML" hx-target="#body" hx-on::after-request="updateProgress()">
 				<section>
 					<p class="col-start-1 col-end-2 flex flex-col">
@@ -59,34 +59,41 @@
 				</button>
 			</header>
 			<section class="grid grid-cols-2 sm:grid-cols-3 auto-rows-max gap-2 mt-2 overflow-y-scroll">
-				{% for clothing_item in closet %}
-					<section class="flex flex-col p-3 rounded border relative overflow-hidden after:w-full after:h-full hover:after:bg-zinc-950/40 after:absolute after:top-0 after:left-0 after:flex after:justify-center after:items-center after:cursor-pointer" id={{ clothing_item['_id'] }}>
-						<img src="{{ clothing_item['image'] }}" alt="" class="w-full rounded mb-2">	
-						<header class="flex flex-row justify-between items-center">
-							<a href="/closet/{{ clothing_item['_id'] }}" class="text-base font-bold">{{ clothing_item['name'].capitalize() }}</a>
-						</header>
-						<span class="text-sm"><span class="font-medium">Brand</span>: {{ clothing_item['brand'].capitalize() }}</span>
-						<span class="text-sm"><span class="font-medium">Type</span>: {{ clothing_item['type'].capitalize() }}</span>
-						<span class="text-sm">
-							<span class="font-medium">Colors</span>:
-							{% for color in clothing_item['colors'] %}
-								{% if loop.index < clothing_item['colors']|length: %}
-									{{ color.capitalize() }}, 
-								{% else %}
-									{{ color.capitalize() }}
-								{% endif %}
-							{% endfor %}
-						</span>
-						<section class="absolute left-0 top-0 w-full h-full bg-green-600/75 flex flex-col justify-center items-center text-white hidden">
-							<i class="las la-check-circle text-2xl"></i>
-							<p>Item selected</p>
-						</section>
-					</section>	
-				{% endfor %}
+				{% if data['closet']|length > 0: %}
+					{% for clothing_item in data['closet'] %}
+						<section class="flex flex-col p-3 rounded border relative overflow-hidden after:w-full after:h-full hover:after:bg-zinc-950/40 after:absolute after:top-0 after:left-0 after:flex after:justify-center after:items-center after:cursor-pointer" id={{ clothing_item['_id'] }}>
+							<img src="{{ clothing_item['image'] }}" alt="" class="w-full rounded mb-2">	
+							<header class="flex flex-row justify-between items-center">
+								<a href="/closet/{{ clothing_item['_id'] }}" class="text-base font-bold">{{ clothing_item['name'].capitalize() }}</a>
+							</header>
+							<span class="text-sm"><span class="font-medium">Brand</span>: {{ clothing_item['brand'].capitalize() }}</span>
+							<span class="text-sm"><span class="font-medium">Type</span>: {{ clothing_item['type'].capitalize() }}</span>
+							<span class="text-sm">
+								<span class="font-medium">Colors</span>:
+								{% for color in clothing_item['colors'] %}
+									{% if loop.index < clothing_item['colors']|length: %}
+										{{ color.capitalize() }}, 
+									{% else %}
+										{{ color.capitalize() }}
+									{% endif %}
+								{% endfor %}
+							</span>
+							<section class="absolute left-0 top-0 w-full h-full bg-green-600/75 flex flex-col justify-center items-center text-white hidden">
+								<i class="las la-check-circle text-2xl"></i>
+								<p>Item selected</p>
+							</section>
+						</section>	
+					{% endfor %}
+				{% else %}
+					<h3 class="font-medium col-span-2 sm:col-span-4 text-center my-4">
+						You haven't added clothes yet!
+					</h3> 
+				{% endif %}
 			</section>
 			<button class="w-full p-2 bg-zinc-950 text-white font-medium sm:text-sm rounded hover:bg-zinc-800 mt-2" onclick="saveOutfitClothes(event)">
 				Save
 			</button>
 		</section>
 	</section>
+	<script src="/js/create-outfit.js"></script>
 {% endblock %}

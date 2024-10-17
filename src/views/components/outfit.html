@@ -1,13 +1,13 @@
-{% if outfits|length != 0 %}
+{% if data['outfits']|length != 0 %}
 	{% for outfit in data['outfits'] %}
 	<section class="flex flex-col p-3 rounded border border-zinc-200">
 		<img src={{ outfit['image'] }} alt="" class="w-full rounded mb-2">	
 		<header class="flex flex-row justify-between items-center">
 			<a href={{ '/outfits/{}'.format(outfit['_id']) }} class="text-base font-bold hover:underline">{{ outfit['name'] }}</a>
 			<button class="p-1 flex justify-center items-center relative z-0 aspect-square hover:bg-zinc-200 rounded-full" onclick="toggleMenu(event)">
-				<i class="las la-ellipsis-v text-xl"></i>
+				<i class="las la-ellipsis-v text-xl z-0"></i>
 				<ul class="absolute right-0 top-8 min-w-36 bg-white rounded border border-zinc-200 hidden">
-					<li class="flex justify-between items-center text-sm font-medium w-full p-2 hover:bg-zinc-200" hx-delete={{ '/outfits/delete/{}'.format(outfit['_id']) }} hx-swap="innerHTML" hx-target="#outfits-list">
+					<li class="flex justify-between items-center text-sm font-medium w-full p-2 hover:bg-zinc-200 z-10" hx-delete={{ '/outfits/delete/{}'.format(outfit['_id']) }} hx-swap="innerHTML" hx-target="#outfits-list">
 						Delete Outfit
 						<i class="las la-trash text-lg text-red-600"></i>
 					</li>

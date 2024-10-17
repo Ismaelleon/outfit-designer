@@ -1,4 +1,4 @@
-{% if closet|length != 0 %}
+{% if data['closet']|length != 0 %}
 	{% for clothing_item in data['closet'] %}
 		<section class="flex flex-col p-3 rounded border border-zinc-200" id={{ clothing_item['_id'] }}>
 			<img src="{{ clothing_item['image'] }}" alt="" class="w-full rounded mb-2">	
