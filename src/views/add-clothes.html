@@ -4,7 +4,7 @@
 		<header class="flex flex-row justify-between items-center mt-2">
 			<h2 class="text-lg sm:text-base font-bold">Add clothes</h2>
 		</header>
-		<section class="mt-4">
+		<section class="my-4">
 			<form class="flex sm:grid sm:grid-cols-2 gap-3 flex-col" hx-post="/closet/new" hx-encoding="multipart/form-data" hx-swap="outerHTML" hx-target="#body" hx-on::after-request="updateProgress()">
 				<p class="col-start-1 col-end-2 flex flex-col">
 					<label for="name-input" class="sm:text-sm font-medium mb-1">Name</label>
@@ -106,4 +106,5 @@
 			</form>
 		</section>
 	</section>
+	<script src="/js/add-clothes.js"></script>
 {% endblock %}
