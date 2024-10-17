@@ -65,7 +65,7 @@ def setup_router (app, mongo):
                 return res
 
             # If required properties not added
-            if 'name' not in request.form or 'season' not in request.form or 'clothes' not in request.form or 'image' not in request.form:
+            if 'name' not in request.form or 'season' not in request.form or 'clothes' not in request.form or 'image' not in request.files:
                 return render_template('create-outfit.html', data={ 'error': True })
 
             # Get request body 
@@ -180,7 +180,7 @@ def setup_router (app, mongo):
             # Find clothing item
             clothing_item = {}
             for clothing_item in user['closet']:
-                if clothing_item['_id'] == clothing_id:
+                if str(clothing_item['_id']) == clothing_id:
                     clothing_item = clothing_item
 
             return render_template('closet-item.html', data={ 'clothing_item': clothing_item })
@@ -195,7 +195,7 @@ def setup_router (app, mongo):
                 return res
 
             # If required properties not added
-            if 'name' not in request.form or 'type' not in request.form or 'colors' not in request.form or 'image' not in request.form:
+            if 'name' not in request.form or 'type' not in request.form or 'color' not in request.form or 'image' not in request.files:
                 return render_template('add-clothes.html', data={ 'error': True })
 
             # Get request body 
