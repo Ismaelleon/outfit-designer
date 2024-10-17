@@ -6,7 +6,7 @@
 			<a href="/" class="font-bold">Outfit Designer</a>
 		{% endif %}
 		<i id="menu-open" class="las la-bars text-2xl sm:scale-0"></i>
-		<nav class="hidden items-center justify-center flex-col w-screen h-screen fixed bg-white inset-0 sm:flex sm:w-auto sm:h-auto sm:flex-row sm:static" id="menu">
+		<nav class="hidden items-center justify-center flex-col w-screen h-screen fixed bg-white inset-0 sm:flex sm:w-auto sm:h-auto sm:flex-row sm:static z-20" id="menu">
 			<i id="menu-close" class="las la-times text-2xl fixed top-3 right-3 sm:scale-0"></i>
 			{% if request.path[0:8] == '/outfits' %}
 				<a href="/outfits" class="text-2xl text-zinc-950 hover:text-zinc-950 sm:ml-5 flex flex-row items-center py-2 font-medium sm:text-sm">
