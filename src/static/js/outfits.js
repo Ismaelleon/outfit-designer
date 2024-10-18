@@ -1,5 +1,5 @@
 function toggleMenu(event) {
-	event.target.children[1].classList.toggle("hidden");
+	event.currentTarget.querySelector("ul").classList.toggle("hidden");
 }
 
 function toggleFiltersMenu() {
