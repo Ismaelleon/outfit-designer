@@ -1,4 +1,4 @@
-import os
+import os, cloudinary
 from flask import Flask
 from flask_pymongo import PyMongo
 from flask_session import Session
@@ -11,9 +11,15 @@ load_dotenv()
 # Init flask app 
 app = Flask(__name__, template_folder="views")
 
+# Setup cloudinary
+app.config["CLOUDINARY"] = cloudinary.config(secure=True)
+
 # Setup mongo client
 app.config["MONGO_URI"] = os.environ["MONGO_URI"]
 mongo = PyMongo(app)
+
+# Setup uploads folder
+app.config["UPLOAD_FOLDER"] = os.path.join(os.getcwd(), 'static/images')
 
 # Setup server sessions
 app.config["SESSION_PERMANENT"] = True 

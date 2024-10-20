@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block content %}
+	<section class="w-full max-w-3xl pt-4">
+		<header class="flex flex-row justify-between items-center mt-2">
+			<h2 class="text-lg sm:text-base font-bold">Create outfit</h2>
+		</header>
+		<section class="my-4">
+			<form class="flex flex-col sm:grid sm:gap-3 sm:grid-cols-2" hx-post="/outfits/new" hx-encoding="multipart/form-data" hx-swap="outerHTML" hx-target="#body" hx-on::after-request="updateProgress()">
+				<section>
+					<p class="col-start-1 col-end-2 flex flex-col">
+						<label for="name-input" class="sm:text-sm font-medium mb-1">Name</label>
+						<input type="text" id="name-input" name="name" 
+							{% if data['error'] == True %}
+								class="sm:text-sm p-2 border border-red-500 rounded mb-2">
+							{% else %}
+								class="sm:text-sm p-2 border border-zinc-400 rounded mb-2">
+							{% endif %}
+					</p>
+					<p class="col-start-1 col-end-2 flex flex-col">
+						<label for="season-input" class="sm:text-sm font-medium mb-1">Season</label>
+						<select name="season" id="season-input"
+							{% if data['error'] == True %}
+								class="sm:text-sm p-2 border border-red-500 rounded mb-3 bg-white">
+							{% else %}
+								class="sm:text-sm p-2 border border-zinc-400 rounded mb-3 bg-white">
+							{% endif %}
+							<option value="summer">Summer</option>
+							<option value="autumn">Autumn</option>
+							<option value="winter">Winter</option>
+							<option value="spring">Spring</option>
+						</select>
+					</p>
+					{% include 'components/image-input.html' %}
+				</section>
+				<section class="grid grid-cols-2 gap-2 flex-col w-full col-start-2 col-end-3 row-start-1 row-end-5" id="clothes-list">
+					<section id="add-clothes" onclick="toggleOutfitDialog()" 
+						{% if data['error'] == True %}
+							class="flex flex-row justify-center items-center border border-dashed border-red-500 rounded w-full col-start-1 col-end-3 p-4 sm:text-sm mb-2 font-medium max-h-32 h-full cursor-pointer">
+						{% else %}
+							class="flex flex-row justify-center items-center border border-dashed border-zinc-400 rounded w-full col-start-1 col-end-3 p-4 sm:text-sm mb-2 font-medium max-h-32 h-full cursor-pointer">
+						{% endif %}
+						<i class="las la-tshirt text-2xl mr-1"></i>
+						Add Clothes
+					</section>
+				</section>
+				{% if data['error'] == True %}
+					<p class="text-sm text-red-500 col-start-1 col-end-2">Required parameters not filled</p>
+				{% endif %}
+				<button class="w-full p-2 bg-zinc-950 text-white font-medium sm:text-sm rounded hover:bg-zinc-800 mt-2 col-start-1 col-end-2">Submit</button>
+			</form>
+		</section>
+	</section>
+	<section class="flex justify-center items-center w-full h-screen fixed top-0 left-0 bg-zinc-950/50 hidden" id="clothes-dialog">
+		<section class="flex flex-col p-4 bg-white rounded w-full max-w-3xl max-h-[80%]">
+			<header class="flex flex-row items-center">
+				<h2 class="text-lg font-medium">Select Clothes</h2>	
+				<button class="ml-auto close" onclick="toggleOutfitDialog()">
+					<i class="las la-times text-2xl"></i>
+				</button>
+			</header>
+			<section class="grid grid-cols-2 sm:grid-cols-3 auto-rows-max gap-2 mt-2 overflow-y-scroll">
+				{% if data['closet']|length > 0: %}
+					{% for clothing_item in data['closet'] %}
+						<section class="flex flex-col p-3 rounded border relative overflow-hidden after:w-full after:h-full hover:after:bg-zinc-950/40 after:absolute after:top-0 after:left-0 after:flex after:justify-center after:items-center after:cursor-pointer" id={{ clothing_item['_id'] }}>
+							<img src="{{ clothing_item['image'] }}" alt="" class="w-full rounded mb-2">	
+							<header class="flex flex-row justify-between items-center">
+								<a href="/closet/{{ clothing_item['_id'] }}" class="text-base font-bold">{{ clothing_item['name'].capitalize() }}</a>
+							</header>
+							<span class="text-sm"><span class="font-medium">Brand</span>: {{ clothing_item['brand'].capitalize() }}</span>
+							<span class="text-sm"><span class="font-medium">Type</span>: {{ clothing_item['type'].capitalize() }}</span>
+							<span class="text-sm">
+								<span class="font-medium">Colors</span>:
+								{% for color in clothing_item['colors'] %}
+									{% if loop.index < clothing_item['colors']|length: %}
+										{{ color.capitalize() }}, 
+									{% else %}
+										{{ color.capitalize() }}
+									{% endif %}
+								{% endfor %}
+							</span>
+							<section class="absolute left-0 top-0 w-full h-full bg-green-600/75 flex flex-col justify-center items-center text-white hidden">
+								<i class="las la-check-circle text-2xl"></i>
+								<p>Item selected</p>
+							</section>
+						</section>	
+					{% endfor %}
+				{% else %}
+					<h3 class="font-medium col-span-2 sm:col-span-4 text-center my-4">
+						You haven't added clothes yet!
+					</h3> 
+				{% endif %}
+			</section>
+			<button class="w-full p-2 bg-zinc-950 text-white font-medium sm:text-sm rounded hover:bg-zinc-800 mt-2" onclick="saveOutfitClothes(event)">
+				Save
+			</button>
+		</section>
+	</section>
+	<script src="/js/create-outfit.js"></script>
+{% endblock %}
