@@ -10,7 +10,7 @@
 					Filters
 				</button>	
 				<ul class="hidden absolute left-0 top-full translate-y-4 p-4 bg-zinc-200 rounded flex flex-col w-full col-span-2 sm:w-auto sm:left-auto sm:right-0 z-20" id="filters-menu">
-					<form hx-post="/closet/filter" hx-swap="innerHTML" hx-target="#clothing-list">
+					<form hx-post="/closet/filter" hx-swap="innerHTML" hx-target="#clothing-list" class="flex flex-col">
 						<label for="type-input" class="sm:text-sm font-medium mb-1">Type</label>
 						<select name="type" id="type-input"
 							{% if data['error'] == True %}
