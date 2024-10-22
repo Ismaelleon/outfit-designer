@@ -17,7 +17,7 @@ def setup_router (app, mongo):
         if session.get("id"):
             return redirect("/outfits")
 
-        return render_template("index.html")
+        return render_template("index.html", data={})
 
     @app.route("/outfits")
     def outfits ():
@@ -353,11 +353,27 @@ def setup_router (app, mongo):
             email = request.form["email"]
             password = request.form["password"]
 
+            # Check for input lengths
+            if len(name) < 4 or len(email) < 8 or len(password) < 4:
+                data = {
+                    "input-error": True,
+                    "name": name,
+                    "email": email,
+                    "password": password,
+                }
+                return render_template("components/signup-form.html", data=data)
+
             # Check for user with same e-mail
             result = mongo.db.users.find_one({ "email": email })
 
             if result != None:
-                return make_response({"message": "E-mail already exists"}, 409)
+                data = {
+                    "email-error": True,
+                    "name": name,
+                    "email": email,
+                    "password": password,
+                }
+                return render_template("components/signup-form.html", data=data)
 
             # Encrypt password
             hashed_password = bcrypt.hashpw(password.encode("ascii"), bcrypt.gensalt()).decode("ascii")
@@ -390,6 +406,15 @@ def setup_router (app, mongo):
         email = request.form["email"]
         password = request.form["password"]
 
+        # Check for input lengths
+        if len(email) < 8 or len(password) < 4:
+            data = {
+                "input-error": True,
+                "email": email,
+                "password": password,
+            }
+            return render_template("components/login-form.html", data=data)
+
         # Search for user matching email address
         result = mongo.db.users.find_one({ "email": email })
 
@@ -398,7 +423,12 @@ def setup_router (app, mongo):
 
         # Check if password doesn"t match 
         if not bcrypt.checkpw(password.encode("ascii"), result["password"].encode("ascii")):
-            return make_response({"message": "Unauthorized"}, 401)
+            data = {
+                "password-error": True,
+                "email": email,
+                "password": password,
+            }
+            return render_template("components/login-form.html", data=data)
 
         # Create user session
         session["id"] = str(result["_id"])

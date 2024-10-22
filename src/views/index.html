@@ -35,13 +35,7 @@
 				<h2 class="text-xl font-medium">Log In</h2>	
 				<p>Welcome back to Outfit Designer.</p>
 
-				<form class="flex flex-col mt-3">
-					<label for="email-input" class="text-sm font-medium mb-1">E-mail</label>
-					<input type="email" id="email-input" name="email" class="text-sm p-2 border border-zinc-400 rounded mb-2">
-					<label for="password-input" class="text-sm font-medium mb-1">Password</label>
-					<input type="Password" id="password-input" name="password" class="text-sm p-2 border border-zinc-400 rounded mb-2">
-					<button class="w-full p-2 bg-zinc-950 text-white font-medium text-sm rounded hover:bg-zinc-800 mt-2" hx-post="/log-in">Submit</button>
-				</form>
+				{% include 'components/login-form.html' %}
 				<a href="#sign-up" class="text-sm text-center mt-2 text-zinc-600 hover:text-zinc-950" id="signup-toggle">New here? Sign Up</a>
 			</section>	
 		</section>
@@ -54,15 +48,7 @@
 				<h2 class="text-xl font-medium">Sign Up</h2>	
 				<p>Welcome to Outfit Designer.</p>
 
-				<form class="flex flex-col mt-3">
-					<label for="name-input" class="text-sm font-medium mb-1">Name</label>
-					<input type="text" id="name-input" name="name" class="text-sm p-2 border border-zinc-400 rounded mb-2">
-					<label for="email-input" class="text-sm font-medium mb-1">E-mail</label>
-					<input type="email" id="email-input" name="email" class="text-sm p-2 border border-zinc-400 rounded mb-2">
-					<label for="password-input" class="text-sm font-medium mb-1">Password</label>
-					<input type="Password" id="password-input" name="password" class="text-sm p-2 border border-zinc-400 rounded mb-2">
-					<button class="w-full p-2 bg-zinc-950 text-white font-medium text-sm rounded hover:bg-zinc-800 mt-2" hx-post="/sign-up">Submit</button>
-				</form>
+				{% include 'components/signup-form.html' %}
 				<a href="#log-in" class="text-sm text-center mt-2 text-zinc-600 hover:text-zinc-950" id="login-toggle">Already have an account? Log In</a>
 			</section>	
 		</section>
