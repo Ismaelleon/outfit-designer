@@ -26,7 +26,7 @@ app.config["SESSION_PERMANENT"] = True
 app.config["SESSION_TYPE"] = "mongodb" 
 app.config["SESSION_MONGODB"] = mongo 
 app.config["SESSION_MONGODB_DB"] = os.environ["MONGO_DB"] 
-app.config["SESSION_MONGODB_COLLECTION"] = "sessions" 
+app.config["SESSION_MONGODB_COLLECT"] = "sessions" 
 Session(app)
 
 # Setup routes
