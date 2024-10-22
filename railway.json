@@ -4,7 +4,7 @@
         "builder": "NIXPACKS"
     },
     "deploy": {
-        "startCommand": "/bin/sh -c \"cd ./src/ && gunicorn main:app\"",
+        "startCommand": "/bin/sh -c \"cd ./src/ && mkdir ./static/images/ && gunicorn main:app\"",
         "restartPolicyType": "ON_FAILURE",
         "restartPolicyMaxRetries": 10
     }
