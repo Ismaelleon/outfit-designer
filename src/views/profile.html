@@ -10,11 +10,11 @@
 				<p class="font-medium">{{ data['user']['name'] }}</p>
 			</section>
 			<section class="flex flex-row gap-2">
-				<!--<button class="flex flex-row items-center text-sm p-2 hover:bg-zinc-200 rounded min-w-16">
-					<i class="las la-edit text-xl mr-1"></i>
-					Edit Profile
-				</button>-->
-				<button class="text-sm text-center font-medium text-white p-2 bg-zinc-950 hover:bg-zinc-800 rounded min-w-16 flex flex-row items-center" id="log-out-button" hx-post="/log-out">
+				<a href="/settings" class="flex flex-row items-center text-sm p-2 hover:bg-zinc-200 rounded min-w-16 dark:hover:bg-zinc-800">
+					<i class="las la-cog text-xl mr-1"></i>
+					Settings 
+				</a>
+				<button class="text-sm text-center font-medium text-white p-2 bg-zinc-950 hover:bg-zinc-800 rounded min-w-16 flex flex-row items-center dark:bg-white dark:text-black dark:hover:bg-zinc-200" id="log-out-button" hx-post="/log-out">
 					<i class="las la-sign-out-alt text-xl mr-1"></i>
 					Log Out
 				</button>	

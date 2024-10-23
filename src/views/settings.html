@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+	<section class="w-full max-w-3xl pt-4">
+		<header class="flex flex-row justify-between items-center pt-2">
+			<h2 class="text-lg sm:text-base font-bold">Your Settings</h2>
+		</header>
+		<section class="flex flex-row justify-between items-start mt-4">
+			<section class="flex flex-row justify-between items-center w-full">
+				<p class="text-sm">Dark Mode</p>
+				{% with id="dark-mode-switch" %}
+					{% include 'components/switch.html' %}
+				{% endwith %}
+			</section>
+		</section>
+	</section>
+	<script src="/js/settings.js"></script>
+{% endblock %}
