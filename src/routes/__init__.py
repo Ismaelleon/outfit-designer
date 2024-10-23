@@ -4,6 +4,7 @@ from cloudinary import CloudinaryImage
 from werkzeug.utils import secure_filename
 from bson.objectid import ObjectId
 from rembg import remove
+from helpers import dark_mode
 
 def setup_router (app, mongo):
     # Static files
@@ -17,6 +18,7 @@ def setup_router (app, mongo):
         if session.get("id"):
             return redirect("/outfits")
 
+        data = dark_mode({}, request.cookies)
         return render_template("index.html", data={})
 
     @app.route("/outfits")
@@ -28,7 +30,8 @@ def setup_router (app, mongo):
             user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
             outfits = user["outfits"]
 
-            return render_template("outfits.html", data={ "outfits": outfits })
+            data = dark_mode({"outfits": outfits}, request.cookies)
+            return render_template("outfits.html", data=data)
 
         # Otherwise, redirect to the home page
         return redirect("/")
@@ -53,7 +56,8 @@ def setup_router (app, mongo):
                     if str(clothing_item["_id"]) == clothing_id:
                         outfit["clothes"][index] = clothing_item 
 
-            return render_template("outfit.html", data={ "outfit": outfit })
+            data = dark_mode({"outfit": outfit}, request.cookies)
+            return render_template("outfit.html", data=data)
 
     @app.route("/outfits/new", methods=["POST", "GET"])
     def create_outfit ():
@@ -66,7 +70,8 @@ def setup_router (app, mongo):
 
             # If required properties not added
             if "name" not in request.form or "season" not in request.form or "clothes" not in request.form or "image" not in request.files:
-                return render_template("create-outfit.html", data={ "error": True })
+                data = dark_mode({"error": True}, request.cookies)
+                return render_template("create-outfit.html", data=data)
 
             # Get request body 
             name = request.form["name"]
@@ -126,7 +131,8 @@ def setup_router (app, mongo):
             user_id = session.get("id")
             user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
 
-            return render_template("create-outfit.html", data={ "closet": user["closet"] })
+            data = dark_mode({"closet": user["closet"]}, request.cookies)
+            return render_template("create-outfit.html", data=data)
 
         # Otherwise, redirect to the home page
         return redirect("/")
@@ -153,7 +159,8 @@ def setup_router (app, mongo):
                         if outfit in filtered_outfits:
                             filtered_outfits.remove(outfit)
 
-                return render_template("components/outfit.html", data={ "outfits": filtered_outfits })
+                data = dark_mode({"outfits": filtered_outfits}, request.cookies)
+                return render_template("components/outfit.html", data=data)
 
 
     @app.route("/outfits/delete/<string:outfit_id>", methods=["DELETE"])
@@ -179,7 +186,8 @@ def setup_router (app, mongo):
                 result = mongo.db.users.update_one({"_id": ObjectId(user_id)}, {"$set": {"outfits": outfits}})
 
                 # Return outfits html
-                return render_template("components/outfit.html", data={ "outfits": outfits })
+                data = dark_mode({ "outfits": outfits }, request.cookies)
+                return render_template("components/outfit.html", data=data)
 
     @app.route("/closet")
     def closet ():
@@ -189,7 +197,8 @@ def setup_router (app, mongo):
             user_id = session.get("id")
             user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
 
-            return render_template("closet.html", data={ "closet": user["closet"] })
+            data = dark_mode({ "closet": user["closet"] }, request.cookies)
+            return render_template("closet.html", data=data)
 
         # Otherwise, redirect to the home page
         return redirect("/")
@@ -208,7 +217,8 @@ def setup_router (app, mongo):
                 if str(clothing_item["_id"]) == clothing_id:
                     clothing_item = clothing_item
 
-            return render_template("closet-item.html", data={ "clothing_item": clothing_item })
+            data = dark_mode({ "clothing_item": clothing_item }, request.cookies)
+            return render_template("closet-item.html", data=data)
 
     @app.route("/closet/new", methods=["POST", "GET"])
     def add_clothes ():
@@ -221,7 +231,8 @@ def setup_router (app, mongo):
 
             # If required properties not added
             if "name" not in request.form or "type" not in request.form or "color" not in request.form or "image" not in request.files:
-                return render_template("add-clothes.html", data={ "error": True })
+                data = dark_mode({ "error": True }, request.cookies)
+                return render_template("add-clothes.html", data=data)
 
             # Get request body 
             name = request.form["name"]
@@ -277,7 +288,8 @@ def setup_router (app, mongo):
 
         # If user logged in render template
         if session.get("id"):
-            return render_template("add-clothes.html", data={ "error": False })
+            data = dark_mode({ "error": False }, request.cookies)
+            return render_template("add-clothes.html", data=data)
 
         # Otherwise, redirect to the home page
         return redirect("/")
@@ -308,7 +320,8 @@ def setup_router (app, mongo):
                         if len(colors) > 0 and sorted(colors) != sorted(clothing_item["colors"]):
                             filtered_clothes.remove(clothing_item)
 
-                return render_template("components/clothing-item.html", data={ "closet": filtered_clothes })
+                data = dark_mode({ "closet": filtered_clothes }, request.cookies)
+                return render_template("components/clothing-item.html", data=data)
 
     @app.route("/closet/delete/<string:clothing_id>", methods=["DELETE"])
     def delete_clothes (clothing_id):
@@ -331,7 +344,8 @@ def setup_router (app, mongo):
                 result = mongo.db.users.update_one({"_id": ObjectId(user_id)}, {"$set": {"closet": closet}})
 
                 # Return closet html
-                return render_template("components/clothing-item.html", data={ "closet": closet })
+                data = dark_mode({ "closet": closet }, request.cookies)
+                return render_template("components/clothing-item.html", data=data)
 
     @app.route("/profile")
     def profile ():
@@ -341,10 +355,24 @@ def setup_router (app, mongo):
             user_id = session.get("id")
             user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
 
-        return render_template("profile.html", data={ "user": user })
+            data = dark_mode({ "user": user }, request.cookies)
+            return render_template("profile.html", data=data)
 
+        return redirect("/")
 
-    # Controllers
+    @app.route("/settings", methods=["GET", "POST"])
+    def settings ():
+        # If user logged in render template
+        if session.get("id"):
+            # Get user document 
+            user_id = session.get("id")
+            user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
+
+            data = dark_mode({ "user": user }, request.cookies)
+            return render_template("settings.html", data=data)
+
+        return redirect("/")
+
     @app.route("/sign-up", methods=["POST"])
     def sign_up ():
         if request.method == "POST":

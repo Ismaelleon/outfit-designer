@@ -4,5 +4,5 @@ function toggleMenu(event) {
 
 function toggleFiltersMenu(event) {
 	document.getElementById("filters-menu").classList.toggle("hidden");
-	event.currentTarget.classList.toggle("bg-zinc-200");
+	event.currentTarget.classList.toggle("bg-zinc-200 dark:bg-zinc-800");
 }

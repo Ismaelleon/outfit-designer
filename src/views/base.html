@@ -1,5 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"
+{% if data["dark-mode"] %}
+	class="dark">
+{% else %}
+	>
+{% endif %}
 	<head>
 		<title>Outfit Designer</title>
 		<meta charset="UTF-8">
@@ -8,11 +13,12 @@
 		<link rel="stylesheet" type="text/css" href="/css/index.css">
 		<script src="/js/htmx.min.js"></script>
 	</head>
-	<body id="body">
+	<body id="body" class="dark:bg-zinc-900 dark:text-white">
 		{% include 'components/navbar.html' %}
 		{% include 'components/progress-bar.html' %}
 		<main class="flex justify-center w-full pt-[53px] px-4">
 			{% block content %}{% endblock %}
 		</main>
 	</body>
+	<script src="/js/dark-mode.js"></script>
 </html>
