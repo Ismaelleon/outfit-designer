@@ -1,3 +1,14 @@
+const switchEl = document.querySelector("#dark-mode-switch input");
+
+function setDarkModeSwitch() {
+	let darkModeCookie = document.cookie.split("=");
+	if (darkModeCookie[0] === "dark-mode" && darkModeCookie[1] === "true") {
+		switchEl.checked = true;
+	}
+}
+
+window.onload = setDarkModeSwitch;
+
 function toggleDarkMode() {
 	let documentEl = document.documentElement;
 	documentEl.classList.toggle("dark");
@@ -5,8 +16,8 @@ function toggleDarkMode() {
 	if (documentEl.classList[0] === "dark") {
 		document.cookie = "dark-mode=true";
 	} else {
-		document.cookie = "";
+		document.cookie = "dark-mode=\"\"";
 	}
 }
 
-document.querySelector('#dark-mode-switch input').addEventListener('change', toggleDarkMode);
+switchEl.addEventListener('change', toggleDarkMode);
