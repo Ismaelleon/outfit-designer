@@ -47,8 +47,9 @@ def setup_router (app, mongo):
             # Find outfit
             outfit = {}
             for outfit in user["outfits"]:
-                if outfit["_id"] == outfit_id:
+                if str(outfit["_id"]) == outfit_id:
                     outfit = outfit 
+                    break
 
             # Get outfit clothes
             for index, clothing_id in enumerate(outfit["clothes"]):
