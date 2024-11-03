@@ -217,6 +217,7 @@ def setup_router (app, mongo):
             for clothing_item in user["closet"]:
                 if str(clothing_item["_id"]) == clothing_id:
                     clothing_item = clothing_item
+                    break
 
             data = dark_mode({ "clothing_item": clothing_item }, request.cookies)
             return render_template("closet-item.html", data=data)
