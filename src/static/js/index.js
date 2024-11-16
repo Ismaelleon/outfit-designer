@@ -1,4 +1,7 @@
-const logInButton = document.getElementById('log-in');
+const logInButton = document.getElementById('log-in'),
+	signUpButton = document.getElementById('sign-up'),
+	getStartedButton = document.getElementById('get-started'),
+	joinButton = document.getElementById('join');
 
 const signUpToggleLink = document.getElementById('signup-toggle'),
 	logInToggleLink = document.getElementById('login-toggle');
@@ -22,6 +25,9 @@ function toggleDialog (dialog) {
 }
 
 logInButton.addEventListener('click', () => toggleDialog('log-in'));
+signUpButton.addEventListener('click', () => toggleDialog('sign-up'))
+joinButton.addEventListener('click', () => toggleDialog('sign-up'))
+getStartedButton.addEventListener('click', () => toggleDialog('sign-up'))
 signUpToggleLink.addEventListener('click', () => toggleDialog('sign-up'));
 logInToggleLink.addEventListener('click', () => toggleDialog('log-in'));
 closeButtons.forEach(el => el.addEventListener('click', () => toggleDialog('all')))
@@ -33,3 +39,6 @@ function toggleMenu () {
 
 document.getElementById('menu-open').addEventListener('click', toggleMenu);
 document.getElementById('menu-close').addEventListener('click', toggleMenu);
+for (const el of document.querySelectorAll('#menu > a')) {
+	el.addEventListener('click', toggleMenu);
+}
