@@ -1,8 +1,7 @@
 const switchEl = document.querySelector("#dark-mode-switch input");
 
 function setDarkModeSwitch() {
-	let darkModeCookie = document.cookie.split("=");
-	if (darkModeCookie[0] === "dark-mode" && darkModeCookie[1] === "true") {
+	if (document.cookie.includes("dark-mode=true")) {
 		switchEl.checked = true;
 	}
 }
