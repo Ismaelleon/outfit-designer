@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 	<head>
 		<title>Outfit Designer</title>
 		<meta charset="UTF-8">
@@ -11,42 +11,101 @@
 	<body>
 		<header class="flex flex-row justify-center items-center p-3 w-full border-b fixed top-0 left-0 bg-white sm:p-2">
 			<section class="flex flex-row justify-between items-center w-full max-w-2xl">
-				<a href="/" class="font-bold text-base">Outfit Designer</a>
+				<a href="#" class="font-bold text-base">Outfit Designer</a>
 				<i id="menu-open" class="las la-bars text-2xl sm:scale-0"></i>
 				<nav class="hidden items-center justify-center flex-col fixed w-full h-screen bg-white inset-0 sm:flex sm:static sm:w-auto sm:h-auto sm:flex-row" id="menu">
 					<i id="menu-close" class="las la-times text-2xl fixed top-3 right-3 sm:scale-0"></i>
-					<a href="/" class="text-2xl my-2 text-zinc-600 hover:text-zinc-950 ml-5 sm:text-sm sm:my-0">About</a>
-					<a href="/" class="text-2xl my-2 text-zinc-600 hover:text-zinc-950 ml-5 sm:text-sm sm:my-0">Screenshots</a>
-					<a href="#log-in" id="log-in" class="text-2xl my-2 text-center font-medium text-white ml-5 p-3 bg-zinc-950 min-w-32 hover:bg-zinc-800 rounded sm:min-w-16 sm:p-2 sm:text-sm sm:my-0">Log In</a>
+					<a href="#features" class="text-xl my-2 text-zinc-600 hover:text-zinc-950 ml-5 sm:text-sm sm:my-0">Features</a>
+					<a href="#how-it-works" class="text-xl my-2 text-zinc-600 hover:text-zinc-950 ml-5 sm:text-sm sm:my-0">How It Works</a>
+					<span class="w-full max-w-64 my-2 block mx-auto h-[1px] bg-zinc-950/20 sm:hidden"></span>
+					<section class="flex flex-row">
+						<a href="#log-in" id="log-in" class="text-sm my-2 text-center font-medium text-white ml-5 p-2 bg-zinc-950 min-w-24 hover:bg-zinc-800 rounded sm:min-w-20 sm:text-sm sm:my-0">Log In</a>
+						<a href="#sign-up" id="sign-up" class="text-sm my-2 text-center font-medium ml-5 p-2 min-w-24 hover:bg-zinc-100 border border-zinc-950/20 rounded sm:hidden">Sign Up</a>
+					</section>
 				</nav>
 			</section>
 		</header>
-		<main class="flex justify-center items-center w-full h-screen">
-			<section class="p-2">
-				<h1 class="text-2xl font-bold">Design your closet</h1>
+		<main class="flex flex-col justify-center items-center w-full min-h-screen">
+			<section class="flex flex-col items-center justify-center pt-[57px] p-2 w-full max-w-2xl h-screen">
+				<h1 class="text-3xl font-bold mb-2 text-center">Design Your Perfect Outfit</h1>
+				<blockquote class="text-center max-w-xs text-zinc-600 text-lg mb-5">
+					Organize your wardrobe, create stunning outfits,
+					and elevate your style with Outfit Designer.
+				</blockquote>
+				<section class="flex gap-3">
+					<a href="#sign-up" class="text-sm font-medium text-center text-white p-3 bg-zinc-950 min-w-32 hover:bg-zinc-800 rounded" id="get-started">Get Started</a>
+					<a href="#features" id="log-in" class="text-sm font-medium text-center p-3 border border-zinc-950/20 hover:bg-zinc-100 min-w-32 rounded">Learn More</a>
+				</section>
+			</section>
+			<section class="flex flex-col items-center justify-center p-2 max-w-2xl pt-[57px] h-screen" id="features">
+				<h2 class="text-2xl font-bold mb-2 text-center">Features</h2>	
+				<ul class="flex flex-col sm:flex-row my-2">
+					<li class="text-center my-4">
+						<i class="las la-tshirt text-4xl"></i>
+						<h3 class="text-xl font-semibold">Virtual Closet</h3>
+						<p class="text-zinc-600">
+							Digitize and organize your entire wardrobe in one place.
+						</p>
+					</li>
+					<li class="text-center my-4">
+						<i class="las la-user-tie text-4xl"></i>
+						<h3 class="text-xl font-semibold">Outfit Creator</h3>
+						<p class="text-zinc-600">
+							Mix and match items to create perfect outfits for any occasion.
+						</p>
+					</li>
+					<li class="text-center my-4">
+						<i class="las la-filter text-4xl"></i>
+						<h3 class="text-xl font-semibold">Smart Filtering</h3>
+						<p class="text-zinc-600">
+							Easily find the right clothes with powerful filtering options.
+						</p>
+					</li>
+				</ul>
+			</section>
+			<section class="flex flex-col items-center justify-center p-2 max-w-2xl pt-[57px] h-screen" id="how-it-works">
+				<h2 class="text-2xl font-bold mb-2 text-center">How It Works</h2>
+				<section class="flex flex-col gap-6 items-center sm:flex-row">
+					<video width="200" height="" class="mt-4 shadow-2xl rounded-lg" autoplay muted loop>
+						<source src="/videos/outfit-designer.mp4" type="video/mp4">		
+					</video>
+					<ol class="text-lg text-zinc-600">
+						<li>1. Save your clothes</li>
+						<li>2. Create your outfits</li>
+						<li>3. Enjoy!</li>
+					</ol>
+				</section>
+			</section>
+			<section class="flex flex-col items-center justify-center p-2 max-w-2xl min-h-[50vh] h-screen">
+				<h2 class="text-2xl font-bold mb-2 text-center">Ready to Elevate Your Style?</h2>
+				<p class="text-center max-w-xs text-zinc-600 text-lg mb-5">Join now and start designing your perfect outfits today.</p>
+					<a href="#sign-up" class="text-sm font-medium text-center text-white p-3 bg-zinc-950 min-w-32 hover:bg-zinc-800 rounded" id="join">Join Now</a>
 			</section>
 		</main>
-		<section class="flex justify-center items-center w-full h-screen fixed top-0 left-0 bg-zinc-950/50 hidden" id="login-dialog">
+		<footer class="border-t border-zinc-950/20 block m-auto max-w-2xl w-full p-2 py-4">
+			<p class="text-sm text-zinc-600">© 2024 Outfit Designer. All rights reserved.</p>
+		</footer>
+		<section class="flex justify-center items-center w-full h-screen fixed top-0 left-0 bg-zinc-950/20 hidden" id="login-dialog">
 			<section class="flex flex-col p-4 bg-white rounded w-full max-w-xs">
 				<button class="ml-auto close">
 					<i class="las la-times text-2xl"></i>
 				</button>
 
-				<h2 class="text-xl font-medium">Log In</h2>	
-				<p>Welcome back to Outfit Designer.</p>
+				<h2 class="text-xl font-semibold">Log In</h2>	
+				<p class="text-zinc-600">Welcome back to Outfit Designer.</p>
 
 				{% include 'components/login-form.html' %}
 				<a href="#sign-up" class="text-sm text-center mt-2 text-zinc-600 hover:text-zinc-950" id="signup-toggle">New here? Sign Up</a>
 			</section>	
 		</section>
-		<section class="flex justify-center items-center w-full h-screen fixed top-0 left-0 bg-zinc-950/50 hidden" id="signup-dialog">
+		<section class="flex justify-center items-center w-full h-screen fixed top-0 left-0 bg-zinc-950/20 hidden" id="signup-dialog">
 			<section class="flex flex-col p-4 bg-white rounded w-full max-w-xs">
 				<button class="ml-auto close">
 					<i class="las la-times text-2xl"></i>
 				</button>
 
-				<h2 class="text-xl font-medium">Sign Up</h2>	
-				<p>Welcome to Outfit Designer.</p>
+				<h2 class="text-xl font-semibold">Sign Up</h2>	
+				<p class="text-zinc-600">Welcome to Outfit Designer.</p>
 
 				{% include 'components/signup-form.html' %}
 				<a href="#log-in" class="text-sm text-center mt-2 text-zinc-600 hover:text-zinc-950" id="login-toggle">Already have an account? Log In</a>

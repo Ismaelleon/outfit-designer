@@ -151,14 +151,13 @@ def setup_router (app, mongo):
                 season = request.form["season"]
 
                 # Filter outfits by clothes and season
-                filtered_outfits = user["outfits"]
+                filtered_outfits = []
                 for outfit in user["outfits"]:
-                    if int(clothes) != 0 and int(clothes) != len(outfit["clothes"]):
-                        if outfit in filtered_outfits:
-                            filtered_outfits.remove(outfit)
-                    if season != "all" and season != outfit["season"]:
-                        if outfit in filtered_outfits:
-                            filtered_outfits.remove(outfit)
+                    if (
+                        (int(clothes) == 0 or int(clothes) == len(outfit["clothes"])) and
+                        (season == "all" or season == outfit["season"])
+                    ):
+                        filtered_outfits.append(outfit)
 
                 data = dark_mode({"outfits": filtered_outfits}, request.cookies)
                 return render_template("components/outfit.html", data=data)
@@ -312,15 +311,14 @@ def setup_router (app, mongo):
                     colors = request.form.getlist("color")
 
                 # Filter clothes by type, brand, and colors 
-                filtered_clothes = user["closet"]
+                filtered_clothes = []
                 for clothing_item in user["closet"]:
-                    if clothing_item in filtered_clothes:
-                        if clothing_type != "all" and clothing_type != clothing_item["type"]:
-                            filtered_clothes.remove(clothing_item)
-                        if brand != "" and brand.lower() != clothing_item["brand"].lower():
-                            filtered_clothes.remove(clothing_item)
-                        if len(colors) > 0 and sorted(colors) != sorted(clothing_item["colors"]):
-                            filtered_clothes.remove(clothing_item)
+                    if (
+                        (clothing_type == "all" or clothing_type == clothing_item["type"]) and 
+                        (brand == "" or brand.lower() == clothing_item["brand"].lower()) and
+                        (len(colors) == 0 or sorted(colors) == sorted(clothing_item["colors"]))
+                    ):
+                        filtered_clothes.append(clothing_item)
 
                 data = dark_mode({ "closet": filtered_clothes }, request.cookies)
                 return render_template("components/clothing-item.html", data=data)

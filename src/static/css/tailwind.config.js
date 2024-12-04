@@ -6,6 +6,9 @@ module.exports = {
 	],
 	darkMode: 'selector',
 	theme: {
+		fontFamily: {
+			'sans': ['Geist'],
+		},
 		extend: {},
 	},
 	plugins: [],
