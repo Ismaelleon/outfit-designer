@@ -1199,6 +1199,11 @@ video {
   color: rgb(9 9 11 / var(--tw-text-opacity, 1));
 }
 
+.text-black{
+  --tw-text-opacity: 1;
+  color: rgb(0 0 0 / var(--tw-text-opacity, 1));
+}
+
 .accent-black{
   accent-color: #000;
 }
