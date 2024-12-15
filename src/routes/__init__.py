@@ -1,10 +1,10 @@
-import os, bcrypt, cloudinary, cloudinary.uploader, uuid, datetime
+import os, bcrypt, cloudinary, cloudinary.uploader, uuid, datetime, secrets
 from flask import send_from_directory, render_template, redirect, request, make_response, session
 from cloudinary import CloudinaryImage
 from werkzeug.utils import secure_filename
 from bson.objectid import ObjectId
 from rembg import remove
-from helpers import dark_mode
+from helpers import dark_mode, send_verification_mail
 
 def setup_router (app, mongo):
     # Static files
@@ -30,7 +30,19 @@ def setup_router (app, mongo):
             user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
             outfits = user["outfits"]
 
-            data = dark_mode({"outfits": outfits}, request.cookies)
+            # Get the "activated" url param, to show a banner letting the user know that the account is activated
+            just_activated = request.args.get("activated")
+
+            if just_activated != "true":
+                just_activated = False
+            else:
+                just_activated = True
+
+            data = dark_mode({
+                "outfits": outfits,
+                "just_activated": just_activated,
+                "activated": user["activation"]["activated"]
+            }, request.cookies)
             return render_template("outfits.html", data=data)
 
         # Otherwise, redirect to the home page
@@ -57,7 +69,7 @@ def setup_router (app, mongo):
                     if str(clothing_item["_id"]) == clothing_id:
                         outfit["clothes"][index] = clothing_item 
 
-            data = dark_mode({"outfit": outfit}, request.cookies)
+            data = dark_mode({"outfit": outfit, "activated": user["activation"]["activated"]}, request.cookies)
             return render_template("outfit.html", data=data)
 
     @app.route("/outfits/new", methods=["POST", "GET"])
@@ -65,7 +77,7 @@ def setup_router (app, mongo):
         if request.method == "POST":
             # If user not logged in
             if not session.get("id"):
-                res = make_response({"msg": "Unauthorized"}, 401)
+                res = make_response({"message": "Unauthorized"}, 401)
                 res.headers["HX-Redirect"] = "/outfits"
                 return res
 
@@ -121,7 +133,7 @@ def setup_router (app, mongo):
             # Update document with updated closet array
             result = mongo.db.users.update_one({"_id": ObjectId(user_id)}, {"$set": {"outfits": outfits}})
             
-            res = make_response({"msg": "OK"}, 200)
+            res = make_response({"message": "OK"}, 200)
             res.headers["HX-Redirect"] = f"/outfits/{new_outfit_id}?redirect"
             return res
             
@@ -132,7 +144,7 @@ def setup_router (app, mongo):
             user_id = session.get("id")
             user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
 
-            data = dark_mode({"closet": user["closet"]}, request.cookies)
+            data = dark_mode({"closet": user["closet"], "activated": user["activation"]["activated"]}, request.cookies)
             return render_template("create-outfit.html", data=data)
 
         # Otherwise, redirect to the home page
@@ -159,7 +171,7 @@ def setup_router (app, mongo):
                     ):
                         filtered_outfits.append(outfit)
 
-                data = dark_mode({"outfits": filtered_outfits}, request.cookies)
+                data = dark_mode({"outfits": filtered_outfits, "activated": user["activation"]["activated"]}, request.cookies)
                 return render_template("components/outfit.html", data=data)
 
 
@@ -186,7 +198,7 @@ def setup_router (app, mongo):
                 result = mongo.db.users.update_one({"_id": ObjectId(user_id)}, {"$set": {"outfits": outfits}})
 
                 # Return outfits html
-                data = dark_mode({ "outfits": outfits }, request.cookies)
+                data = dark_mode({ "outfits": outfits, "activated": user["activation"]["activated"] }, request.cookies)
                 return render_template("components/outfit.html", data=data)
 
     @app.route("/closet")
@@ -197,7 +209,7 @@ def setup_router (app, mongo):
             user_id = session.get("id")
             user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
 
-            data = dark_mode({ "closet": user["closet"] }, request.cookies)
+            data = dark_mode({ "closet": user["closet"], "activated": user["activation"]["activated"] }, request.cookies)
             return render_template("closet.html", data=data)
 
         # Otherwise, redirect to the home page
@@ -218,7 +230,7 @@ def setup_router (app, mongo):
                     clothing_item = clothing_item
                     break
 
-            data = dark_mode({ "clothing_item": clothing_item }, request.cookies)
+            data = dark_mode({ "clothing_item": clothing_item, "activated": user["activation"]["activated"] }, request.cookies)
             return render_template("closet-item.html", data=data)
 
     @app.route("/closet/new", methods=["POST", "GET"])
@@ -226,13 +238,13 @@ def setup_router (app, mongo):
         if request.method == "POST":
             # If user not logged in
             if not session.get("id"):
-                res = make_response({"msg": "Unauthorized"}, 401)
+                res = make_response({"message": "Unauthorized"}, 401)
                 res.headers["HX-Redirect"] = "/outfits"
                 return res
 
             # If required properties not added
             if "name" not in request.form or "type" not in request.form or "color" not in request.form or "image" not in request.files:
-                data = dark_mode({ "error": True }, request.cookies)
+                data = dark_mode({ "error": True, "activated": user["activation"]["activated"] }, request.cookies)
                 return render_template("add-clothes.html", data=data)
 
             # Get request body 
@@ -244,7 +256,7 @@ def setup_router (app, mongo):
 
             # If user does not select a file
             if image_file.filename == "":
-                return make_response({"msg": "Bad Request"}, 400)
+                return make_response({"message": "Bad Request"}, 400)
 
             # Save image file
             image_filename = secure_filename(str(uuid.uuid4()))
@@ -283,13 +295,13 @@ def setup_router (app, mongo):
             # Update document with updated closet array
             result = mongo.db.users.update_one({"_id": ObjectId(user_id)}, {"$set": {"closet": closet}})
             
-            res = make_response({"msg": "OK"}, 200)
+            res = make_response({"message": "OK"}, 200)
             res.headers["HX-Redirect"] = f"/closet/{new_clothing_id}?redirect"
             return res
 
         # If user logged in render template
         if session.get("id"):
-            data = dark_mode({ "error": False }, request.cookies)
+            data = dark_mode({ "error": False, "activated": user["activation"]["activated"] }, request.cookies)
             return render_template("add-clothes.html", data=data)
 
         # Otherwise, redirect to the home page
@@ -320,7 +332,7 @@ def setup_router (app, mongo):
                     ):
                         filtered_clothes.append(clothing_item)
 
-                data = dark_mode({ "closet": filtered_clothes }, request.cookies)
+                data = dark_mode({ "closet": filtered_clothes, "activated": user["activation"]["activated"] }, request.cookies)
                 return render_template("components/clothing-item.html", data=data)
 
     @app.route("/closet/delete/<string:clothing_id>", methods=["DELETE"])
@@ -344,7 +356,7 @@ def setup_router (app, mongo):
                 result = mongo.db.users.update_one({"_id": ObjectId(user_id)}, {"$set": {"closet": closet}})
 
                 # Return closet html
-                data = dark_mode({ "closet": closet }, request.cookies)
+                data = dark_mode({ "closet": closet, "activated": user["activation"]["activated"] }, request.cookies)
                 return render_template("components/clothing-item.html", data=data)
 
     @app.route("/profile")
@@ -355,7 +367,7 @@ def setup_router (app, mongo):
             user_id = session.get("id")
             user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
 
-            data = dark_mode({ "user": user }, request.cookies)
+            data = dark_mode({ "user": user, "activated": user["activation"]["activated"] }, request.cookies)
             return render_template("profile.html", data=data)
 
         return redirect("/")
@@ -368,7 +380,7 @@ def setup_router (app, mongo):
             user_id = session.get("id")
             user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
 
-            data = dark_mode({ "user": user }, request.cookies)
+            data = dark_mode({ "user": user, "activated": user["activation"]["activated"] }, request.cookies)
             return render_template("settings.html", data=data)
 
         return redirect("/")
@@ -412,10 +424,16 @@ def setup_router (app, mongo):
                 "email": email,
                 "password": hashed_password,
                 "closet": [],
-                "outfits": []
+                "outfits": [],
+                "activation": {
+                    "activated": False,
+                    "code": secrets.token_urlsafe(16)
+                }
             }
 
             result = mongo.db.users.insert_one(new_user)
+            
+            send_verification_mail(email, new_user["activation"]["code"])
 
             if result.acknowledged == False:
                 return make_response({"message": "Internal Server Error"}, 500)
@@ -427,6 +445,24 @@ def setup_router (app, mongo):
             res = make_response({"message": "OK"}, 200)
             res.headers["HX-Redirect"] = "/outfits"
             return res 
+
+    @app.route("/activate/<string:activation_code>", methods=["GET"])
+    def activate_account(activation_code):
+        # Find user with same activation code
+        user = mongo.db.users.find_one({ "activation": { "activated": False, "code": activation_code } })
+
+        if user == None:
+            return redirect("/")
+
+        updated_activation = {
+            "activation": {
+                "activated": True
+            }
+        }
+        result = mongo.db.users.update_one({"_id": ObjectId(user["_id"])}, {"$set": updated_activation})
+
+        return redirect("/outfits?activated=true")
+
 
     @app.route("/log-in", methods=["POST"])
     def log_in ():

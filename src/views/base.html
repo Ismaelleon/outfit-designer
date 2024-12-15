@@ -19,7 +19,23 @@
 		{% include 'components/navbar.html' %}
 		{% include 'components/mobile-navbar.html' %}
 		{% include 'components/progress-bar.html' %}
-		<main class="flex justify-center w-full pt-[53px] px-4">
+		<main class="flex flex-col items-center w-full pt-[56px] sm:pt-[61px] px-4">
+			{% if data["activated"] == False %}
+				<section class="flex bg-black py-2 px-3 w-full max-w-3xl text-white items-center">
+					<p class="text-sm flex items-center gap-2">
+						<i class="las la-user-check text-lg"></i>
+						An e-mail has been sent to your address, activate your account to hide this message.
+					</p>
+				</section>
+			{% endif %}
+			{% if data["just_activated"] == True %}
+				<section class="flex bg-green-600 py-2 px-3 w-full max-w-3xl text-white items-center">
+					<p class="text-sm flex items-center gap-2">
+						<i class="las la-user-check text-lg"></i>
+						Your account has been activated!
+					</p>
+				</section>
+			{% endif %}
 			{% block content %}{% endblock %}
 		</main>
 	</body>
