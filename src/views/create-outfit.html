@@ -51,7 +51,7 @@
 		</section>
 	</section>
 	<section class="flex justify-center items-center w-full h-screen fixed top-0 left-0 bg-zinc-950/50 hidden" id="clothes-dialog">
-		<section class="flex flex-col p-4 bg-white rounded w-full max-w-3xl max-h-[80%]">
+		<section class="flex flex-col p-4 bg-white rounded w-full max-w-3xl max-h-[80%] dark:bg-zinc-900">
 			<header class="flex flex-row items-center">
 				<h2 class="text-lg font-medium">Select Clothes</h2>	
 				<button class="ml-auto close" onclick="toggleOutfitDialog()">
@@ -61,7 +61,7 @@
 			<section class="grid grid-cols-2 sm:grid-cols-3 auto-rows-max gap-2 mt-2 overflow-y-scroll">
 				{% if data['closet']|length > 0: %}
 					{% for clothing_item in data['closet'] %}
-						<section class="flex flex-col p-3 rounded border relative overflow-hidden after:w-full after:h-full hover:after:bg-zinc-950/40 after:absolute after:top-0 after:left-0 after:flex after:justify-center after:items-center after:cursor-pointer" id={{ clothing_item['_id'] }}>
+						<section class="flex flex-col p-3 rounded border relative overflow-hidden after:w-full after:h-full hover:after:bg-zinc-950/40 after:absolute after:top-0 after:left-0 after:flex after:justify-center after:items-center after:cursor-pointer dark:border-zinc-600" id={{ clothing_item['_id'] }}>
 							<img src="{{ clothing_item['image'] }}" alt="" class="w-full rounded mb-2">	
 							<header class="flex flex-row justify-between items-center">
 								<a href="/closet/{{ clothing_item['_id'] }}" class="text-base font-bold">{{ clothing_item['name'].capitalize() }}</a>
@@ -90,7 +90,7 @@
 					</h3> 
 				{% endif %}
 			</section>
-			<button class="w-full p-2 bg-zinc-950 text-white font-medium sm:text-sm rounded hover:bg-zinc-800 mt-2" onclick="saveOutfitClothes(event)">
+			<button class="w-full p-2 bg-zinc-950 text-white font-medium sm:text-sm rounded hover:bg-zinc-800 mt-2 dark:bg-white dark:text-black dark:hover:bg-zinc-200" onclick="saveOutfitClothes(event)">
 				Save
 			</button>
 		</section>
