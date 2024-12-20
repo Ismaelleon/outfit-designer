@@ -4,7 +4,7 @@ from cloudinary import CloudinaryImage
 from werkzeug.utils import secure_filename
 from bson.objectid import ObjectId
 from rembg import remove
-from helpers import dark_mode, send_verification_mail
+from helpers import dark_mode, send_verification_mail, handle_invalid_user_session
 
 def setup_router (app, mongo):
     # Static files
@@ -28,6 +28,10 @@ def setup_router (app, mongo):
             # Get user document 
             user_id = session.get("id")
             user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
+
+            if user == None:
+                return handle_invalid_user_session()
+
             outfits = user["outfits"]
 
             # Get the "activated" url param, to show a banner letting the user know that the account is activated
@@ -55,6 +59,9 @@ def setup_router (app, mongo):
             # Get user data
             user_id = session.get("id")
             user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
+
+            if user == None:
+                return handle_invalid_user_session()
 
             # Find outfit
             outfit = {}
@@ -118,6 +125,9 @@ def setup_router (app, mongo):
             user_id = session.get("id")
             user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
 
+            if user == None:
+                return handle_invalid_user_session()
+
             # Update closet array 
             outfits = user["outfits"]
             new_outfit_id = ObjectId()
@@ -144,6 +154,9 @@ def setup_router (app, mongo):
             user_id = session.get("id")
             user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
 
+            if user == None:
+                return handle_invalid_user_session()
+
             data = dark_mode({"closet": user["closet"], "activated": user["activation"]["activated"]}, request.cookies)
             return render_template("create-outfit.html", data=data)
 
@@ -157,6 +170,9 @@ def setup_router (app, mongo):
                 # Get user document
                 user_id = session.get("id")
                 user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
+
+                if user == None:
+                    return handle_invalid_user_session()
 
                 # Get request body
                 clothes = request.form["clothes"] 
@@ -183,6 +199,8 @@ def setup_router (app, mongo):
                 user_id = session.get("id")
                 user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
 
+                if user == None:
+                    return handle_invalid_user_session()
 
                 # Remove outfits from outfits list 
                 outfits = user["outfits"]
@@ -209,6 +227,9 @@ def setup_router (app, mongo):
             user_id = session.get("id")
             user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
 
+            if user == None:
+                return handle_invalid_user_session()
+
             data = dark_mode({ "closet": user["closet"], "activated": user["activation"]["activated"] }, request.cookies)
             return render_template("closet.html", data=data)
 
@@ -222,6 +243,9 @@ def setup_router (app, mongo):
             # Get user data
             user_id = session.get("id")
             user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
+
+            if user == None:
+                return handle_invalid_user_session()
 
             # Find clothing item
             clothing_item = {}
@@ -244,6 +268,12 @@ def setup_router (app, mongo):
 
             # If required properties not added
             if "name" not in request.form or "type" not in request.form or "color" not in request.form or "image" not in request.files:
+                user_id = session.get("id")
+                user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
+
+                if user == None:
+                    return handle_invalid_user_session()
+
                 data = dark_mode({ "error": True, "activated": user["activation"]["activated"] }, request.cookies)
                 return render_template("add-clothes.html", data=data)
 
@@ -280,6 +310,9 @@ def setup_router (app, mongo):
             user_id = session.get("id")
             user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
 
+            if user == None:
+                return handle_invalid_user_session()
+
             # Update closet array 
             closet = user["closet"]
             new_clothing_id = ObjectId()
@@ -301,6 +334,12 @@ def setup_router (app, mongo):
 
         # If user logged in render template
         if session.get("id"):
+            user_id = session.get("id")
+            user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
+
+            if user == None:
+                return handle_invalid_user_session()
+
             data = dark_mode({ "error": False, "activated": user["activation"]["activated"] }, request.cookies)
             return render_template("add-clothes.html", data=data)
 
@@ -314,6 +353,9 @@ def setup_router (app, mongo):
                 # Get user document
                 user_id = session.get("id")
                 user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
+
+                if user == None:
+                    return handle_invalid_user_session()
 
                 # Get request body
                 clothing_type = request.form["type"] 
@@ -343,6 +385,9 @@ def setup_router (app, mongo):
                 user_id = session.get("id")
                 user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
 
+                if user == None:
+                    return handle_invalid_user_session()
+
                 # Remove clothes from closet list 
                 closet = user["closet"]
                 for item in closet:
@@ -367,6 +412,9 @@ def setup_router (app, mongo):
             user_id = session.get("id")
             user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
 
+            if user == None:
+                return handle_invalid_user_session() 
+
             data = dark_mode({ "user": user, "activated": user["activation"]["activated"] }, request.cookies)
             return render_template("profile.html", data=data)
 
@@ -379,6 +427,9 @@ def setup_router (app, mongo):
             # Get user document 
             user_id = session.get("id")
             user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
+
+            if user == None:
+                return handle_invalid_user_session()
 
             data = dark_mode({ "user": user, "activated": user["activation"]["activated"] }, request.cookies)
             return render_template("settings.html", data=data)

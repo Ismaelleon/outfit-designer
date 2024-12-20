@@ -1,4 +1,5 @@
 import smtplib, os
+from flask import session, redirect
 from email.mime.text import MIMEText
 from jinja2 import Template, Environment, FileSystemLoader
 
@@ -7,6 +8,10 @@ def dark_mode(data, cookies):
         data["dark-mode"] = True
 
     return data
+
+def handle_invalid_user_session():
+    session.clear()
+    return redirect("/")
 
 def send_verification_mail(email, activation_code):
     # Open verification mail file
