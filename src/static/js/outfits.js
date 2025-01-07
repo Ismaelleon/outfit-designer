@@ -23,6 +23,9 @@ function showDeletionModal(event) {
 	// Set the attribute to use the DELETE method, with the outfit id
 	deleteButton.setAttribute("hx-delete", `/outfits/delete/${outfitEl.id}`);
 
+	// Set the target for htmx swap to #outfits-list
+	deleteButton.setAttribute("hx-target", "#outfits-list");
+
 	// Make htmx process the button
 	htmx.process(deleteButton);
 }
