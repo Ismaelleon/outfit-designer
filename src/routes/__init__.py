@@ -388,6 +388,13 @@ def setup_router (app, mongo):
                 if user == None:
                     return handle_invalid_user_session()
 
+                # Remove outfits using this clothing item
+                outfits = user["outfits"]
+                for outfit in outfits:
+                    for clothing_item in outfit["clothes"]:
+                        if clothing_item == clothing_id:
+                            outfits.remove(outfit)
+
                 # Remove clothes from closet list 
                 closet = user["closet"]
                 for item in closet:
@@ -398,7 +405,7 @@ def setup_router (app, mongo):
                         closet.remove(item)
 
                 # Save updated closet
-                result = mongo.db.users.update_one({"_id": ObjectId(user_id)}, {"$set": {"closet": closet}})
+                result = mongo.db.users.update_one({"_id": ObjectId(user_id)}, {"$set": {"closet": closet, "outfits": outfits}})
 
                 # Return closet html
                 data = dark_mode({ "closet": closet, "activated": user["activation"]["activated"] }, request.cookies)
