@@ -491,7 +491,7 @@ def setup_router (app, mongo):
 
             result = mongo.db.users.insert_one(new_user)
             
-            send_verification_mail(email, new_user["activation"]["code"])
+            send_verification_mail(email, new_user["activation"]["code"], app)
 
             if result.acknowledged == False:
                 return make_response({"message": "Internal Server Error"}, 500)

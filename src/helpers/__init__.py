@@ -1,7 +1,7 @@
 import smtplib, os
 from flask import session, redirect
-from email.mime.text import MIMEText
 from jinja2 import Template, Environment, FileSystemLoader
+from flask_mail import Mail, Message
 
 def dark_mode(data, cookies):
     if "dark-mode" in cookies and cookies["dark-mode"] == "true":
@@ -13,7 +13,7 @@ def handle_invalid_user_session():
     session.clear()
     return redirect("/")
 
-def send_verification_mail(email, activation_code):
+def send_verification_mail(email, activation_code, app):
     # Open verification mail file
     env = Environment(loader=FileSystemLoader("./views"))
     template = env.get_template("verification-mail.html")
@@ -25,13 +25,16 @@ def send_verification_mail(email, activation_code):
     }
     final_html = template.render(data=data)
 
-    message = MIMEText(final_html, "html")
-    message["Subject"] = "Activate your account"
-    message["From"] = "example@outfit-designer.com"
-    message["To"] = email
+    try:
+        # Init flask mail
+        mail = Mail(app)
 
-    s = smtplib.SMTP(os.environ["MAILTRAP_HOST"], 2525)
-    s.starttls()
-    s.login(os.environ["MAILTRAP_USER"], os.environ["MAILTRAP_PASSWORD"])
-    s.sendmail("example@outfit-designer.com", email, message.as_string())
-    s.quit()
+        msg = Message(
+            subject="Activate your account",
+            recipients=[email],
+            html=final_html
+        )
+
+        mail.send(msg)
+    except Exception as error:
+        return f"Failed to send email: {error}"
