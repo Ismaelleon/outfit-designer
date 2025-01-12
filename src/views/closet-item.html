@@ -2,13 +2,13 @@
 {% block content %}
 	<section class="w-full max-w-3xl pt-4">
 		<header class="flex flex-row justify-between items-center mb-2">
-			<h2 class="text-lg font-bold">{{ data['clothing_item']['name'].capitalize() }}</h2>
+			<h2 class="text-base font-bold">{{ data['clothing_item']['name'].capitalize() }}</h2>
 		</header>
 		<section class="flex flex-col">
 			<img src="{{ data['clothing_item']['image'] }}" class="max-w-xs mb-2 rounded">
-			<span><span class="font-medium">Brand</span>: {{ data['clothing_item']['brand'].capitalize() }}</span>
-			<span><span class="font-medium">Type</span>: {{ data['clothing_item']['type'].capitalize() }}</span>
-			<span>
+			<span class="text-sm"><span class="font-medium">Brand</span>: {{ data['clothing_item']['brand'].capitalize() }}</span>
+			<span class="text-sm"><span class="font-medium">Type</span>: {{ data['clothing_item']['type'].capitalize() }}</span>
+			<span class="text-sm">
 				<span class="font-medium">Colors</span>:
 				{% for color in data['clothing_item']['colors'] %}
 					{% if loop.index < data['clothing_item']['colors']|length: %}

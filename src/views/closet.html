@@ -11,12 +11,12 @@
 				</button>	
 				<ul class="hidden absolute left-0 top-full translate-y-4 p-4 bg-zinc-200 rounded flex flex-col w-full col-span-2 sm:w-auto sm:left-auto sm:right-0 z-20 dark:bg-zinc-800" id="filters-menu">
 					<form hx-post="/closet/filter" hx-swap="innerHTML" hx-target="#clothing-list" class="flex flex-col">
-						<label for="type-input" class="sm:text-sm font-medium mb-1">Type</label>
+						<label for="type-input" class="text-sm font-medium mb-1">Type</label>
 						<select name="type" id="type-input"
 							{% if data['error'] == True %}
-								class="sm:text-sm p-2 border border-red-500 rounded mb-2 bg-white dark:bg-transparent">
+								class="text-sm p-2 border border-red-500 rounded mb-2 bg-white dark:bg-transparent">
 							{% else %}
-								class="sm:text-sm p-2 border border-zinc-400 rounded mb-2 bg-white dark:bg-transparent dark:border-zinc-600">
+								class="text-sm p-2 border border-zinc-400 rounded mb-2 bg-white dark:bg-transparent dark:border-zinc-600">
 							{% endif %}
 							<option value="all" selected>All</option>
 							<option value="cap">Cap</option>
@@ -34,66 +34,66 @@
 							<option value="t-shirt">T-Shirt</option>
 						</select>
 						<p class="col-start-1 col-end-2 flex flex-col">
-							<label for="brand-input" class="sm:text-sm font-medium mb-1">Brand</label>
+							<label for="brand-input" class="text-sm font-medium mb-1">Brand</label>
 							<input type="text" id="brand-input" name="brand" 
 								{% if data['error'] == True %}
-									class="sm:text-sm p-2 border border-red-500 rounded mb-2 dark:bg-transparent">
+									class="text-sm p-2 border border-red-500 rounded mb-2 dark:bg-transparent">
 								{% else %}
-									class="sm:text-sm p-2 border border-zinc-400 rounded mb-2 dark:bg-transparent dark:border-zinc-600">
+									class="text-sm p-2 border border-zinc-400 rounded mb-2 dark:bg-transparent dark:border-zinc-600">
 								{% endif %}
 						</p>
 						<fieldset class="grid grid-cols-3 gap-1 flex-col items-start mb-2 col-start-1 col-end-2">
-							<legend class="sm:text-sm font-medium mb-1">Colors</legend>
-							<p class="sm:text-sm">
+							<legend class="text-sm font-medium mb-1">Colors</legend>
+							<p class="text-sm">
 								<input type="checkbox" name="color" value="white" id="color-white" class="accent-zinc-200">
 								<label for="color-white">White</label>
 							</p>
-							<p class="sm:text-sm">
+							<p class="text-sm">
 								<input type="checkbox" name="color" value="gray" id="color-gray" class="accent-zinc-400">
 								<label for="color-gray">Gray</label>
 							</p>
-							<p class="sm:text-sm">
+							<p class="text-sm">
 								<input type="checkbox" name="color" value="black" id="color-black" class="accent-black">
 								<label for="color-black">Black</label>
 							</p>
-							<p class="sm:text-sm">
+							<p class="text-sm">
 								<input type="checkbox" name="color" value="red" id="color-red" class="accent-red-600">
 								<label for="color-red">Red</label>
 							</p>
-							<p class="sm:text-sm">
+							<p class="text-sm">
 								<input type="checkbox" name="color" value="blue" id="color-blue" class="accent-blue-600">
 								<label for="color-blue">Blue</label>
 							</p>
-							<p class="sm:text-sm">
+							<p class="text-sm">
 								<input type="checkbox" name="color" value="yellow" id="color-yellow" class="accent-yellow-400">
 								<label for="color-yellow">Yellow</label>
 							</p>
-							<p class="sm:text-sm">
+							<p class="text-sm">
 								<input type="checkbox" name="color" value="orange" id="color-orange" class="accent-orange-600">
 								<label for="color-orange">Orange</label>
 							</p>
-							<p class="sm:text-sm">
+							<p class="text-sm">
 								<input type="checkbox" name="color" value="green" id="color-green" class="accent-green-600">
 								<label for="color-green">Green</label>
 							</p>
-							<p class="sm:text-sm">
+							<p class="text-sm">
 								<input type="checkbox" name="color" value="purple" id="color-purple" class="accent-purple-600">
 								<label for="color-purple">Purple</label>
 							</p>
-							<p class="sm:text-sm">
+							<p class="text-sm">
 								<input type="checkbox" name="color" value="pink" id="color-pink" class="accent-pink-600">
 								<label for="color-pink">Pink</label>
 							</p>
-							<p class="sm:text-sm">
+							<p class="text-sm">
 								<input type="checkbox" name="color" value="brown" id="color-brown" class="accent-yellow-950">
 								<label for="color-brown">Brown</label>
 							</p>
-							<p class="sm:text-sm">
+							<p class="text-sm">
 								<input type="checkbox" name="color" value="cyan" id="color-cyan" class="accent-cyan-600">
 								<label for="color-cyan">Cyan</label>
 							</p>
 						</fieldset>
-						<button class="w-full p-2 bg-zinc-950 text-white font-medium sm:text-sm rounded hover:bg-zinc-800 mt-2 col-start-1 col-end-2 dark:bg-white dark:text-black dark:hover:bg-zinc-200">Apply</button>
+						<button class="w-full p-2 bg-zinc-950 text-white font-medium text-sm rounded hover:bg-zinc-800 mt-2 col-start-1 col-end-2 dark:bg-white dark:text-black dark:hover:bg-zinc-200">Apply</button>
 					</form>
 				</ul>
 				<a href="/closet/new" class="text-sm text-center font-medium text-white ml-5 p-2 bg-zinc-950 hover:bg-zinc-800 rounded min-w-16 flex flex-row items-center dark:bg-white dark:text-black dark:hover:bg-zinc-200">
@@ -112,5 +112,6 @@
 			{% endif %}
 		</section>
 	</section>
+	{% include 'components/delete-confirmation.html' %}
 	<script src="/js/closet.js"></script>
 {% endblock %}

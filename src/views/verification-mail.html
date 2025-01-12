@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Activate your account</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<style>
+			@import url('https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap');
+
+			html {
+				font-size: 16px;
+				font-family: "Geist";
+			}
+
+			h1 {
+				font-size: 1.875rem;
+				margin: 0;
+			}
+			
+			p {
+				margin-top: 0;
+				line-height: 2rem;
+			}
+
+			a {
+				padding: .75rem;
+				background-color: #000;
+				border-radius: .25rem;
+				text-decoration: none;
+				color: #fff;
+				font-weight: 500;
+				font-size: .875rem;
+			}
+
+			a:hover {
+				background-color: rgb(39, 39, 42);
+			}
+		</style>
+	</head>
+	<body>
+		<h1>Activate your account</h1>		
+		<p>Thanks for joining Outfit Designer.</p>
+		<a href="{{ data["APP_URL"] }}/activate/{{ data["activation_code"] }}">Activate account</a>
+	</body>
+</html>

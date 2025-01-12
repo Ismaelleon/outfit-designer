@@ -4,14 +4,22 @@
 		<header class="flex flex-row justify-between items-center pt-2">
 			<h2 class="text-lg sm:text-base font-bold">Your Settings</h2>
 		</header>
-		<section class="flex flex-row justify-between items-start mt-4">
+		<section class="flex flex-col justify-between items-start mt-4 gap-6">
 			<section class="flex flex-row justify-between items-center w-full">
 				<p class="text-sm">Dark Mode</p>
 				{% with id="dark-mode-switch" %}
 					{% include 'components/switch.html' %}
 				{% endwith %}
 			</section>
+			<section class="flex flex-row justify-between items-center w-full">
+				<span class="flex flex-col">
+					<p class="text-sm">Delete Account</p>
+					<p class="text-xs">There's not going back.</p>
+				</span>
+				<button class="text-sm text-center font-medium text-white p-2 bg-red-700 hover:bg-red-600 rounded min-w-16" onclick="showDeletionModal(event)">Delete my account</button>
+			</section>
 		</section>
 	</section>
+	{% include 'components/delete-account.html' %}
 	<script src="/js/settings.js"></script>
 {% endblock %}

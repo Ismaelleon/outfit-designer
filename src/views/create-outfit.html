@@ -13,7 +13,7 @@
 							{% if data['error'] == True %}
 								class="sm:text-sm p-2 border border-red-500 rounded mb-2 dark:bg-transparent">
 							{% else %}
-								class="sm:text-sm p-2 border border-zinc-400 rounded mb-2 dark:bg-transparent dark:border-zinc-600">
+								class="sm:text-sm p-2 border border-zinc-200 rounded mb-2 dark:bg-transparent dark:border-zinc-600">
 							{% endif %}
 					</p>
 					<p class="col-start-1 col-end-2 flex flex-col">
@@ -22,7 +22,7 @@
 							{% if data['error'] == True %}
 								class="sm:text-sm p-2 border border-red-500 rounded mb-3 bg-white dark:bg-transparent">
 							{% else %}
-								class="sm:text-sm p-2 border border-zinc-400 rounded mb-3 bg-white dark:bg-transparent dark:border-zinc-600">
+								class="sm:text-sm p-2 border border-zinc-200 rounded mb-3 bg-white dark:bg-transparent dark:border-zinc-600">
 							{% endif %}
 							<option value="summer">Summer</option>
 							<option value="autumn">Autumn</option>
@@ -37,7 +37,7 @@
 						{% if data['error'] == True %}
 							class="flex flex-row justify-center items-center border border-dashed border-red-500 rounded w-full col-start-1 col-end-3 p-4 sm:text-sm mb-2 font-medium max-h-32 h-full cursor-pointer">
 						{% else %}
-							class="flex flex-row justify-center items-center border border-dashed border-zinc-400 rounded w-full col-start-1 col-end-3 p-4 sm:text-sm mb-2 font-medium max-h-32 h-full cursor-pointer dark:border-zinc-600">
+							class="flex flex-row justify-center items-center border border-dashed border-zinc-200 rounded w-full col-start-1 col-end-3 p-4 sm:text-sm mb-2 font-medium max-h-32 h-full cursor-pointer dark:border-zinc-600">
 						{% endif %}
 						<i class="las la-tshirt text-2xl mr-1"></i>
 						Add Clothes
@@ -50,8 +50,8 @@
 			</form>
 		</section>
 	</section>
-	<section class="flex justify-center items-center w-full h-screen fixed top-0 left-0 bg-zinc-950/50 hidden" id="clothes-dialog">
-		<section class="flex flex-col p-4 bg-white rounded w-full max-w-3xl max-h-[80%]">
+	<section class="flex justify-center items-center w-full h-screen fixed top-0 left-0 bg-zinc-950/50 hidden z-40" id="clothes-dialog">
+		<section class="flex flex-col p-4 bg-white rounded w-full max-w-3xl max-h-[80%] dark:bg-zinc-900">
 			<header class="flex flex-row items-center">
 				<h2 class="text-lg font-medium">Select Clothes</h2>	
 				<button class="ml-auto close" onclick="toggleOutfitDialog()">
@@ -61,7 +61,7 @@
 			<section class="grid grid-cols-2 sm:grid-cols-3 auto-rows-max gap-2 mt-2 overflow-y-scroll">
 				{% if data['closet']|length > 0: %}
 					{% for clothing_item in data['closet'] %}
-						<section class="flex flex-col p-3 rounded border relative overflow-hidden after:w-full after:h-full hover:after:bg-zinc-950/40 after:absolute after:top-0 after:left-0 after:flex after:justify-center after:items-center after:cursor-pointer" id={{ clothing_item['_id'] }}>
+						<section class="flex flex-col p-3 rounded border relative overflow-hidden after:w-full after:h-full hover:after:bg-zinc-950/40 after:absolute after:top-0 after:left-0 after:flex after:justify-center after:items-center after:cursor-pointer dark:border-zinc-600" id={{ clothing_item['_id'] }}>
 							<img src="{{ clothing_item['image'] }}" alt="" class="w-full rounded mb-2">	
 							<header class="flex flex-row justify-between items-center">
 								<a href="/closet/{{ clothing_item['_id'] }}" class="text-base font-bold">{{ clothing_item['name'].capitalize() }}</a>
@@ -90,7 +90,7 @@
 					</h3> 
 				{% endif %}
 			</section>
-			<button class="w-full p-2 bg-zinc-950 text-white font-medium sm:text-sm rounded hover:bg-zinc-800 mt-2" onclick="saveOutfitClothes(event)">
+			<button class="w-full p-2 bg-zinc-950 text-white font-medium sm:text-sm rounded hover:bg-zinc-800 mt-2 dark:bg-white dark:text-black dark:hover:bg-zinc-200" onclick="saveOutfitClothes(event)">
 				Save
 			</button>
 		</section>

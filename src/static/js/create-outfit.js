@@ -52,7 +52,7 @@ function renderSelectedClothes () {
 			<p class="hidden">
 				<input type="checkbox" name="clothes" id="${id}" value="${id}" checked />
 			</p>
-			<section class="rounded border aspect-[3/4] relative" id="${id}">
+			<section class="flex items-center rounded border aspect-[3/4] relative border-zinc-200 dark:border-zinc-600 p-2" id="${id}">
 				<button class="absolute top-0 right-0 p-2 bg-transparent border-transparent" onclick="removeClothes(event)" type="button">
 					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
 						<path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />

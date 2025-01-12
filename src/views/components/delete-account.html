@@ -1,0 +1,20 @@
+{% if data["modal-hidden"] == True %}
+	<section class="fixed inset-0 bg-zinc-900/50 w-full h-screen z-40 flex justify-center items-center hidden" id="deletion-modal">
+{% else %}
+	<section class="fixed inset-0 bg-zinc-900/50 w-full h-screen z-40 flex justify-center items-center" id="deletion-modal">
+{% endif %}
+	<form class="flex gap-2 flex-col p-3 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-600 rounded max-w-xs">
+		<i class="las la-user-times text-4xl text-red-600 text-center"></i>
+		<h2 class="text-base font-semibold text-center mb-2">Insert your password to delete your account</h2>
+		<label for="password-input" class="sm:text-sm font-medium">Password</label>
+		<input type="password" id="password-input" name="password" 
+		{% if data["error"] == True %}
+			class="sm:text-sm p-2 border border-red-500 rounded dark:bg-transparent">
+			<p class="text-sm text-red-500 col-start-1 col-end-2">Incorrect password.</p>
+		{% else %}
+			class="sm:text-sm p-2 border border-zinc-200 rounded dark:bg-transparent dark:border-zinc-600">
+		{% endif %}
+		<button class="flex justify-center text-sm font-medium max-w-sm rounded bg-red-700 p-2 text-white border border-red-700 hover:bg-red-600" hx-delete="/account/delete" hx-swap="outerHTML" hx-target="#deletion-modal">Delete</button>
+		<button class="flex justify-center text-sm font-medium max-w-sm rounded bg-white p-2 border border-zinc-200 dark:border-zinc-600 hover:bg-zinc-200 dark:bg-zinc-900 dark:hover:bg-zinc-800" onclick="hideDeletionModal(event)">Cancel</button>
+	</form>
+</section>

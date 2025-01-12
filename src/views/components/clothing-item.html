@@ -9,8 +9,7 @@
 						<path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
 					</svg>
 					<ul class="absolute right-0 top-8 min-w-36 bg-white rounded border border-zinc-200 hidden dark:bg-zinc-900 dark:border-zinc-600">
-						<li class="flex justify-between items-center text-sm font-medium w-full p-2 hover:bg-zinc-200 dark:hover:bg-zinc-800" 
-							hx-delete={{ '/closet/delete/{}'.format(clothing_item['_id']) }} hx-swap="innerHTML" hx-target="#clothing-list">
+						<li class="flex justify-between items-center text-sm font-medium w-full p-2 hover:bg-zinc-200 dark:hover:bg-zinc-800" onclick="showDeletionModal(event)">
 							Delete clothing 
 							<i class="las la-trash text-lg text-red-600"></i>
 						</li>

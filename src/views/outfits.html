@@ -12,21 +12,21 @@
 				<ul class="hidden absolute left-0 top-full translate-y-4 p-4 bg-zinc-200 rounded flex flex-col w-full col-span-2 sm:w-auto sm:left-auto sm:right-0 z-20 dark:bg-zinc-800" id="filters-menu">
 					<form hx-post="/outfits/filter" hx-swap="innerHTML" hx-target="#outfits-list">
 						<p class="col-start-1 col-end-2 flex flex-col">
-							<label for="clothes-input" class="sm:text-sm font-medium mb-1">Clothes</label>
+							<label for="clothes-input" class="text-sm font-medium mb-1">Clothes</label>
 							<input name="clothes" id="clothes-input" type="number" value="0"
 								{% if data['error'] == True %}
-									class="sm:text-sm p-2 border border-red-500 rounded mb-3 bg-white dark:bg-transparent">
+									class="text-sm p-2 border border-red-500 rounded mb-3 bg-white dark:bg-transparent">
 								{% else %}
-									class="sm:text-sm p-2 border border-zinc-400 rounded mb-3 bg-white dark:bg-transparent dark:border-zinc-600">
+									class="text-sm p-2 border border-zinc-400 rounded mb-3 bg-white dark:bg-transparent dark:border-zinc-600">
 								{% endif %}
 						</p>
 						<p class="col-start-1 col-end-2 flex flex-col">
-							<label for="season-input" class="sm:text-sm font-medium mb-1">Season</label>
+							<label for="season-input" class="text-sm font-medium mb-1">Season</label>
 							<select name="season" id="season-input"
 								{% if data['error'] == True %}
-									class="sm:text-sm p-2 border border-red-500 rounded mb-3 bg-white dark:bg-transparent">
+									class="text-sm p-2 border border-red-500 rounded mb-3 bg-white dark:bg-transparent">
 								{% else %}
-									class="sm:text-sm p-2 border border-zinc-400 rounded mb-3 bg-white dark:bg-transparent dark:border-zinc-600">
+									class="text-sm p-2 border border-zinc-400 rounded mb-3 bg-white dark:bg-transparent dark:border-zinc-600">
 								{% endif %}
 								<option value="all" selected>All</option>
 								<option value="summer">Summer</option>
@@ -35,7 +35,7 @@
 								<option value="spring">Spring</option>
 							</select>
 						</p>
-						<button class="w-full p-2 bg-zinc-950 text-white font-medium sm:text-sm rounded hover:bg-zinc-800 mt-2 col-start-1 col-end-2 dark:bg-white dark:text-black dark:hover:bg-zinc-200">Apply</button>
+						<button class="w-full p-2 bg-zinc-950 text-white font-medium text-sm rounded hover:bg-zinc-800 mt-2 col-start-1 col-end-2 dark:bg-white dark:text-black dark:hover:bg-zinc-200">Apply</button>
 					</form>
 				</ul>
 				<a href="/outfits/new" class="text-sm text-center font-medium text-white ml-5 p-2 bg-zinc-950 hover:bg-zinc-800 rounded min-w-16 flex flex-row items-center dark:bg-white dark:text-black dark:hover:bg-zinc-200">
@@ -50,5 +50,6 @@
 			{%  endwith %}
 		</section>
 	</section>
+	{% include 'components/delete-confirmation.html' %}
 	<script src="/js/outfits.js"></script>
 {% endblock %}

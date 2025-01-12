@@ -6,6 +6,8 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
 		<link rel="stylesheet" type="text/css" href="/css/index.css">
+		<link rel="manifest" href="/manifest.json">
+		<script src="/js/base.js"></script>
 		<script src="/js/htmx.min.js"></script>
 	</head>
 	<body>
@@ -109,6 +111,17 @@
 
 				{% include 'components/signup-form.html' %}
 				<a href="#log-in" class="text-sm text-center mt-2 text-zinc-600 hover:text-zinc-950" id="login-toggle">Already have an account? Log In</a>
+			</section>	
+		</section>
+		<section class="flex justify-center items-center w-full h-screen fixed top-0 left-0 bg-zinc-950/20 hidden" id="forgot-password-dialog">
+			<section class="flex flex-col p-4 bg-white rounded w-full max-w-xs">
+				<button class="ml-auto close">
+					<i class="las la-times text-2xl"></i>
+				</button>
+
+				<h2 class="text-xl font-semibold">Forgot your password?</h2>	
+				<p class="text-zinc-600">Please enter the e-mail address you'd like your password reset information sent to.</p>
+				{% include 'components/forgot-password-form.html' %}
 			</section>	
 		</section>
 	</body>

@@ -20,3 +20,17 @@ function toggleDarkMode() {
 }
 
 switchEl.addEventListener('change', toggleDarkMode);
+
+function showDeletionModal(event) {
+	const deletionModal = document.getElementById("deletion-modal");
+
+	// Show deletion modal
+	deletionModal.classList.remove("hidden");
+}
+
+function hideDeletionModal(event) {
+	event.preventDefault();
+
+	const deletionModal = document.getElementById("deletion-modal");
+	deletionModal.classList.add("hidden");
+}
