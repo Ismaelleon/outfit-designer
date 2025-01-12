@@ -687,7 +687,7 @@ def setup_router (app, mongo):
                 return res
 
             # If passwords do not match, return delete-account component
-            data = dark_mode({"error": True, "modal-hidden": False}, request.cookies)
+            data = dark_mode({"error": True, "modal-hidden": False, "password": password}, request.cookies)
             return render_template("components/delete-account.html", data=data)
 
     @app.route("/log-out", methods=["POST"])

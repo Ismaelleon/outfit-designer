@@ -7,9 +7,9 @@
 		<i class="las la-user-times text-4xl text-red-600 text-center"></i>
 		<h2 class="text-base font-semibold text-center mb-2">Insert your password to delete your account</h2>
 		<label for="password-input" class="sm:text-sm font-medium">Password</label>
-		<input type="password" id="password-input" name="password" 
+		<input type="password" id="password-input" name="password"
 		{% if data["error"] == True %}
-			class="sm:text-sm p-2 border border-red-500 rounded dark:bg-transparent">
+			class="sm:text-sm p-2 border border-red-500 rounded dark:bg-transparent" value={{ data["password"] }}>
 			<p class="text-sm text-red-500 col-start-1 col-end-2">Incorrect password.</p>
 		{% else %}
 			class="sm:text-sm p-2 border border-zinc-200 rounded dark:bg-transparent dark:border-zinc-600">
