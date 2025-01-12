@@ -30,6 +30,7 @@ def send_verification_mail(email, activation_code, app):
         mail = Mail(app)
 
         msg = Message(
+            sender=os.environ["MAIL_DEFAULT_SENDER"],
             subject="Activate your account",
             recipients=[email],
             html=final_html

@@ -30,6 +30,7 @@ app.config["MAIL_DEFAULT_SENDER"] = os.environ["MAIL_DEFAULT_SENDER"]
 app.config["MAIL_USE_TLS"] = True
 app.config["MAIL_USE_SSL"] = False
 
+
 # Setup server sessions
 app.config["SESSION_PERMANENT"] = True 
 app.config["SESSION_TYPE"] = "mongodb" 
