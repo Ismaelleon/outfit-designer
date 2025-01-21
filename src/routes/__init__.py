@@ -276,7 +276,14 @@ def setup_router (app, mongo):
                 if user == None:
                     return handle_invalid_user_session()
 
-                data = dark_mode({ "error": True, "activated": user["activation"]["activated"] }, request.cookies)
+                data = dark_mode({ 
+                    "error": True,
+                    "activated": user["activation"]["activated"],
+                    "name": request.form["name"],
+                    "type": request.form["type"],
+                    "brand": request.form["brand"],
+                    "colors": request.form.getlist("color")
+                }, request.cookies)
                 return render_template("add-clothes.html", data=data)
 
             # Get request body 
@@ -288,7 +295,15 @@ def setup_router (app, mongo):
 
             # If user does not select a file
             if image_file.filename == "":
-                return make_response({"message": "Bad Request"}, 400)
+                data = dark_mode({ 
+                    "error": True,
+                    "activated": user["activation"]["activated"],
+                    "name": name,
+                    "type": clothing_type,
+                    "brand": brand,
+                    "colors": colors,
+                }, request.cookies)
+                return render_template("add-clothes.html", data=data)
 
             # Save image file
             image_filename = secure_filename(str(uuid.uuid4()))
