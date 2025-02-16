@@ -8,7 +8,7 @@
 			<form class="flex sm:grid sm:grid-cols-2 gap-3 flex-col" hx-post="/closet/new" hx-encoding="multipart/form-data" hx-swap="outerHTML" hx-target="#body" hx-on::after-request="updateProgress()">
 				<p class="col-start-1 col-end-2 flex flex-col">
 					<label for="name-input" class="sm:text-sm font-medium mb-1">Name</label>
-					<input type="text" id="name-input" name="name" 
+					<input type="text" id="name-input" name="name" value="{{ data["name"] }}"
 						{% if data['error'] == True %}
 							class="sm:text-sm p-2 border border-red-500 rounded mb-2 dark:bg-transparent">
 						{% else %}
@@ -17,30 +17,30 @@
 				</p>
 				<p class="col-start-1 col-end-2 flex flex-col">
 					<label for="type-input" class="sm:text-sm font-medium mb-1">Type</label>
-					<select name="type" id="type-input"
+					<select name="type" id="type-input" 
 						{% if data['error'] == True %}
 							class="sm:text-sm p-2 border border-red-500 rounded mb-2 bg-white dark:bg-transparent">
 						{% else %}
 							class="sm:text-sm p-2 border border-zinc-200 rounded mb-2 bg-white  dark:bg-transparent dark:border-zinc-600">
 						{% endif %}
-						<option value="cap">Cap</option>
-						<option value="coat">Coat</option>
-						<option value="dress">Dress</option>
-						<option value="hoodies">Hoodies</option>
-						<option value="jacket">Jacket</option>
-						<option value="pants">Pants</option>
-						<option value="shoes">Shoes</option>
-						<option value="shorts">Shorts</option>
-						<option value="shirt">Shirt</option>
-						<option value="skirt">Skirt</option>
-						<option value="sweater">Sweater</option>
-						<option value="tie">Tie</option>
-						<option value="t-shirt">T-Shirt</option>
+						<option value="cap" {{ "selected" if data["type"] == "cap" }}>Cap</option>
+						<option value="coat" {{ "selected" if data["type"] == "coat" }}>Coat</option>
+						<option value="dress" {{ "selected" if data["type"] == "dress" }}>Dress</option>
+						<option value="hoodies" {{ "selected" if data["type"] == "hoodies" }}>Hoodies</option>
+						<option value="jacket" {{ "selected" if data["type"] == "jacket" }}>Jacket</option>
+						<option value="pants" {{ "selected" if data["type"] == "pants" }}>Pants</option>
+						<option value="shoes" {{ "selected" if data["type"] == "shoes" }}>Shoes</option>
+						<option value="shorts" {{ "selected" if data["type"] == "shorts" }}>Shorts</option>
+						<option value="shirt" {{ "selected" if data["type"] == "shirt" }}>Shirt</option>
+						<option value="skirt" {{ "selected" if data["type"] == "skirt" }}>Skirt</option>
+						<option value="sweater" {{ "selected" if data["type"] == "sweater" }}>Sweater</option>
+						<option value="tie" {{ "selected" if data["type"] == "tie" }}>Tie</option>
+						<option value="t-shirt" {{ "selected" if data["type"] == "t-shirt" }}>T-Shirt</option>
 					</select>
 				</p>
 				<p class="col-start-1 col-end-2 flex flex-col">
 					<label for="brand-input" class="sm:text-sm font-medium mb-1">Brand</label>
-					<input type="text" id="brand-input" name="brand" 
+					<input type="text" id="brand-input" name="brand" value="{{ data["brand"] }}"
 						{% if data['error'] == True %}
 							class="sm:text-sm p-2 border border-red-500 rounded mb-2 dark:bg-transparent">
 						{% else %}
@@ -50,51 +50,51 @@
 				<fieldset class="grid grid-cols-3 gap-1 flex-col items-start mb-2 col-start-1 col-end-2">
 					<legend class="sm:text-sm font-medium mb-1">Colors</legend>
 					<p class="sm:text-sm">
-						<input type="checkbox" name="color" value="white" id="color-white" class="accent-zinc-200">
+					<input type="checkbox" name="color" value="white" id="color-white" class="accent-zinc-200" {{ "checked" if "white" in data["colors"] }}>
 						<label for="color-white">White</label>
 					</p>
 					<p class="sm:text-sm">
-						<input type="checkbox" name="color" value="gray" id="color-gray" class="accent-zinc-400">
+						<input type="checkbox" name="color" value="gray" id="color-gray" class="accent-zinc-400" {{ "checked" if "gray" in data["colors"] }}>
 						<label for="color-gray">Gray</label>
 					</p>
 					<p class="sm:text-sm">
-						<input type="checkbox" name="color" value="black" id="color-black" class="accent-black">
+						<input type="checkbox" name="color" value="black" id="color-black" class="accent-black" {{ "checked" if "black" in data["colors"] }}>
 						<label for="color-black">Black</label>
 					</p>
 					<p class="sm:text-sm">
-						<input type="checkbox" name="color" value="red" id="color-red" class="accent-red-600">
+						<input type="checkbox" name="color" value="red" id="color-red" class="accent-red-600" {{ "checked" if "red" in data["colors"] }}>
 						<label for="color-red">Red</label>
 					</p>
 					<p class="sm:text-sm">
-						<input type="checkbox" name="color" value="blue" id="color-blue" class="accent-blue-600">
+						<input type="checkbox" name="color" value="blue" id="color-blue" class="accent-blue-600" {{ "checked" if "blue" in data["colors"] }}>
 						<label for="color-blue">Blue</label>
 					</p>
 					<p class="sm:text-sm">
-						<input type="checkbox" name="color" value="yellow" id="color-yellow" class="accent-yellow-400">
+						<input type="checkbox" name="color" value="yellow" id="color-yellow" class="accent-yellow-400" {{ "checked" if "yellow" in data["colors"] }}>
 						<label for="color-yellow">Yellow</label>
 					</p>
 					<p class="sm:text-sm">
-						<input type="checkbox" name="color" value="orange" id="color-orange" class="accent-orange-600">
+						<input type="checkbox" name="color" value="orange" id="color-orange" class="accent-orange-600" {{ "checked" if "orange" in data["colors"] }}>
 						<label for="color-orange">Orange</label>
 					</p>
 					<p class="sm:text-sm">
-						<input type="checkbox" name="color" value="green" id="color-green" class="accent-green-600">
+						<input type="checkbox" name="color" value="green" id="color-green" class="accent-green-600" {{ "checked" if "green" in data["colors"] }} {{ "checked" if "white" in data["colors"] }}>
 						<label for="color-green">Green</label>
 					</p>
 					<p class="sm:text-sm">
-						<input type="checkbox" name="color" value="purple" id="color-purple" class="accent-purple-600">
+						<input type="checkbox" name="color" value="purple" id="color-purple" class="accent-purple-600" {{ "checked" if "purple" in data["colors"] }}>
 						<label for="color-purple">Purple</label>
 					</p>
 					<p class="sm:text-sm">
-						<input type="checkbox" name="color" value="pink" id="color-pink" class="accent-pink-600">
+						<input type="checkbox" name="color" value="pink" id="color-pink" class="accent-pink-600" {{ "checked" if "pink" in data["colors"] }}>
 						<label for="color-pink">Pink</label>
 					</p>
 					<p class="sm:text-sm">
-						<input type="checkbox" name="color" value="brown" id="color-brown" class="accent-yellow-950">
+						<input type="checkbox" name="color" value="brown" id="color-brown" class="accent-yellow-950" {{ "checked" if "brown" in data["colors"] }}>
 						<label for="color-brown">Brown</label>
 					</p>
 					<p class="sm:text-sm">
-						<input type="checkbox" name="color" value="cyan" id="color-cyan" class="accent-cyan-600">
+						<input type="checkbox" name="color" value="cyan" id="color-cyan" class="accent-cyan-600" {{ "checked" if "cyan" in data["colors"] }}>
 						<label for="color-cyan">Cyan</label>
 					</p>
 				</fieldset>

@@ -15,11 +15,11 @@ function toggleDarkMode() {
 	if (documentEl.classList[0] === "dark") {
 		document.cookie = "dark-mode=true";
 	} else {
-		document.cookie = "dark-mode=\"\"";
+		document.cookie = 'dark-mode=""';
 	}
 }
 
-switchEl.addEventListener('change', toggleDarkMode);
+switchEl.addEventListener("change", toggleDarkMode);
 
 function showDeletionModal(event) {
 	const deletionModal = document.getElementById("deletion-modal");

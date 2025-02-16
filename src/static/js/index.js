@@ -5,7 +5,9 @@ const logInButton = document.getElementById("log-in"),
 
 const signUpToggleLink = document.getElementById("signup-toggle"),
 	logInToggleLink = document.getElementById("login-toggle"),
-	forgotPasswordToggleLink = document.getElementById("forgot-password-toggle");
+	forgotPasswordToggleLink = document.getElementById(
+		"forgot-password-toggle"
+	);
 
 const logInDialog = document.getElementById("login-dialog"),
 	signUpDialog = document.getElementById("signup-dialog"),
@@ -13,7 +15,7 @@ const logInDialog = document.getElementById("login-dialog"),
 
 const closeButtons = document.querySelectorAll(".close");
 
-function toggleDialog (dialog) {
+function toggleDialog(dialog) {
 	if (dialog === "log-in") {
 		signUpDialog.classList.add("hidden");
 		logInDialog.classList.remove("hidden");
@@ -39,10 +41,14 @@ joinButton.addEventListener("click", () => toggleDialog("sign-up"));
 getStartedButton.addEventListener("click", () => toggleDialog("sign-up"));
 signUpToggleLink.addEventListener("click", () => toggleDialog("sign-up"));
 logInToggleLink.addEventListener("click", () => toggleDialog("log-in"));
-forgotPasswordToggleLink.addEventListener("click", () => toggleDialog("forgot-password"));
-closeButtons.forEach(el => el.addEventListener("click", () => toggleDialog("all")));
+forgotPasswordToggleLink.addEventListener("click", () =>
+	toggleDialog("forgot-password")
+);
+closeButtons.forEach((el) =>
+	el.addEventListener("click", () => toggleDialog("all"))
+);
 
-function toggleMenu () {
+function toggleMenu() {
 	document.getElementById("menu").classList.toggle("hidden");
 	document.getElementById("menu").classList.toggle("flex");
 }
