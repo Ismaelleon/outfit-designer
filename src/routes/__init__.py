@@ -78,7 +78,10 @@ def setup_router (app, mongo):
                     if str(clothing_item["_id"]) == clothing_id:
                         outfit["clothes"][index] = clothing_item 
 
-            data = dark_mode({"outfit": outfit, "activated": user["activation"]["activated"]}, request.cookies)
+            data = dark_mode({
+                "outfit": outfit,
+                "activated": user["activation"]["activated"],
+            }, request.cookies)
             return render_template("outfit.html", data=data)
 
     @app.route("/outfits/new", methods=["POST", "GET"])
@@ -90,9 +93,22 @@ def setup_router (app, mongo):
                 res.headers["HX-Redirect"] = "/outfits"
                 return res
 
+            # Get user document
+            user_id = session.get("id")
+            user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
+
+            if user == None:
+                return handle_invalid_user_session()
+
             # If required properties not added
             if "name" not in request.form or "season" not in request.form or "clothes" not in request.form or "image" not in request.files:
-                data = dark_mode({"error": True}, request.cookies)
+                data = dark_mode({
+                    "closet": user["closet"],
+                    "error": True,
+                    "activated": user["activation"]["activated"],
+                    "name": request.form["name"],
+                    "season": request.form["season"],
+                }, request.cookies)
                 return render_template("create-outfit.html", data=data)
 
             # Get request body 
@@ -123,13 +139,6 @@ def setup_router (app, mongo):
             # Delete image file
             os.remove(image_file_path)
 
-            # Get user document
-            user_id = session.get("id")
-            user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
-
-            if user == None:
-                return handle_invalid_user_session()
-
             # Update closet array 
             outfits = user["outfits"]
             new_outfit_id = ObjectId()
@@ -159,7 +168,10 @@ def setup_router (app, mongo):
             if user == None:
                 return handle_invalid_user_session()
 
-            data = dark_mode({"closet": user["closet"], "activated": user["activation"]["activated"]}, request.cookies)
+            data = dark_mode({
+                "closet": user["closet"],
+                "activated": user["activation"]["activated"],
+            }, request.cookies)
             return render_template("create-outfit.html", data=data)
 
         # Otherwise, redirect to the home page
@@ -189,7 +201,10 @@ def setup_router (app, mongo):
                     ):
                         filtered_outfits.append(outfit)
 
-                data = dark_mode({"outfits": filtered_outfits, "activated": user["activation"]["activated"]}, request.cookies)
+                data = dark_mode({
+                    "outfits": filtered_outfits,
+                    "activated": user["activation"]["activated"],
+                }, request.cookies)
                 return render_template("components/outfit.html", data=data)
 
 
@@ -218,7 +233,10 @@ def setup_router (app, mongo):
                 result = mongo.db.users.update_one({"_id": ObjectId(user_id)}, {"$set": {"outfits": outfits}})
 
                 # Return outfits html
-                data = dark_mode({ "outfits": outfits, "activated": user["activation"]["activated"] }, request.cookies)
+                data = dark_mode({
+                    "outfits": outfits,
+                    "activated": user["activation"]["activated"],
+                }, request.cookies)
                 return render_template("components/outfit.html", data=data)
 
     @app.route("/closet")
@@ -232,7 +250,10 @@ def setup_router (app, mongo):
             if user == None:
                 return handle_invalid_user_session()
 
-            data = dark_mode({ "closet": user["closet"], "activated": user["activation"]["activated"] }, request.cookies)
+            data = dark_mode({
+                "closet": user["closet"],
+                "activated": user["activation"]["activated"],
+            }, request.cookies)
             return render_template("closet.html", data=data)
 
         # Otherwise, redirect to the home page
@@ -256,7 +277,10 @@ def setup_router (app, mongo):
                     clothing_item = clothing_item
                     break
 
-            data = dark_mode({ "clothing_item": clothing_item, "activated": user["activation"]["activated"] }, request.cookies)
+            data = dark_mode({
+                "clothing_item": clothing_item,
+                "activated": user["activation"]["activated"]
+            }, request.cookies)
             return render_template("closet-item.html", data=data)
 
     @app.route("/closet/new", methods=["POST", "GET"])
@@ -282,7 +306,7 @@ def setup_router (app, mongo):
                     "name": request.form["name"],
                     "type": request.form["type"],
                     "brand": request.form["brand"],
-                    "colors": request.form.getlist("color")
+                    "colors": request.form.getlist("color"),
                 }, request.cookies)
                 return render_template("add-clothes.html", data=data)
 
@@ -357,7 +381,10 @@ def setup_router (app, mongo):
             if user == None:
                 return handle_invalid_user_session()
 
-            data = dark_mode({ "error": False, "activated": user["activation"]["activated"] }, request.cookies)
+            data = dark_mode({
+                "error": False,
+                "activated": user["activation"]["activated"],
+            }, request.cookies)
             return render_template("add-clothes.html", data=data)
 
         # Otherwise, redirect to the home page
@@ -391,7 +418,10 @@ def setup_router (app, mongo):
                     ):
                         filtered_clothes.append(clothing_item)
 
-                data = dark_mode({ "closet": filtered_clothes, "activated": user["activation"]["activated"] }, request.cookies)
+                data = dark_mode({
+                    "closet": filtered_clothes,
+                    "activated": user["activation"]["activated"],
+                }, request.cookies)
                 return render_template("components/clothing-item.html", data=data)
 
     @app.route("/closet/delete/<string:clothing_id>", methods=["DELETE"])
@@ -425,7 +455,10 @@ def setup_router (app, mongo):
                 result = mongo.db.users.update_one({"_id": ObjectId(user_id)}, {"$set": {"closet": closet, "outfits": outfits}})
 
                 # Return closet html
-                data = dark_mode({ "closet": closet, "activated": user["activation"]["activated"] }, request.cookies)
+                data = dark_mode({
+                    "closet": closet,
+                    "activated": user["activation"]["activated"],
+                }, request.cookies)
                 return render_template("components/clothing-item.html", data=data)
 
     @app.route("/profile")
@@ -439,7 +472,10 @@ def setup_router (app, mongo):
             if user == None:
                 return handle_invalid_user_session() 
 
-            data = dark_mode({ "user": user, "activated": user["activation"]["activated"] }, request.cookies)
+            data = dark_mode({
+                "user": user,
+                "activated": user["activation"]["activated"],
+            }, request.cookies)
             return render_template("profile.html", data=data)
 
         return redirect("/")
@@ -455,7 +491,11 @@ def setup_router (app, mongo):
             if user == None:
                 return handle_invalid_user_session()
 
-            data = dark_mode({ "user": user, "activated": user["activation"]["activated"], "modal-hidden": True }, request.cookies)
+            data = dark_mode({
+                "user": user,
+                "activated": user["activation"]["activated"],
+                "modal-hidden": True,
+            }, request.cookies)
             return render_template("settings.html", data=data)
 
         return redirect("/")
