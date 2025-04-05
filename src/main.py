@@ -41,3 +41,7 @@ Session(app)
 
 # Setup routes
 setup_router(app, mongo)
+
+# Run application
+if __name__ == "__main__":
+    app.run(debug=os.environ["DEBUG"])
