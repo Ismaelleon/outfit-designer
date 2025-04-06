@@ -1,49 +1,66 @@
-<header class="flex flex-row justify-center items-center p-3 w-full border-b border-zinc-200 fixed top-0 left-0 bg-white min-h-[56px] sm:min-h-auto sm:p-2 sm:px-4 z-30 dark:bg-zinc-900 dark:border-zinc-600">
-	<section class="flex flex-row justify-between items-center w-full max-w-3xl">
-		{% if request.path[0:8] == '/outfits' or request.path[0:7] == '/closet' or request.path[0:8] == '/profile' %}
-			<a href="/outfits" class="font-bold">Outfit Designer</a>
+<header
+	class="flex flex-row justify-center items-center p-3 w-full border-b border-zinc-200 fixed top-0 left-0 bg-white min-h-[56px] sm:min-h-auto sm:p-2 sm:px-4 z-30 dark:bg-zinc-900 dark:border-zinc-600">
+	<section
+		class="flex flex-row justify-between items-center w-full max-w-3xl">
+		{% if request.path[0:8] == '/outfits' or request.path[0:7] == '/closet'
+		or request.path[0:8] == '/profile' %}
+		<a ="/outfits" class="font-bold">Outfit Designer</a>
 		{% else %}
-			<a href="/" class="font-bold">Outfit Designer</a>
+		<a href="/" class="font-bold">Outfit Designer</a>
 		{% endif %}
-		<i id="menu-open" class="las la-bars text-2xl hidden sm:block sm:scale-0"></i>
-		<nav class="hidden items-center justify-center flex-col w-screen h-screen fixed bg-white inset-0 sm:flex sm:w-auto sm:h-auto sm:flex-row sm:static dark:bg-zinc-900" id="menu">
-			<i id="menu-close" class="las la-times text-2xl fixed top-3 right-3 sm:scale-0"></i>
+		<i
+			id="menu-open"
+			class="las la-bars text-2xl hidden sm:block sm:scale-0"></i>
+		<nav
+			class="hidden items-center justify-center flex-col w-screen h-screen fixed bg-white inset-0 sm:flex sm:w-auto sm:h-auto sm:flex-row sm:static dark:bg-zinc-900"
+			id="menu">
+			<i
+				id="menu-close"
+				class="las la-times text-2xl fixed top-3 right-3 sm:scale-0"></i>
 			{% if request.path[0:8] == '/outfits' %}
-				<a href="/outfits" class="text-2xl text-zinc-950 hover:text-zinc-950 sm:ml-5 flex flex-row items-center py-2 font-medium sm:text-sm dark:text-white dark:hover:text-white">
-					<i class="las la-home text-xl mr-1"></i>
-					Outfits
-				</a>
+			<a
+				href="/outfits"
+				class="text-2xl text-zinc-950 hover:text-zinc-950 sm:ml-5 flex flex-row items-center py-2 font-medium sm:text-sm dark:text-white dark:hover:text-white">
+				<i class="las la-home text-xl mr-1"></i>
+				Outfits
+			</a>
 			{% else %}
-				<a href="/outfits" class="text-2xl text-zinc-600 hover:text-zinc-950 sm:ml-5 flex flex-row items-center py-2 sm:text-sm dark:text-zinc-300 dark:hover:text-white">
-					<i class="las la-home text-xl mr-1"></i>
-					Outfits
-				</a>
-			{% endif %}
-
-			{% if request.path[0:7] == '/closet' %}
-				<a href="/closet" class="text-2xl text-zinc-950 hover:text-zinc-950 sm:ml-5 flex flex-row items-center py-2 font-medium sm:text-sm dark:text-white dark:hover:text-white">
-					<i class="las la-suitcase text-xl mr-1"></i>
-					Closet
-				</a>
+			<a
+				href="/outfits"
+				class="text-2xl text-zinc-600 hover:text-zinc-950 sm:ml-5 flex flex-row items-center py-2 sm:text-sm dark:text-zinc-300 dark:hover:text-white">
+				<i class="las la-home text-xl mr-1"></i>
+				Outfits
+			</a>
+			{% endif %} {% if request.path[0:7] == '/closet' %}
+			<a
+				href="/closet"
+				class="text-2xl text-zinc-950 hover:text-zinc-950 sm:ml-5 flex flex-row items-center py-2 font-medium sm:text-sm dark:text-white dark:hover:text-white">
+				<i class="las la-suitcase text-xl mr-1"></i>
+				Closet
+			</a>
 			{% else %}
-				<a href="/closet" class="text-2xl text-zinc-600 hover:text-zinc-950 sm:ml-5 flex flex-row items-center py-2 sm:text-sm dark:text-zinc-300 dark:hover:text-white">
-					<i class="las la-suitcase text-xl mr-1"></i>
-					Closet
-				</a>
-			{% endif %}
-
-			{% if request.path[0:8] == '/profile' %}
-				<a href="/profile" class="text-2xl text-zinc-950 hover:text-zinc-950 sm:ml-5 flex flex-row items-center py-2 font-medium sm:text-sm dark:text-white dark:hover:text-white">
-					<i class="las la-user-circle text-xl mr-1"></i>
-					Profile
-				</a>
+			<a
+				href="/closet"
+				class="text-2xl text-zinc-600 hover:text-zinc-950 sm:ml-5 flex flex-row items-center py-2 sm:text-sm dark:text-zinc-300 dark:hover:text-white">
+				<i class="las la-suitcase text-xl mr-1"></i>
+				Closet
+			</a>
+			{% endif %} {% if request.path[0:8] == '/profile' %}
+			<a
+				href="/profile"
+				class="text-2xl text-zinc-950 hover:text-zinc-950 sm:ml-5 flex flex-row items-center py-2 font-medium sm:text-sm dark:text-white dark:hover:text-white">
+				<i class="las la-user-circle text-xl mr-1"></i>
+				Profile
+			</a>
 			{% else %}
-				<a href="/profile" class="text-2xl text-zinc-600 hover:text-zinc-950 sm:ml-5 flex flex-row items-center py-2 sm:text-sm dark:text-zinc-300 dark:hover:text-white">
-					<i class="las la-user-circle text-xl mr-1"></i>
-					Profile
-				</a>
+			<a
+				href="/profile"
+				class="text-2xl text-zinc-600 hover:text-zinc-950 sm:ml-5 flex flex-row items-center py-2 sm:text-sm dark:text-zinc-300 dark:hover:text-white">
+				<i class="las la-user-circle text-xl mr-1"></i>
+				Profile
+			</a>
 			{% endif %}
 		</nav>
 	</section>
 </header>
-<script src="/js/navbar.js"></script>
+<script src="/static/js/navbar.js"></script>
