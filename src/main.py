@@ -12,7 +12,12 @@ load_dotenv()
 app = Flask(__name__, template_folder="views")
 
 # Setup cloudinary
-app.config["CLOUDINARY"] = cloudinary.config(secure=True)
+app.config["CLOUDINARY"] = cloudinary.config(
+    cloud_name=os.environ["CLOUDINARY_CLOUD_NAME"],
+    api_key=os.environ["CLOUDINARY_API_KEY"],
+    api_secret=os.environ["CLOUDINARY_API_SECRET"],
+    secure=True
+)
 
 # Setup mongo client
 app.config["MONGO_URI"] = os.environ["MONGO_URI"]
@@ -41,3 +46,7 @@ Session(app)
 
 # Setup routes
 setup_router(app, mongo)
+
+# Run application
+if __name__ == "__main__":
+    app.run(debug=os.environ["DEBUG"], host="0.0.0.0")
