@@ -1,0 +1,16 @@
+{
+	"name": "Outfit Designer",
+	"short_name": "Outfit Designer",
+	"theme_color": "#000000",
+	"background_color": "#000000",
+	"display": "standalone",
+	"orientation": "portrait",
+	"scope": "/",
+	"start_url": "/",
+	"icons": [
+		{
+			"src": "./images/icon.png",
+			"sizes": "512x512"
+		}
+	]
+}

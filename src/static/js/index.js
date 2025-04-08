@@ -1,10 +1,10 @@
 const logInButton = document.getElementById("log-in"),
 	signUpButton = document.getElementById("sign-up"),
-	getStartedButton = document.getElementById("get-started"),
-	joinButton = document.getElementById("join");
+	getStartedButton = document.getElementById("get-started");
 
 const signUpToggleLink = document.getElementById("signup-toggle"),
 	logInToggleLink = document.getElementById("login-toggle"),
+	logInToggleLink2 = document.getElementById("join"),
 	forgotPasswordToggleLink = document.getElementById(
 		"forgot-password-toggle"
 	);
@@ -37,10 +37,10 @@ function toggleDialog(dialog) {
 
 logInButton.addEventListener("click", () => toggleDialog("log-in"));
 signUpButton.addEventListener("click", () => toggleDialog("sign-up"));
-joinButton.addEventListener("click", () => toggleDialog("sign-up"));
 getStartedButton.addEventListener("click", () => toggleDialog("sign-up"));
 signUpToggleLink.addEventListener("click", () => toggleDialog("sign-up"));
 logInToggleLink.addEventListener("click", () => toggleDialog("log-in"));
+logInToggleLink2.addEventListener("click", () => toggleDialog("log-in"));
 forgotPasswordToggleLink.addEventListener("click", () =>
 	toggleDialog("forgot-password")
 );
