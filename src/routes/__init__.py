@@ -5,7 +5,7 @@ from werkzeug.utils import secure_filename
 from jinja2 import Environment, FileSystemLoader
 from bson.objectid import ObjectId
 from rembg import remove
-from helpers import dark_mode, send_verification_mail, handle_invalid_user_session, get_subscription_prices
+from helpers import dark_mode, send_verification_mail, handle_invalid_user_session
 from flask_mail import Mail, Message
 
 def setup_router (app, mongo):
