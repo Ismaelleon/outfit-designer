@@ -1,0 +1,6 @@
+.env
+__pycache__/
+env/
+src/static/css/*
+!src/static/css/*.css
+
