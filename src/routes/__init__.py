@@ -5,12 +5,12 @@ from werkzeug.utils import secure_filename
 from jinja2 import Environment, FileSystemLoader
 from bson.objectid import ObjectId
 from rembg import remove
-from helpers import dark_mode, send_verification_mail, handle_invalid_user_session
+from helpers import dark_mode, send_verification_mail, handle_invalid_user_session, get_subscription_prices
 from flask_mail import Mail, Message
 
 def setup_router (app, mongo):
     # Static files
-    @app.route("/<path:file_path>")
+    @app.route("/static/<path:file_path>")
     def static_files (file_path):
         return send_from_directory("static", file_path)
 
@@ -83,6 +83,51 @@ def setup_router (app, mongo):
                 "activated": user["activation"]["activated"],
             }, request.cookies)
             return render_template("outfit.html", data=data)
+
+    @app.route("/outfits/edit/<string:outfit_id>", methods=["GET", "POST"])
+    def edit_outfit(outfit_id):
+        if request.method == "POST":
+            # If user not logged in
+            if not session.get("id"):
+                res = make_response({"message": "Unauthorized"}, 401)
+                res.headers["HX-Redirect"] = "/outfits"
+                return res
+
+            # Get user document
+            user_id = session.get("id")
+            user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
+
+            if user == None:
+                return handle_invalid_user_session()
+
+        # If user logged in render template
+        if session.get("id"):
+            # Get user document
+            user_id = session.get("id")
+            user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
+
+            if user == None:
+                return handle_invalid_user_session()
+
+            # Find outfit
+            outfit = {}
+            for outfit in user["outfits"]:
+                if str(outfit["_id"]) == outfit_id:
+                    outfit = outfit 
+                    break
+
+            data = dark_mode({
+                "name": outfit["name"],
+                "season": outfit["season"],
+                "image": outfit["image"],
+                "clothes": outfit["clothes"],
+                "closet": user["closet"],
+                "activated": user["activation"]["activated"],
+            }, request.cookies)
+            return render_template("edit-outfit.html", data=data)
+
+        # Otherwise, redirect to the home page
+        return redirect("/")
 
     @app.route("/outfits/new", methods=["POST", "GET"])
     def create_outfit ():
@@ -292,13 +337,15 @@ def setup_router (app, mongo):
                 res.headers["HX-Redirect"] = "/outfits"
                 return res
 
+            # Get user data
+            user_id = session.get("id")
+            user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
+
+            if user == None:
+                return handle_invalid_user_session()
+
             # If required properties not added
             if "name" not in request.form or "type" not in request.form or "color" not in request.form or "image" not in request.files:
-                user_id = session.get("id")
-                user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
-
-                if user == None:
-                    return handle_invalid_user_session()
 
                 data = dark_mode({ 
                     "error": True,
@@ -346,13 +393,6 @@ def setup_router (app, mongo):
 
             # Delete image file
             os.remove(image_file_path)
-
-            # Get user document
-            user_id = session.get("id")
-            user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
-
-            if user == None:
-                return handle_invalid_user_session()
 
             # Update closet array 
             closet = user["closet"]
