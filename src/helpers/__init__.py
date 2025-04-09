@@ -45,9 +45,9 @@ def send_verification_mail(email, activation_code, app):
         "Content-Type": "application/json"
     }
 
-    conn.request("POST", "/api/send/{}".format(os.environ["MAIL_INBOX_ID"]), payload, headers)
+    conn.request("POST", "/api/send".format(payload, headers))
 
     res = conn.getresponse()
 
     if res != 200:
-        print(res.reason)
+        print("Failed to send email", res.status, res.reason)
