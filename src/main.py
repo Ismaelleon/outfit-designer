@@ -26,15 +26,6 @@ mongo = PyMongo(app)
 # Setup uploads folder
 app.config["UPLOAD_FOLDER"] = os.path.join(os.getcwd(), 'static/images')
 
-# Setup flask-mail
-app.config["MAIL_SERVER"] = os.environ["MAIL_SERVER"]
-app.config["MAIL_PORT"] = os.environ["MAIL_PORT"]
-app.config["MAIL_USERNAME"] = os.environ["MAIL_USERNAME"]
-app.config["MAIL_PASSWORD"] = os.environ["MAIL_PASSWORD"]
-app.config["MAIL_DEFAULT_SENDER"] = os.environ["MAIL_DEFAULT_SENDER"]
-app.config["MAIL_USE_TLS"] = True
-app.config["MAIL_USE_SSL"] = False
-
 # Setup server sessions
 app.config["SESSION_PERMANENT"] = True 
 app.config["SESSION_TYPE"] = "mongodb" 

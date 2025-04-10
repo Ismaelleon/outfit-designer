@@ -1,7 +1,6 @@
-import smtplib, os
+import os, requests, json
 from flask import session, redirect
-from jinja2 import Template, Environment, FileSystemLoader
-from flask_mail import Mail, Message
+from jinja2 import Environment, FileSystemLoader
 
 def dark_mode(data, cookies):
     if "dark-mode" in cookies and cookies["dark-mode"] == "true":
@@ -25,18 +24,27 @@ def send_verification_mail(email, activation_code, app):
     }
     final_html = template.render(data=data)
 
+    payload = {
+        "from": {
+            "email": os.environ["MAIL_DEFAULT_SENDER"],
+            "name": "Outfit Designer"
+        },
+        "to": [
+            { "email": email }
+        ],
+        "subject": "Activate your account",
+        "html": final_html
+    }
+
+    headers = {
+        "Authorization": "Bearer {}".format(os.environ["MAIL_API_TOKEN"]),
+        "Content-Type": "application/json"
+    }
+
     try:
-        # Init flask mail
-        mail = Mail(app)
+        res = requests.request("POST", os.environ["MAIL_API_URL"], headers=headers, json=payload)
 
-        msg = Message(
-            sender=os.environ["MAIL_DEFAULT_SENDER"],
-            subject="Activate your account",
-            recipients=[email],
-            html=final_html
-        )
-
-        mail.send(msg)
-    except Exception as error:
-        return f"Failed to send email: {error}"
-
+        if res.status_code != 200:
+            print("Failed to send email:", res.reason)
+    except Exception as e:
+        print("Exception during email sending:", str(e))
