@@ -1,4 +1,4 @@
-const progressBar = document.getElementById('progress-bar');
+/*const progressBar = document.getElementById('progress-bar');
 
 function updateProgress() {
 	progressBar.style.width = '75%';
@@ -18,4 +18,4 @@ window.onload = () => {
 	if (searchParams.has('redirect')) {
 		finishProgress();
 	}
-};
+};*/

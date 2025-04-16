@@ -15,7 +15,8 @@
 		<link rel="manifest" href="/static/manifest.json">
 		<script src="/static/js/htmx.min.js"></script>
 	</head>
-	<body id="body" class="dark:bg-zinc-900 dark:text-white pb-16 sm:pb-0">
+	<body id="body" class="dark:bg-zinc-900 dark:text-white pb-16 sm:pb-0" hx-indicator="#loading-bar">
+		{% include 'components/loading-bar.html' %}
 		{% include 'components/navbar.html' %}
 		{% include 'components/mobile-navbar.html' %}
 		{% include 'components/progress-bar.html' %}

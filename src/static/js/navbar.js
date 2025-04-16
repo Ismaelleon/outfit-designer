@@ -1,11 +1,15 @@
-function toggleNavbarMenu() {
-	document.getElementById("menu").classList.toggle("hidden");
-	document.getElementById("menu").classList.toggle("flex");
+function showLoadingBar() {
+	document.getElementById("loading-bar").classList.add("htmx-request");
 }
 
-document
-	.getElementById("menu-open")
-	.addEventListener("click", toggleNavbarMenu);
-document
-	.getElementById("menu-close")
-	.addEventListener("click", toggleNavbarMenu);
+window.addEventListener("DOMContentLoaded", () => {
+	let navbarLinks = document.querySelectorAll("#menu a");
+	navbarLinks.forEach((link) =>
+		link.addEventListener("click", showLoadingBar)
+	);
+
+	let mobileNavbarLinks = document.querySelectorAll("#mobile-menu a");
+	mobileNavbarLinks.forEach((link) =>
+		link.addEventListener("click", showLoadingBar)
+	);
+});
