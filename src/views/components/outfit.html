@@ -3,7 +3,7 @@
 	<section class="flex flex-col p-3 rounded border border-zinc-200 dark:border-zinc-600" id={{ outfit['_id'] }}>
 		<img src={{ outfit['image'] }} alt="" class="w-full rounded mb-2">	
 		<header class="flex flex-row justify-between items-center">
-			<a href={{ '/outfits/{}'.format(outfit['_id']) }} class="text-base font-bold hover:underline">{{ outfit['name'] }}</a>
+			<a href={{ '/outfits/{}'.format(outfit['_id']) }} class="text-base font-bold hover:underline" onclick="showLoadingBar()">{{ outfit['name'] }}</a>
 			<button class="p-1 flex justify-center items-center relative z-0 aspect-square hover:bg-zinc-200 rounded-full dark:hover:bg-zinc-800" onclick="toggleMenu(event)">
 				<i class="las la-ellipsis-v text-xl z-0"></i>
 				<ul class="absolute right-0 top-8 min-w-36 bg-white rounded border border-zinc-200 hidden dark:bg-zinc-900 dark:border-zinc-600">
