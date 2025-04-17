@@ -14,7 +14,7 @@
 		{% else %}
 			class="sm:text-sm p-2 border border-zinc-200 rounded dark:bg-transparent dark:border-zinc-600">
 		{% endif %}
-		<button class="flex justify-center text-sm font-medium max-w-sm rounded bg-red-700 p-2 text-white border border-red-700 hover:bg-red-600" hx-delete="/account/delete" hx-swap="outerHTML" hx-target="#deletion-modal">Delete</button>
+		<button class="flex justify-center text-sm font-medium max-w-sm rounded bg-red-700 p-2 text-white border border-red-700 hover:bg-red-600" hx-delete="/account/delete" hx-swap="outerHTML transition:true" hx-target="#deletion-modal">Delete</button>
 		<button class="flex justify-center text-sm font-medium max-w-sm rounded bg-white p-2 border border-zinc-200 dark:border-zinc-600 hover:bg-zinc-200 dark:bg-zinc-900 dark:hover:bg-zinc-800" onclick="hideDeletionModal(event)">Cancel</button>
 	</form>
 </section>
