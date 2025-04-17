@@ -1,19 +1,28 @@
 {% extends "base.html" %}
 {% block content %}
-	<section class="w-full max-w-3xl pt-4">
-		<header class="flex flex-row justify-between items-center mb-2">
-			<h2 class="text-base font-bold">{{ data['outfit']['name'].capitalize() }}</h2>
-		</header>
-		<section class="flex flex-col">
-			<img src="{{ data['outfit']['image'] }}" class="max-w-xs mb-2 rounded">
-			<section class="flex flex-row gap-2 mb-2">
-				{% for clothing in data['outfit']['clothes'] %}
-					<a href="/closet/{{ clothing['_id'] }}" onclick="showLoadingBar()">
-						<img src="{{ clothing['image'] }}" class="w-[120px] border hover:border-zinc-950 cursor-pointer border-zinc-200 dark:border-zinc-600 dark:hover:border-zinc-600 p-2">
-					</a>
-				{% endfor %}
-			</section>
-			<span class="text-sm"><span class="font-medium">Season:</span> {{ data['outfit']['season'].capitalize() }}</span>
+<section class="w-full max-w-3xl pt-4">
+	<header class="flex flex-row justify-between items-center mb-2">
+		<h2 class="text-base font-bold">
+			{{ data['outfit']['name'].capitalize() }}
+		</h2>
+	</header>
+	<section class="flex flex-col">
+		<img
+			src="{{ data['outfit']['image'] }}"
+			class="max-w-xs mb-2 rounded" />
+		<section class="flex flex-row gap-2 mb-2">
+			{% for clothing in data['outfit']['clothes'] %}
+			<a href="/closet/{{ clothing['_id'] }}" onclick="showLoadingBar()">
+				<img
+					src="{{ clothing['image'] }}"
+					class="w-[120px] border hover:border-zinc-950 cursor-pointer border-zinc-200 dark:border-zinc-600 dark:hover:border-zinc-600 p-2" />
+			</a>
+			{% endfor %}
 		</section>
+		<span class="text-sm"
+			><span class="font-medium">Season:</span> {{
+			data['outfit']['season'].capitalize() }}</span
+		>
 	</section>
+</section>
 {% endblock %}
