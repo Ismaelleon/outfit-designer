@@ -1302,15 +1302,15 @@ video {
 
 @keyframes loadingColor {
   0% {
-    background: #fff;
+    opacity: 100%;
   }
 
   50% {
-    background: #bbbbbb;
+    opacity: 75%;
   }
 
   100% {
-    background: #fff;
+    opacity: 100%;
   }
 }
 
