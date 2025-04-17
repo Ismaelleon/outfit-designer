@@ -723,16 +723,16 @@ video {
   margin-top: 0.5rem;
 }
 
+.mt-24{
+  margin-top: 6rem;
+}
+
 .mt-3{
   margin-top: 0.75rem;
 }
 
 .mt-4{
   margin-top: 1rem;
-}
-
-.mt-24{
-  margin-top: 6rem;
 }
 
 .block{
@@ -790,10 +790,6 @@ video {
 
 .h-screen{
   height: 100vh;
-}
-
-.h-auto{
-  height: auto;
 }
 
 .max-h-32{
@@ -1300,6 +1296,10 @@ video {
   100% {
     width: 100%;
   }
+}
+
+@view-transition {
+  navigation: auto;
 }
 
 .after\:absolute::after{
