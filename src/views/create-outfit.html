@@ -5,7 +5,7 @@
 			<h2 class="text-lg sm:text-base font-bold">Create outfit</h2>
 		</header>
 		<section class="my-4">
-			<form class="flex flex-col sm:grid sm:gap-3 sm:grid-cols-2" hx-post="/outfits/new" hx-encoding="multipart/form-data" hx-swap="outerHTML" hx-target="#body" hx-on::after-request="updateProgress()">
+			<form class="flex flex-col sm:grid sm:gap-3 sm:grid-cols-2" hx-post="/outfits/new" hx-encoding="multipart/form-data" hx-swap="outerHTML transition:true" hx-target="#body" hx-on::after-request="updateProgress()">
 				<section>
 					<p class="col-start-1 col-end-2 flex flex-col">
 						<label for="name-input" class="sm:text-sm font-medium mb-1">Name</label>
