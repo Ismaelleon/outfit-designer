@@ -5,7 +5,7 @@ from werkzeug.utils import secure_filename
 from jinja2 import Environment, FileSystemLoader
 from bson.objectid import ObjectId
 from rembg import remove
-from helpers import dark_mode, send_verification_mail, handle_invalid_user_session
+from helpers import dark_mode, send_verification_mail, handle_invalid_user_session, upload_image
 from flask_mail import Mail, Message
 
 def setup_router (app, mongo):
@@ -166,23 +166,8 @@ def setup_router (app, mongo):
             if image_file.filename == "" or name == "" or len(clothes) == 0:
                 pass
 
-            # Save image file
-            image_filename = secure_filename(str(uuid.uuid4()))
-            image_file_path = os.path.join(app.config["UPLOAD_FOLDER"], image_filename)
-            image_file.save(image_file_path)
-
-            # Remove image background
-            image_file = open(image_file_path, "rb").read()
-            image_bg_removed = remove(image_file)
-            image_file = open(image_file_path, "wb")
-            image_file.write(image_bg_removed)
-
             # Upload image to cloudinary
-            result = cloudinary.uploader.upload(os.path.join(os.getcwd(), f"static/images/{image_filename}"), public_id=image_filename, overwrite=False, folder=os.environ["CLOUDINARY_OUTFITS_FOLDER"])
-            image_src = result["secure_url"]
-            
-            # Delete image file
-            os.remove(image_file_path)
+            upload_image(os.environ["CLOUDINARY_OUTFITS_FOLDER"])
 
             # Update closet array 
             outfits = user["outfits"]
@@ -376,23 +361,8 @@ def setup_router (app, mongo):
                 }, request.cookies)
                 return render_template("add-clothes.html", data=data)
 
-            # Save image file
-            image_filename = secure_filename(str(uuid.uuid4()))
-            image_file_path = os.path.join(app.config["UPLOAD_FOLDER"], image_filename)
-            image_file.save(image_file_path)
-
-            # Remove image background
-            image_file = open(image_file_path, "rb").read()
-            image_bg_removed = remove(image_file)
-            image_file = open(image_file_path, "wb")
-            image_file.write(image_bg_removed)
-
             # Upload image to cloudinary
-            result = cloudinary.uploader.upload(os.path.join(os.getcwd(), f"static/images/{image_filename}"), public_id=image_filename, overwrite=False, folder=os.environ["CLOUDINARY_CLOSET_FOLDER"])
-            image_src = result["secure_url"]
-
-            # Delete image file
-            os.remove(image_file_path)
+            upload_image(os.environ["CLOUDINARY_CLOSET_FOLDER"])
 
             # Update closet array 
             closet = user["closet"]
