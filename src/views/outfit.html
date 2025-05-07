@@ -1,5 +1,4 @@
-{% extends "base.html" %}
-{% block content %}
+{% extends "base.html" %} {% block content %}
 <section class="w-full max-w-3xl pt-4">
 	<header class="flex flex-row justify-between items-center mb-2">
 		<h2 class="text-base font-bold">
@@ -19,10 +18,14 @@
 			</a>
 			{% endfor %}
 		</section>
-		<span class="text-sm"
-			><span class="font-medium">Season:</span> {{
-			data['outfit']['season'].capitalize() }}</span
-		>
+		<span class="text-sm">
+			<span class="font-medium">Season:</span>
+			{{ data['outfit']['season'].capitalize() }}
+		</span>
+		<span class="text-sm">
+			<span class="font-medium">Created:</span>
+			{{ data['outfit']['created'] }}
+		</span>
 	</section>
 </section>
 {% endblock %}
