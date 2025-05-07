@@ -1,4 +1,4 @@
-import os, bcrypt, cloudinary, cloudinary.uploader, datetime, secrets
+import os, bcrypt, cloudinary, cloudinary.uploader, datetime, secrets, re
 from flask import send_from_directory, render_template, redirect, request, make_response, session
 from cloudinary import CloudinaryImage
 from jinja2 import Environment, FileSystemLoader
@@ -144,7 +144,7 @@ def setup_router (app, mongo):
                 return handle_invalid_user_session()
 
             # If required properties not added
-            if "name" not in request.form or "season" not in request.form or "clothes" not in request.form or "image" not in request.files:
+            if "name" not in request.form or "season" not in request.form or "image" not in request.files:
                 data = dark_mode({
                     "closet": user["closet"],
                     "error": True,
@@ -161,7 +161,7 @@ def setup_router (app, mongo):
             image_file = request.files["image"]
 
             # If user does not select a file or some inputs are not valid
-            if image_file.filename == "" or name == "" or len(clothes) == 0:
+            if image_file.filename == "" or name == "":
                 pass
 
             # Upload image to cloudinary
@@ -603,7 +603,7 @@ def setup_router (app, mongo):
             return render_template("components/login-form.html", data=data)
 
         # Search for user matching email address
-        result = mongo.db.users.find_one({ "email": email })
+        result = mongo.db.users.find_one({ "email": re.compile(email, re.IGNORECASE) })
 
         if result == None:
             return make_response({"message": "Not Found"}, 404)

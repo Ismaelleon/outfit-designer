@@ -14,7 +14,9 @@
 				</ul>
 			</button>
 		</header>
-		<span class="text-sm"><span class="font-medium">Clothes:</span> {{ outfit['clothes']|length }}</span>
+		{% if data['clothes']|length > 0 %}
+			<span class="text-sm"><span class="font-medium">Clothes:</span> {{ outfit['clothes']|length }}</span>
+		{% endif %}
 		<span class="text-sm"><span class="font-medium">Season:</span> {{ outfit['season'].capitalize() }} </span>
 		<span class="text-sm"><span class="font-medium">Created:</span> {{ outfit['created'] }} </span>
 	</section>	
