@@ -16,12 +16,12 @@ function toggleDarkMode() {
 		document.cookie = "dark-mode=true";
 		document
 			.querySelector('meta[name="theme-color"]')
-			.setAttribute("content", "#52525b");
+			.setAttribute("content", "#18181b");
 	} else {
 		document.cookie = 'dark-mode=""';
 		document
 			.querySelector('meta[name="theme-color"]')
-			.setAttribute("content", "#e4e4e7");
+			.setAttribute("content", "#ffffff");
 	}
 }
 
