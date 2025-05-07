@@ -590,7 +590,7 @@ def setup_router (app, mongo):
     @app.route("/log-in", methods=["POST"])
     def log_in ():
         # Get user data
-        email = request.form["email"]
+        email = request.form["email"].lower()
         password = request.form["password"]
 
         # Check for input lengths
