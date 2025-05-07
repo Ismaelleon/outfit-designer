@@ -1,4 +1,4 @@
-import os, bcrypt, cloudinary, cloudinary.uploader, datetime, secrets
+import os, bcrypt, cloudinary, cloudinary.uploader, datetime, secrets, re
 from flask import send_from_directory, render_template, redirect, request, make_response, session
 from cloudinary import CloudinaryImage
 from jinja2 import Environment, FileSystemLoader
@@ -590,7 +590,7 @@ def setup_router (app, mongo):
     @app.route("/log-in", methods=["POST"])
     def log_in ():
         # Get user data
-        email = request.form["email"].lower()
+        email = request.form["email"]
         password = request.form["password"]
 
         # Check for input lengths
@@ -603,7 +603,7 @@ def setup_router (app, mongo):
             return render_template("components/login-form.html", data=data)
 
         # Search for user matching email address
-        result = mongo.db.users.find_one({ "email": email })
+        result = mongo.db.users.find_one({ "email": re.compile(email, re.IGNORECASE) })
 
         if result == None:
             return make_response({"message": "Not Found"}, 404)
