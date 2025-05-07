@@ -1,10 +1,8 @@
-import os, bcrypt, cloudinary, cloudinary.uploader, uuid, datetime, secrets
+import os, bcrypt, cloudinary, cloudinary.uploader, datetime, secrets
 from flask import send_from_directory, render_template, redirect, request, make_response, session
 from cloudinary import CloudinaryImage
-from werkzeug.utils import secure_filename
 from jinja2 import Environment, FileSystemLoader
 from bson.objectid import ObjectId
-from rembg import remove
 from helpers import dark_mode, send_verification_mail, handle_invalid_user_session, upload_image
 from flask_mail import Mail, Message
 
@@ -167,7 +165,7 @@ def setup_router (app, mongo):
                 pass
 
             # Upload image to cloudinary
-            upload_image(os.environ["CLOUDINARY_OUTFITS_FOLDER"])
+            image_src = upload_image(os.environ["CLOUDINARY_OUTFITS_FOLDER"], image_file, app)
 
             # Update closet array 
             outfits = user["outfits"]
@@ -362,7 +360,7 @@ def setup_router (app, mongo):
                 return render_template("add-clothes.html", data=data)
 
             # Upload image to cloudinary
-            upload_image(os.environ["CLOUDINARY_CLOSET_FOLDER"])
+            image_src = upload_image(os.environ["CLOUDINARY_CLOSET_FOLDER"], image_file, app)
 
             # Update closet array 
             closet = user["closet"]

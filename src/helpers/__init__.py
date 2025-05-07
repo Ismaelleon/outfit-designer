@@ -1,4 +1,7 @@
-import os, requests, json
+import os, requests, json, uuid, cloudinary
+from PIL import Image
+from rembg import remove
+from werkzeug.utils import secure_filename
 from flask import session, redirect
 from jinja2 import Environment, FileSystemLoader
 
@@ -49,7 +52,7 @@ def send_verification_mail(email, activation_code, app):
     except Exception as e:
         print("Exception during email sending:", str(e))
 
-def upload_image(folder):
+def upload_image(folder, image_file, app):
     # Save image file
     image_filename = secure_filename(str(uuid.uuid4()))
     image_file_path = os.path.join(app.config["UPLOAD_FOLDER"], image_filename)
@@ -61,9 +64,16 @@ def upload_image(folder):
     image_file = open(image_file_path, "wb")
     image_file.write(image_bg_removed)
 
+    # Scale image (max width or height 500px) for better upload time
+    img = Image.open(image_file_path)
+    img.thumbnail((500, 500))
+    img.save(image_file_path, img.format, quality=100)
+
     # Upload image to cloudinary
     result = cloudinary.uploader.upload(os.path.join(os.getcwd(), f"static/images/{image_filename}"), public_id=image_filename, overwrite=False, folder=folder)
     image_src = result["secure_url"]
 
     # Delete image file
     os.remove(image_file_path)
+
+    return image_src
