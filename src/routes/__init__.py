@@ -207,65 +207,63 @@ def setup_router (app, mongo):
 
     @app.route("/outfits/filter", methods=["POST"])
     def filter_outfits ():
-        if request.method == "POST":
-            if session.get("id"):
-                # Get user document
-                user_id = session.get("id")
-                user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
+        if session.get("id"):
+            # Get user document
+            user_id = session.get("id")
+            user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
 
-                if user == None:
-                    return handle_invalid_user_session()
+            if user == None:
+                return handle_invalid_user_session()
 
-                # Get request body
-                clothes = request.form["clothes"] 
-                season = request.form["season"]
+            # Get request body
+            clothes = request.form["clothes"] 
+            season = request.form["season"]
 
-                # Filter outfits by clothes and season
-                filtered_outfits = []
-                for outfit in user["outfits"]:
-                    if (
-                        (int(clothes) == 0 or int(clothes) == len(outfit["clothes"])) and
-                        (season == "all" or season == outfit["season"])
-                    ):
-                        filtered_outfits.append(outfit)
+            # Filter outfits by clothes and season
+            filtered_outfits = []
+            for outfit in user["outfits"]:
+                if (
+                    (int(clothes) == 0 or int(clothes) == len(outfit["clothes"])) and
+                    (season == "all" or season == outfit["season"])
+                ):
+                    filtered_outfits.append(outfit)
 
-                data = dark_mode({
-                    "outfits": filtered_outfits,
-                    "activated": user["activation"]["activated"],
-                }, request.cookies)
-                return render_template("components/outfit.html", data=data)
+            data = dark_mode({
+                "outfits": filtered_outfits,
+                "activated": user["activation"]["activated"],
+            }, request.cookies)
+            return render_template("components/outfit.html", data=data)
 
 
     @app.route("/outfits/delete/<string:outfit_id>", methods=["DELETE"])
     def delete_outfits (outfit_id):
-        if request.method == "DELETE":
-            if session.get("id"):
-                # Get user document
-                user_id = session.get("id")
-                user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
+        if session.get("id"):
+            # Get user document
+            user_id = session.get("id")
+            user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
 
-                if user == None:
-                    return handle_invalid_user_session()
+            if user == None:
+                return handle_invalid_user_session()
 
-                # Remove outfits from outfits list 
-                outfits = user["outfits"]
-                for outfit in outfits:
-                    if str(outfit["_id"]) == outfit_id:
-                        # Remove image from cloudinary
-                        image_public_id = outfit["image"].split("/")[-1].split(".")[0]
-                        cloudinary.uploader.destroy(os.path.join(os.environ["CLOUDINARY_OUTFITS_FOLDER"], image_public_id))
+            # Remove outfits from outfits list 
+            outfits = user["outfits"]
+            for outfit in outfits:
+                if str(outfit["_id"]) == outfit_id:
+                    # Remove image from cloudinary
+                    image_public_id = outfit["image"].split("/")[-1].split(".")[0]
+                    cloudinary.uploader.destroy(os.path.join(os.environ["CLOUDINARY_OUTFITS_FOLDER"], image_public_id))
 
-                        outfits.remove(outfit)
+                    outfits.remove(outfit)
 
-                # Save updated outfits 
-                result = mongo.db.users.update_one({"_id": ObjectId(user_id)}, {"$set": {"outfits": outfits}})
+            # Save updated outfits 
+            result = mongo.db.users.update_one({"_id": ObjectId(user_id)}, {"$set": {"outfits": outfits}})
 
-                # Return outfits html
-                data = dark_mode({
-                    "outfits": outfits,
-                    "activated": user["activation"]["activated"],
-                }, request.cookies)
-                return render_template("components/outfit.html", data=data)
+            # Return outfits html
+            data = dark_mode({
+                "outfits": outfits,
+                "activated": user["activation"]["activated"],
+            }, request.cookies)
+            return render_template("components/outfit.html", data=data)
 
     @app.route("/closet")
     def closet ():
@@ -401,74 +399,72 @@ def setup_router (app, mongo):
 
     @app.route("/closet/filter", methods=["POST"])
     def filter_clothes ():
-        if request.method == "POST":
-            if session.get("id"):
-                # Get user document
-                user_id = session.get("id")
-                user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
+        if session.get("id"):
+            # Get user document
+            user_id = session.get("id")
+            user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
 
-                if user == None:
-                    return handle_invalid_user_session()
+            if user == None:
+                return handle_invalid_user_session()
 
-                # Get request body
-                clothing_type = request.form["type"] 
-                brand = request.form["brand"]
-                colors = []
-                if "color" in request.form:
-                    colors = request.form.getlist("color")
+            # Get request body
+            clothing_type = request.form["type"] 
+            brand = request.form["brand"]
+            colors = []
+            if "color" in request.form:
+                colors = request.form.getlist("color")
 
-                # Filter clothes by type, brand, and colors 
-                filtered_clothes = []
-                for clothing_item in user["closet"]:
-                    if (
-                        (clothing_type == "all" or clothing_type == clothing_item["type"]) and 
-                        (brand == "" or brand.lower() == clothing_item["brand"].lower()) and
-                        (len(colors) == 0 or sorted(colors) == sorted(clothing_item["colors"]))
-                    ):
-                        filtered_clothes.append(clothing_item)
+            # Filter clothes by type, brand, and colors 
+            filtered_clothes = []
+            for clothing_item in user["closet"]:
+                if (
+                    (clothing_type == "all" or clothing_type == clothing_item["type"]) and 
+                    (brand == "" or brand.lower() == clothing_item["brand"].lower()) and
+                    (len(colors) == 0 or sorted(colors) == sorted(clothing_item["colors"]))
+                ):
+                    filtered_clothes.append(clothing_item)
 
-                data = dark_mode({
-                    "closet": filtered_clothes,
-                    "activated": user["activation"]["activated"],
-                }, request.cookies)
-                return render_template("components/clothing-item.html", data=data)
+            data = dark_mode({
+                "closet": filtered_clothes,
+                "activated": user["activation"]["activated"],
+            }, request.cookies)
+            return render_template("components/clothing-item.html", data=data)
 
     @app.route("/closet/delete/<string:clothing_id>", methods=["DELETE"])
     def delete_clothes (clothing_id):
-        if request.method == "DELETE":
-            if session.get("id"):
-                # Get user document
-                user_id = session.get("id")
-                user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
+        if session.get("id"):
+            # Get user document
+            user_id = session.get("id")
+            user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
 
-                if user == None:
-                    return handle_invalid_user_session()
+            if user == None:
+                return handle_invalid_user_session()
 
-                # Remove outfits using this clothing item
-                outfits = user["outfits"]
-                for outfit in outfits:
-                    for clothing_item in outfit["clothes"]:
-                        if clothing_item == clothing_id:
-                            outfits.remove(outfit)
+            # Remove outfits using this clothing item
+            outfits = user["outfits"]
+            for outfit in outfits:
+                for clothing_item in outfit["clothes"]:
+                    if clothing_item == clothing_id:
+                        outfits.remove(outfit)
 
-                # Remove clothes from closet list 
-                closet = user["closet"]
-                for item in closet:
-                    if str(item["_id"]) == clothing_id:
-                        # Remove image from cloudinary
-                        image_public_id = item["image"].split("/")[-1].split(".")[0]
-                        cloudinary.uploader.destroy(os.path.join(os.environ["CLOUDINARY_CLOSET_FOLDER"], image_public_id))
-                        closet.remove(item)
+            # Remove clothes from closet list 
+            closet = user["closet"]
+            for item in closet:
+                if str(item["_id"]) == clothing_id:
+                    # Remove image from cloudinary
+                    image_public_id = item["image"].split("/")[-1].split(".")[0]
+                    cloudinary.uploader.destroy(os.path.join(os.environ["CLOUDINARY_CLOSET_FOLDER"], image_public_id))
+                    closet.remove(item)
 
-                # Save updated closet
-                result = mongo.db.users.update_one({"_id": ObjectId(user_id)}, {"$set": {"closet": closet, "outfits": outfits}})
+            # Save updated closet
+            result = mongo.db.users.update_one({"_id": ObjectId(user_id)}, {"$set": {"closet": closet, "outfits": outfits}})
 
-                # Return closet html
-                data = dark_mode({
-                    "closet": closet,
-                    "activated": user["activation"]["activated"],
-                }, request.cookies)
-                return render_template("components/clothing-item.html", data=data)
+            # Return closet html
+            data = dark_mode({
+                "closet": closet,
+                "activated": user["activation"]["activated"],
+            }, request.cookies)
+            return render_template("components/clothing-item.html", data=data)
 
     @app.route("/profile")
     def profile ():
@@ -489,7 +485,7 @@ def setup_router (app, mongo):
 
         return redirect("/")
 
-    @app.route("/settings", methods=["GET", "POST"])
+    @app.route("/settings", methods=["GET"])
     def settings ():
         # If user logged in render template
         if session.get("id"):
@@ -511,66 +507,65 @@ def setup_router (app, mongo):
 
     @app.route("/sign-up", methods=["POST"])
     def sign_up ():
-        if request.method == "POST":
-            # Get user data
-            name = request.form["name"]
-            email = request.form["email"]
-            password = request.form["password"]
+        # Get user data
+        name = request.form["name"]
+        email = request.form["email"]
+        password = request.form["password"]
 
-            # Check for input lengths
-            if len(name) < 4 or len(email) < 8 or len(password) < 4:
-                data = {
-                    "input-error": True,
-                    "name": name,
-                    "email": email,
-                    "password": password,
-                }
-                return render_template("components/signup-form.html", data=data)
-
-            # Check for user with same e-mail
-            result = mongo.db.users.find_one({ "email": email })
-
-            if result != None:
-                data = {
-                    "email-error": True,
-                    "name": name,
-                    "email": email,
-                    "password": password,
-                }
-                return render_template("components/signup-form.html", data=data)
-
-            # Encrypt password
-            hashed_password = bcrypt.hashpw(password.encode("ascii"), bcrypt.gensalt()).decode("ascii")
-
-            # Save new user
-            new_user = {
+        # Check for input lengths
+        if len(name) < 4 or len(email) < 8 or len(password) < 4:
+            data = {
+                "input-error": True,
                 "name": name,
                 "email": email,
-                "password": hashed_password,
-                "closet": [],
-                "outfits": [],
-                "activation": {
-                    "activated": False,
-                    "code": secrets.token_urlsafe(16)
-                }
+                "password": password,
             }
+            return render_template("components/signup-form.html", data=data)
 
-            result = mongo.db.users.insert_one(new_user)
-            
-            send_verification_mail(email, new_user["activation"]["code"], app)
+        # Check for user with same e-mail
+        result = mongo.db.users.find_one({ "email": email })
 
-            if result.acknowledged == False:
-                return make_response({"message": "Internal Server Error"}, 500)
+        if result != None:
+            data = {
+                "email-error": True,
+                "name": name,
+                "email": email,
+                "password": password,
+            }
+            return render_template("components/signup-form.html", data=data)
 
-            # Create user session
-            session["id"] = str(result.inserted_id)
+        # Encrypt password
+        hashed_password = bcrypt.hashpw(password.encode("ascii"), bcrypt.gensalt()).decode("ascii")
 
-            # Redirect user to outfits page
-            res = make_response({"message": "OK"}, 200)
-            res.headers["HX-Redirect"] = "/outfits"
-            return res 
+        # Save new user
+        new_user = {
+            "name": name,
+            "email": email,
+            "password": hashed_password,
+            "closet": [],
+            "outfits": [],
+            "activation": {
+                "activated": False,
+                "code": secrets.token_urlsafe(16)
+            }
+        }
 
-    @app.route("/activate/<string:activation_code>", methods=["GET"])
+        result = mongo.db.users.insert_one(new_user)
+        
+        send_verification_mail(email, new_user["activation"]["code"], app)
+
+        if result.acknowledged == False:
+            return make_response({"message": "Internal Server Error"}, 500)
+
+        # Create user session
+        session["id"] = str(result.inserted_id)
+
+        # Redirect user to outfits page
+        res = make_response({"message": "OK"}, 200)
+        res.headers["HX-Redirect"] = "/outfits"
+        return res 
+
+    @app.route("/activate/<string:activation_code>")
     def activate_account(activation_code):
         # Find user with same activation code
         user = mongo.db.users.find_one({ "activation": { "activated": False, "code": activation_code } })
