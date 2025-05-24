@@ -185,25 +185,24 @@ def setup_router (app, mongo):
             res = make_response({"message": "OK"}, 200)
             res.headers["HX-Redirect"] = f"/outfits/{new_outfit_id}?redirect"
             return res
-            
+        elif request.method == "GET":
+            # If user logged in render template
+            if session.get("id"):
+                # Get user document
+                user_id = session.get("id")
+                user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
 
-        # If user logged in render template
-        if session.get("id"):
-            # Get user document
-            user_id = session.get("id")
-            user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
+                if user == None:
+                    return handle_invalid_user_session()
 
-            if user == None:
-                return handle_invalid_user_session()
+                data = dark_mode({
+                    "closet": user["closet"],
+                    "activated": user["activation"]["activated"],
+                }, request.cookies)
+                return render_template("create-outfit.html", data=data)
 
-            data = dark_mode({
-                "closet": user["closet"],
-                "activated": user["activation"]["activated"],
-            }, request.cookies)
-            return render_template("create-outfit.html", data=data)
-
-        # Otherwise, redirect to the home page
-        return redirect("/")
+            # Otherwise, redirect to the home page
+            return redirect("/")
 
     @app.route("/outfits/filter", methods=["POST"])
     def filter_outfits ():
