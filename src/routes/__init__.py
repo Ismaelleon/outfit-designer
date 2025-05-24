@@ -84,7 +84,36 @@ def setup_router (app, mongo):
 
     @app.route("/outfits/edit/<string:outfit_id>", methods=["GET", "POST"])
     def edit_outfit(outfit_id):
-        if request.method == "POST":
+        if request.method == "GET":
+            # If user logged in render template
+            if session.get("id"):
+                # Get user document
+                user_id = session.get("id")
+                user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
+
+                if user == None:
+                    return handle_invalid_user_session()
+
+                # Find outfit
+                outfit = {}
+                for outfit in user["outfits"]:
+                    if str(outfit["_id"]) == outfit_id:
+                        outfit = outfit 
+                        break
+
+                data = dark_mode({
+                    "name": outfit["name"],
+                    "season": outfit["season"],
+                    "image": outfit["image"],
+                    "clothes": outfit["clothes"],
+                    "closet": user["closet"],
+                    "activated": user["activation"]["activated"],
+                }, request.cookies)
+                return render_template("edit-outfit.html", data=data)
+
+            # Otherwise, redirect to the home page
+            return redirect("/")
+        elif request.method == "POST":
             # If user not logged in
             if not session.get("id"):
                 res = make_response({"message": "Unauthorized"}, 401)
@@ -98,38 +127,28 @@ def setup_router (app, mongo):
             if user == None:
                 return handle_invalid_user_session()
 
-        # If user logged in render template
-        if session.get("id"):
-            # Get user document
-            user_id = session.get("id")
-            user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
 
-            if user == None:
-                return handle_invalid_user_session()
-
-            # Find outfit
-            outfit = {}
-            for outfit in user["outfits"]:
-                if str(outfit["_id"]) == outfit_id:
-                    outfit = outfit 
-                    break
-
-            data = dark_mode({
-                "name": outfit["name"],
-                "season": outfit["season"],
-                "image": outfit["image"],
-                "clothes": outfit["clothes"],
-                "closet": user["closet"],
-                "activated": user["activation"]["activated"],
-            }, request.cookies)
-            return render_template("edit-outfit.html", data=data)
-
-        # Otherwise, redirect to the home page
-        return redirect("/")
-
-    @app.route("/outfits/new", methods=["POST", "GET"])
+    @app.route("/outfits/new", methods=["GET", "POST"])
     def create_outfit ():
-        if request.method == "POST":
+        if request.method == "GET":
+            # If user logged in render template
+            if session.get("id"):
+                # Get user document
+                user_id = session.get("id")
+                user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
+
+                if user == None:
+                    return handle_invalid_user_session()
+
+                data = dark_mode({
+                    "closet": user["closet"],
+                    "activated": user["activation"]["activated"],
+                }, request.cookies)
+                return render_template("create-outfit.html", data=data)
+
+            # Otherwise, redirect to the home page
+            return redirect("/")
+        elif request.method == "POST":
             # If user not logged in
             if not session.get("id"):
                 res = make_response({"message": "Unauthorized"}, 401)
@@ -185,24 +204,6 @@ def setup_router (app, mongo):
             res = make_response({"message": "OK"}, 200)
             res.headers["HX-Redirect"] = f"/outfits/{new_outfit_id}?redirect"
             return res
-        elif request.method == "GET":
-            # If user logged in render template
-            if session.get("id"):
-                # Get user document
-                user_id = session.get("id")
-                user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
-
-                if user == None:
-                    return handle_invalid_user_session()
-
-                data = dark_mode({
-                    "closet": user["closet"],
-                    "activated": user["activation"]["activated"],
-                }, request.cookies)
-                return render_template("create-outfit.html", data=data)
-
-            # Otherwise, redirect to the home page
-            return redirect("/")
 
     @app.route("/outfits/filter", methods=["POST"])
     def filter_outfits ():
@@ -310,9 +311,26 @@ def setup_router (app, mongo):
             }, request.cookies)
             return render_template("closet-item.html", data=data)
 
-    @app.route("/closet/new", methods=["POST", "GET"])
+    @app.route("/closet/new", methods=["GET", "POST"])
     def add_clothes ():
-        if request.method == "POST":
+        if request.method == "GET":
+            # If user logged in render template
+            if session.get("id"):
+                user_id = session.get("id")
+                user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
+
+                if user == None:
+                    return handle_invalid_user_session()
+
+                data = dark_mode({
+                    "error": False,
+                    "activated": user["activation"]["activated"],
+                }, request.cookies)
+                return render_template("add-clothes.html", data=data)
+
+            # Otherwise, redirect to the home page
+            return redirect("/")
+        elif request.method == "POST":
             # If user not logged in
             if not session.get("id"):
                 res = make_response({"message": "Unauthorized"}, 401)
@@ -380,22 +398,6 @@ def setup_router (app, mongo):
             res.headers["HX-Redirect"] = f"/closet/{new_clothing_id}?redirect"
             return res
 
-        # If user logged in render template
-        if session.get("id"):
-            user_id = session.get("id")
-            user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
-
-            if user == None:
-                return handle_invalid_user_session()
-
-            data = dark_mode({
-                "error": False,
-                "activated": user["activation"]["activated"],
-            }, request.cookies)
-            return render_template("add-clothes.html", data=data)
-
-        # Otherwise, redirect to the home page
-        return redirect("/")
 
     @app.route("/closet/filter", methods=["POST"])
     def filter_clothes ():
