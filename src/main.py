@@ -23,6 +23,7 @@ def create_app():
     # Setup mongo client
     app.config["MONGO_URI"] = os.environ["MONGO_URI"]
     mongo = PyMongo(app)
+    db = mongo.cx.get_database(os.environ["MONGO_DB"])
 
     # Setup uploads folder
     app.config["UPLOAD_FOLDER"] = os.path.join(os.getcwd(), 'static/images')
@@ -36,6 +37,6 @@ def create_app():
     Session(app)
 
     # Setup routes
-    setup_router(app, mongo)
+    setup_router(app, db)
 
     return app
