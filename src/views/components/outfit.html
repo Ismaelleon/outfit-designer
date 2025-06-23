@@ -22,5 +22,8 @@
 	</section>	
 	{% endfor %}
 {% else %}
-	<h3 class="font-medium col-start-1 col-end-3 sm:col-start-2 sm:col-end-3 text-center">You haven't created an outfit yet!</h3>
+	<h3 class="font-medium col-start-1 col-end-3 sm:col-start-2 sm:col-end-3 text-center flex flex-col gap-2">
+		<i class="las la-box-open text-4xl"></i>
+		You haven't created an outfit yet!
+	</h3>
 {% endif %}
