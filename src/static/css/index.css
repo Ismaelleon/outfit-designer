@@ -1518,10 +1518,6 @@ video {
     grid-column-start: 2;
   }
 
-  .sm\:col-start-1{
-    grid-column-start: 1;
-  }
-
   .sm\:col-end-3{
     grid-column-end: 3;
   }
