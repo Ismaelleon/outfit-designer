@@ -1,6 +1,6 @@
 .env
 __pycache__/
 env/
-src/static/css/*
-!src/static/css/*.css
+flaskr/static/css/*
+!flaskr/static/css/*.css
 
