@@ -2,7 +2,7 @@ import os, cloudinary
 from flask import Flask
 from flask_pymongo import PyMongo
 from flask_session import Session
-from routes import setup_router 
+from .routes import setup_router 
 from dotenv import load_dotenv
 
 # Load environment variables from .env file

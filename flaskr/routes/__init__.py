@@ -3,7 +3,7 @@ from flask import send_from_directory, render_template, redirect, request, make_
 from cloudinary import CloudinaryImage
 from jinja2 import Environment, FileSystemLoader
 from bson.objectid import ObjectId
-from helpers import dark_mode, send_verification_mail, handle_invalid_user_session, upload_image
+from ..helpers import dark_mode, send_verification_mail, handle_invalid_user_session, upload_image
 from flask_mail import Mail, Message
 
 def setup_router (app, mongo):
