@@ -13,12 +13,12 @@ function toggleDarkMode() {
 	documentEl.classList.toggle("dark");
 
 	if (documentEl.classList[0] === "dark") {
-		document.cookie = "dark-mode=true";
+		document.cookie = "dark-mode=true; path=/";
 		document
 			.querySelector('meta[name="theme-color"]')
 			.setAttribute("content", "#18181b");
 	} else {
-		document.cookie = 'dark-mode=""';
+		document.cookie = 'dark-mode=""; path=/';
 		document
 			.querySelector('meta[name="theme-color"]')
 			.setAttribute("content", "#ffffff");

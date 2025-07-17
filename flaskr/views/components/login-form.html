@@ -20,5 +20,5 @@
 		<p class="text-sm text-red-500 col-start-1 col-end-2">Incorrect password.</p>
 	{% endif %}
 	<a href="#forgot-password" class="text-sm font-semibold hover:underline" id="forgot-password-toggle">Forgot your password?</a>
-	<button class="w-full p-2 bg-zinc-950 text-white font-medium text-sm rounded hover:bg-zinc-800 mt-2" hx-post="/log-in" hx-swap="outerHTML transition:true" hx-target="#login-form">Submit</button>
+	<button class="w-full p-2 bg-zinc-950 text-white font-medium text-sm rounded hover:bg-zinc-800 mt-2" hx-post="/auth/log-in" hx-swap="outerHTML transition:true" hx-target="#login-form">Submit</button>
 </form>
