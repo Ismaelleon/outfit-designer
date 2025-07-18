@@ -25,7 +25,7 @@ def create_app():
     )
 
     # Setup uploads folder
-    app.config["UPLOAD_FOLDER"] = os.path.join(os.getcwd(), 'static/images')
+    app.config["UPLOAD_FOLDER"] = os.path.join(os.getcwd(), os.environ["UPLOAD_FOLDER"])
 
     # Setup server sessions
     app.config["SESSION_PERMANENT"] = True

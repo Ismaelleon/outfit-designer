@@ -1,4 +1,4 @@
-import os, requests, json, uuid, cloudinary
+import os, requests, uuid, cloudinary.uploader
 from PIL import Image
 from rembg import remove
 from werkzeug.utils import secure_filename
@@ -55,7 +55,7 @@ def send_verification_mail(email, activation_code, app):
 def upload_image(folder, image_file, app):
     # Save image file
     image_filename = secure_filename(str(uuid.uuid4()))
-    image_file_path = os.path.join(app.config["UPLOAD_FOLDER"], image_filename)
+    image_file_path = os.path.join(os.getcwd(), app.config["UPLOAD_FOLDER"], image_filename)
     image_file.save(image_file_path)
 
     # Remove image background
@@ -70,7 +70,7 @@ def upload_image(folder, image_file, app):
     img.save(image_file_path, img.format, quality=100)
 
     # Upload image to cloudinary
-    result = cloudinary.uploader.upload(os.path.join(os.getcwd(), f"static/images/{image_filename}"), public_id=image_filename, overwrite=False, folder=folder)
+    result = cloudinary.uploader.upload(image_file_path, public_id=image_filename, overwrite=False, folder=folder)
     image_src = result["secure_url"]
 
     # Delete image file
