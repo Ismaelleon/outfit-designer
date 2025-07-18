@@ -4,7 +4,12 @@ function toggleMenu(event) {
 
 function toggleFiltersMenu(event) {
 	document.getElementById("filters-menu").classList.toggle("hidden");
-	event.currentTarget.classList.toggle("bg-zinc-200 dark:bg-zinc-800");
+	event.currentTarget.classList.toggle("dark:bg-zinc-800");
+	event.currentTarget.classList.toggle("bg-zinc-200");
+}
+
+function hideFiltersMenu() {
+	document.getElementById("filters-menu").classList.add("hidden");
 }
 
 function hideDeletionModal() {
