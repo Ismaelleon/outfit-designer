@@ -1,8 +1,8 @@
 from flaskr.extensions import mongo
-from flaskr.helpers import dark_mode, handle_invalid_user_session
-from flask import render_template, request, make_response, session, redirect, Blueprint
+from flaskr.helpers import dark_mode, handle_invalid_user_session, upload_image
+from flask import render_template, request, make_response, session, redirect, Blueprint, current_app as app
 from bson.objectid import ObjectId
-import cloudinary
+import cloudinary, os, datetime
 
 bp = Blueprint("outfits", __name__, url_prefix="/outfits")
 
