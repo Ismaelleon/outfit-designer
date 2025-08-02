@@ -3,4 +3,5 @@ __pycache__/
 env/
 flaskr/static/css/*
 !flaskr/static/css/*.css
+!flaskr/static/css/tailwind.config.js
 
