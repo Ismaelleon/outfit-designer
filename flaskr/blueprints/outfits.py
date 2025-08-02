@@ -2,6 +2,7 @@ from flaskr.extensions import mongo
 from flaskr.helpers import dark_mode, handle_invalid_user_session
 from flask import render_template, request, make_response, session, redirect, Blueprint
 from bson.objectid import ObjectId
+import cloudinary
 
 bp = Blueprint("outfits", __name__, url_prefix="/outfits")
 
