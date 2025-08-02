@@ -26,5 +26,5 @@
 	{% if data["input-error"] == True %}
 		<p class="text-sm text-red-500 col-start-1 col-end-2">Name, e-mail, or password too short.</p>
 	{% endif %}
-	<button class="w-full p-2 bg-zinc-950 text-white font-medium text-sm rounded hover:bg-zinc-800 mt-2" hx-post="/sign-up" hx-target="#signup-form" hx-swap="outerHTML transition:true">Submit</button>
+	<button class="w-full p-2 bg-zinc-950 text-white font-medium text-sm rounded hover:bg-zinc-800 mt-2" hx-post="/auth/sign-up" hx-target="#signup-form" hx-swap="outerHTML transition:true">Submit</button>
 </form>

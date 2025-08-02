@@ -29,17 +29,16 @@
 		<i class="las la-suitcase text-xl"></i>
 		Closet
 	</a>
-	{% endif %} {% if request.path[0:8] == '/profile' or request.path[0:9] ==
-	'/settings' %}
+	{% endif %} {% if request.path[0:8] == '/account' %}
 	<a
-		href="/profile"
+		href="/account"
 		class="flex flex-col items-center text-sm font-semibold text-center">
 		<i class="las la-user-circle text-xl"></i>
 		Profile
 	</a>
 	{% else %}
 	<a
-		href="/profile"
+		href="/account"
 		class="flex flex-col items-center text-sm text-center text-zinc-600 dark:text-zinc-300">
 		<i class="las la-user-circle text-xl"></i>
 		Profile

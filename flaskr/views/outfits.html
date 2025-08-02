@@ -10,7 +10,7 @@
 					Filters
 				</button>	
 				<ul class="hidden absolute left-0 top-full translate-y-4 p-4 bg-zinc-200 rounded flex flex-col w-full col-span-2 sm:w-auto sm:left-auto sm:right-0 z-20 dark:bg-zinc-800" id="filters-menu">
-					<form hx-post="/outfits/filter" hx-swap="innerHTML transition: true" hx-target="#outfits-list">
+					<form hx-post="/outfits/filter" hx-swap="innerHTML transition: true" hx-target="#outfits-list" onsubmit="hideFiltersMenu()">
 						<p class="col-start-1 col-end-2 flex flex-col">
 							<label for="clothes-input" class="text-sm font-medium mb-1">Clothes</label>
 							<input name="clothes" id="clothes-input" type="number" value="0"

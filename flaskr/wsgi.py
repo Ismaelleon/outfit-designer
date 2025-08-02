@@ -1,3 +1,4 @@
-from main import create_app
+from flaskr import create_app
 
+# Initialize app
 app = create_app()

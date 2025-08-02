@@ -3,7 +3,7 @@
 	<section
 		class="flex flex-row justify-between items-center w-full max-w-3xl">
 		{% if request.path[0:8] == '/outfits' or request.path[0:7] == '/closet'
-		or request.path[0:8] == '/profile' %}
+		or request.path[0:8] == '/account' %}
 		<a ="/outfits" class="font-bold">Outfit Designer</a>
 		{% else %}
 		<a href="/" class="font-bold">Outfit Designer</a>
@@ -39,16 +39,16 @@
 				<i class="las la-suitcase text-xl mr-1"></i>
 				Closet
 			</a>
-			{% endif %} {% if request.path[0:8] == '/profile' %}
+			{% endif %} {% if request.path[0:8] == '/account' %}
 			<a
-				href="/profile"
+				href="/account"
 				class="text-2xl text-zinc-950 hover:text-zinc-950 sm:ml-5 flex flex-row items-center py-2 font-medium sm:text-sm dark:text-white dark:hover:text-white">
 				<i class="las la-user-circle text-xl mr-1"></i>
 				Profile
 			</a>
 			{% else %}
 			<a
-				href="/profile"
+				href="/account"
 				class="text-2xl text-zinc-600 hover:text-zinc-950 sm:ml-5 flex flex-row items-center py-2 sm:text-sm dark:text-zinc-300 dark:hover:text-white">
 				<i class="las la-user-circle text-xl mr-1"></i>
 				Profile
