@@ -14,6 +14,8 @@ def create_app():
 
     # Setup mongo
     app.config["MONGO_URI"] = os.environ["MONGO_URI"]
+
+    # Initialize PyMongo with the app
     mongo.init_app(app)
 
     # Setup cloudinary
