@@ -12,6 +12,12 @@ def create_app():
     # Init flask app 
     app = Flask(__name__, template_folder="views")
 
+    # Setup mongo
+    app.config["MONGO_URI"] = os.environ["MONGO_URI"]
+
+    # Initialize PyMongo with the app
+    mongo.init_app(app)
+
     # Setup cloudinary
     app.config["CLOUDINARY"] = cloudinary.config(
         cloud_name=os.environ["CLOUDINARY_CLOUD_NAME"],
