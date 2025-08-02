@@ -30,6 +30,11 @@
 							<option value="spring" {{ "selected" if data["season"] == "spring" }}>Spring</option>
 						</select>
 					</p>
+					<section class="flex flex-row justify-between items-center w-full mb-3">
+						<p class="text-sm">Add Image</p>
+						{% with id="image-input-switch" %} {% include 'components/switch.html'
+						%} {% endwith %}
+					</section>
 					{% include 'components/image-input.html' %}
 				</section>
 				<section class="grid grid-cols-2 gap-2 flex-col w-full col-start-2 col-end-3 row-start-1 row-end-5" id="clothes-list">

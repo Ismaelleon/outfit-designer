@@ -146,6 +146,9 @@ function removeImage(event) {
 	// Remove image source
 	imgEl.setAttribute("src", "");
 
+	// Remove image from input
+	inputEl.value = "";
+
 	// Show label for file input
 	inputLabelEl.classList.remove("hidden");
 
@@ -155,3 +158,28 @@ function removeImage(event) {
 
 inputEl.addEventListener("change", setImage);
 removePreviewButton.addEventListener("click", removeImage);
+
+const switchEl = document.querySelector("#image-input-switch input");
+switchEl.checked = true;
+
+function toggleImageInput(event) {
+	// If "add-image" is set to false
+	if (!switchEl.checked) {
+		// If an image was added
+		if (imgEl.getAttribute("src") !== "") {
+			// Remove the image
+			removeImage(event);
+
+			// Hide image preview
+			imgPreviewContainer.classList.add("hidden");
+		}
+
+		// Add hidden class on image input
+		inputLabelEl.classList.add("hidden");
+	} else {
+		// Remove hidden class on image input
+		inputLabelEl.classList.remove("hidden");
+	}
+}
+
+switchEl.addEventListener("change", toggleImageInput);
