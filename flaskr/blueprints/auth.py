@@ -1,11 +1,11 @@
-import re, bcrypt
+import re, bcrypt, secrets
 from flaskr.extensions import mongo
 from flaskr.helpers import send_verification_mail, dark_mode
-from flask import render_template, request, make_response, session, redirect, g, Blueprint
+from flask import render_template, request, make_response, session, redirect, g, Blueprint, current_app
 
 bp = Blueprint("auth", __name__, url_prefix="/auth")
 
-@bp.route("/sign-up")
+@bp.route("/sign-up", methods=["POST"])
 def sign_up ():
     # Get user data
     name = request.form["name"]
@@ -52,7 +52,7 @@ def sign_up ():
 
     result = mongo.db.users.insert_one(new_user)
     
-    send_verification_mail(email, new_user["activation"]["code"], app)
+    send_verification_mail(email, new_user["activation"]["code"], current_app)
 
     if result.acknowledged == False:
         return make_response({"message": "Internal Server Error"}, 500)
@@ -157,7 +157,7 @@ def forgot_password():
     # Send password-reset e-mail
     try:
         # Init flask mail
-        mail = Mail(app)
+        mail = Mail(current_app)
 
         msg = Message(
             sender=os.environ["MAIL_DEFAULT_SENDER"],
