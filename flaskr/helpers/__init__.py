@@ -17,7 +17,7 @@ def handle_invalid_user_session():
 
 def send_verification_mail(email, activation_code, app):
     # Open verification mail file
-    env = Environment(loader=FileSystemLoader("./views"))
+    env = Environment(loader=FileSystemLoader("./flaskr/views"))
     template = env.get_template("verification-mail.html")
 
     # Run jinja2 on template
