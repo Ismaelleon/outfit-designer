@@ -1,5 +1,5 @@
 from flaskr.extensions import mongo
-from flaskr.helpers import dark_mode, handle_invalid_user_session, upload_image
+from flaskr.helpers import dark_mode, handle_invalid_user_session, upload_image, generate_outfit_image
 from flask import render_template, request, make_response, session, redirect, Blueprint, current_app as app
 from bson.objectid import ObjectId
 import cloudinary, os, datetime
@@ -148,7 +148,7 @@ def create_outfit ():
             return handle_invalid_user_session()
 
         # If required properties not added
-        if "name" not in request.form or "season" not in request.form or "image" not in request.files:
+        if "name" not in request.form or "season" not in request.form:
             data = dark_mode({
                 "closet": user["closet"],
                 "error": True,
@@ -162,11 +162,31 @@ def create_outfit ():
         name = request.form["name"]
         season = request.form["season"]
         clothes = request.form.getlist("clothes")
-        image_file = request.files["image"]
+        image_file = request.files["image"] if "image" in request.files else None
 
-        # If user does not select a file or some inputs are not valid
-        if image_file.filename == "" or name == "":
-            pass
+        # Initialize image source
+        image_src = None
+
+        # If user does not upload an image for the outfit generate an outfit image
+        if image_file == None:
+            # Get clothes details from user closet
+            clothes_details = []
+            
+            for clothing_id in clothes:
+                for clothing_item in user["closet"]:
+                    if str(clothing_item["_id"]) == clothing_id:
+                        public_id = clothing_item["image"].split("/")[-1].split(".")[0]
+                        _id = clothing_item["_id"]
+                        type_ = clothing_item["type"]
+                        image = clothing_item["image"]
+
+                        clothes_details.append({ "public_id": public_id, "_id": _id, "type": type_, "image": image })
+
+            # Order clothes by type
+            clothes_details.sort(key=lambda x: x["type"])
+
+            # Create an image for the outfit using layers
+            image_file = generate_outfit_image(clothes_details)
 
         # Upload image to cloudinary
         image_src = upload_image(os.environ["CLOUDINARY_OUTFITS_FOLDER"], image_file, app)
