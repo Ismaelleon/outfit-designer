@@ -83,17 +83,17 @@ def generate_outfit_image(clothes):
     # Clothing position by type
     y_position = {
         "cap": 0,
-        "coat": 170,
-        "dress": 170,
-        "hoodies": 170,
-        "jacket": 170,
+        "coat": 0,
+        "dress": 0,
+        "hoodies": 0,
+        "jacket": 0,
         "pants": 170,
         "shoes": 340,
-        "shorts": 340,
-        "shirt": 170,
-        "skirt": 340,
-        "sweater": 170,
-        "tie": 170,
+        "shorts": 170,
+        "shirt": 0,
+        "skirt": 170,
+        "sweater": 0,
+        "tie": 0,
         "t-shirt": 0,
     }
 
