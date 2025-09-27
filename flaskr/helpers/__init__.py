@@ -57,6 +57,7 @@ def upload_image(folder, image_file, app):
     # Save image file
     image_filename = secure_filename(str(uuid.uuid4()))
     image_file_path = os.path.join(os.getcwd(), app.config["UPLOAD_FOLDER"], image_filename)
+    image_file.convert("RGB")
     image_file.save(image_file_path, "PNG")
 
     # Remove image background
