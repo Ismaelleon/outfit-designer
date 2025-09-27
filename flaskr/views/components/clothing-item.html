@@ -2,7 +2,7 @@
 	{% for clothing_item in data['closet'] %}
 		<section class="flex flex-col p-3 rounded border border-zinc-200 dark:border-zinc-600" id={{ clothing_item['_id'] }}>
 			<img src="{{ clothing_item['image'] }}" alt="" class="w-full rounded mb-2">	
-			<header class="flex flex-row justify-between items-center">
+			<header class="flex flex-row justify-between items-center mt-auto">
 				<a href="/closet/{{ clothing_item['_id'] }}" class="text-base font-bold hover:underline" onclick="showLoadingBar()">{{ clothing_item['name'].capitalize() }}</a>
 				<button class="p-1 relative hover:bg-zinc-200 rounded-full dark:hover:bg-zinc-800" onclick="toggleMenu(event)">
 					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">

@@ -1,5 +1,6 @@
-import os, requests, uuid, cloudinary.uploader
+import os, requests, uuid, cloudinary.utils, cloudinary.uploader
 from PIL import Image
+from io import BytesIO
 from rembg import remove
 from werkzeug.utils import secure_filename
 from flask import session, redirect
@@ -17,7 +18,7 @@ def handle_invalid_user_session():
 
 def send_verification_mail(email, activation_code, app):
     # Open verification mail file
-    env = Environment(loader=FileSystemLoader("./views"))
+    env = Environment(loader=FileSystemLoader("./flaskr/views"))
     template = env.get_template("verification-mail.html")
 
     # Run jinja2 on template
@@ -56,7 +57,7 @@ def upload_image(folder, image_file, app):
     # Save image file
     image_filename = secure_filename(str(uuid.uuid4()))
     image_file_path = os.path.join(os.getcwd(), app.config["UPLOAD_FOLDER"], image_filename)
-    image_file.save(image_file_path)
+    image_file.save(image_file_path, "PNG")
 
     # Remove image background
     image_file = open(image_file_path, "rb").read()
@@ -77,3 +78,53 @@ def upload_image(folder, image_file, app):
     os.remove(image_file_path)
 
     return image_src
+
+def generate_outfit_image(clothes):
+    # Clothing position by type
+    y_position = {
+        "cap": 0,
+        "coat": 170,
+        "dress": 170,
+        "hoodies": 170,
+        "jacket": 170,
+        "pants": 170,
+        "shoes": 340,
+        "shorts": 340,
+        "shirt": 170,
+        "skirt": 340,
+        "sweater": 170,
+        "tie": 170,
+        "t-shirt": 0,
+    }
+
+    images = []
+
+    # Create a blank image for the base
+    images.append(Image.new("RGBA", (512, 512), (0, 0, 0, 0)))
+
+    # Get all images data from url
+    for clothing_item in clothes:
+        image_url = clothing_item["image"]
+
+        # Get image data from url
+        res = requests.get(image_url)
+        image = Image.open(BytesIO(res.content))
+
+        # Resize image
+        height = 170
+        width = int((height * image.width) / image.height)
+        image = image.resize((width, height))
+
+        # Add to images list
+        images.append(image)
+
+    # Combine images
+    for i in range(len(clothes)):
+        # Calculate the x position of the image
+        img = images[i + 1]
+        x_position = int(256 - (img.width / 2))
+
+        # Paste the next image over the first one
+        images[0].paste(img, (x_position, y_position[clothes[i]["type"]]), img)
+
+    return images[0]

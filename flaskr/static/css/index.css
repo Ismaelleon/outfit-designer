@@ -739,6 +739,10 @@ video {
   margin-top: 1rem;
 }
 
+.mt-auto{
+  margin-top: auto;
+}
+
 .block{
   display: block;
 }
@@ -814,6 +818,10 @@ video {
 
 .max-h-\[80\%\]{
   max-height: 80%;
+}
+
+.max-h-\[90\%\]{
+  max-height: 90%;
 }
 
 .min-h-32{
@@ -1140,6 +1148,10 @@ video {
   padding-bottom: 4rem;
 }
 
+.pb-\[65px\]{
+  padding-bottom: 65px;
+}
+
 .pt-2{
   padding-top: 0.5rem;
 }
@@ -1154,10 +1166,6 @@ video {
 
 .pt-\[57px\]{
   padding-top: 57px;
-}
-
-.pb-\[65px\]{
-  padding-bottom: 65px;
 }
 
 .text-center{
