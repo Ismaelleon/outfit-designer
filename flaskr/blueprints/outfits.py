@@ -189,7 +189,7 @@ def create_outfit ():
             image_file = generate_outfit_image(clothes_details)
 
         # Upload image to cloudinary
-        image_src = upload_image(os.environ["CLOUDINARY_OUTFITS_FOLDER"], image_file, app)
+        image_src = upload_image(os.environ["CLOUDINARY_OUTFITS_FOLDER"], image_file, app, False)
 
         # Update closet array 
         outfits = user["outfits"]

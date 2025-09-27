@@ -116,7 +116,7 @@ def add_clothes ():
             return render_template("add-clothes.html", data=data)
 
         # Upload image to cloudinary
-        image_src = upload_image(os.environ["CLOUDINARY_CLOSET_FOLDER"], image_file, current_app)
+        image_src = upload_image(os.environ["CLOUDINARY_CLOSET_FOLDER"], image_file, current_app, True)
 
         # Update closet array 
         closet = user["closet"]
