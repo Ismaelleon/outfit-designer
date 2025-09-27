@@ -57,7 +57,14 @@ def upload_image(folder, image_file, app):
     # Save image file
     image_filename = secure_filename(str(uuid.uuid4()))
     image_file_path = os.path.join(os.getcwd(), app.config["UPLOAD_FOLDER"], image_filename)
-    image_file.save(image_file_path)
+
+    # If image has no filename to extract the extension
+    if not hasattr(image_file, "filename"):
+        # Save as png
+        image_file.save(image_file_path, "PNG")
+    else:
+        # Otherwise save with original extension
+        image_file.save(image_file_path)
 
     # Remove image background
     image_file = open(image_file_path, "rb").read()
@@ -131,4 +138,5 @@ def generate_outfit_image(clothes):
         # Paste the next image over the first one
         images[0].paste(img, (x_position, y_position[clothes[i]["type"]]), img)
 
+    
     return images[0]
