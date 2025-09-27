@@ -129,6 +129,9 @@ const imgPreviewContainer = document.getElementById("image-preview"),
 	removePreviewButton = document.querySelector("#image-preview > button");
 
 function setImage() {
+	// Remove error message
+	removeErrorMsg();
+
 	// Set image source
 	imgEl.setAttribute("src", URL.createObjectURL(inputEl.files[0]));
 
@@ -140,6 +143,9 @@ function setImage() {
 }
 
 function removeImage(event) {
+	// Remove error message
+	removeErrorMsg();
+
 	// Prevent making a form request
 	event.preventDefault();
 
@@ -163,6 +169,9 @@ const switchEl = document.querySelector("#image-input-switch input");
 switchEl.checked = true;
 
 function toggleImageInput(event) {
+	// Remove error message
+	removeErrorMsg();
+
 	// If "add-image" is set to false
 	if (!switchEl.checked) {
 		// If an image was added
@@ -183,3 +192,40 @@ function toggleImageInput(event) {
 }
 
 switchEl.addEventListener("change", toggleImageInput);
+
+const submitButton = document.getElementById("submit-form"),
+	form = document.querySelector("form");
+function checkImage(event) {
+	// If there's no outfit image and switch is set to "add image"
+	if (switchEl.checked && inputEl.files.length === 0) {
+		// Prevent default behaviour
+		event.preventDefault();
+
+		// Set image label border to red
+		inputLabelEl.classList.remove(
+			"border-zinc-200",
+			"dark:border-zinc-600"
+		);
+		inputLabelEl.classList.add("border-red-500", "dark:border-red-500");
+
+		// Add error text
+		const errorEl = document.createElement("p");
+		errorEl.setAttribute("id", "error-msg");
+		errorEl.innerText = "Required parameters not filled";
+		errorEl.className = "text-sm text-red-500 col-start-1 col-end-2";
+		form.insertBefore(errorEl, submitButton);
+	}
+}
+
+submitButton.addEventListener("click", checkImage);
+
+function removeErrorMsg() {
+	// Remove error element
+	if (document.getElementById("error-msg")) {
+		document.getElementById("error-msg").remove();
+
+		// Set image label border to zinc
+		inputLabelEl.classList.remove("border-red-500", "dark:border-red-500");
+		inputLabelEl.classList.add("border-zinc-200", "dark:border-zinc-600");
+	}
+}
