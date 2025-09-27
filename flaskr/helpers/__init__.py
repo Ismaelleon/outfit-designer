@@ -57,7 +57,7 @@ def upload_image(folder, image_file, app):
     # Save image file
     image_filename = secure_filename(str(uuid.uuid4()))
     image_file_path = os.path.join(os.getcwd(), app.config["UPLOAD_FOLDER"], image_filename)
-    image_file.convert("RGB")
+    image_file = image_file.convert("RGB")
     image_file.save(image_file_path, "PNG")
 
     # Remove image background
@@ -84,18 +84,18 @@ def generate_outfit_image(clothes):
     # Clothing position by type
     y_position = {
         "cap": 0,
-        "coat": 0,
-        "dress": 0,
-        "hoodies": 0,
-        "jacket": 0,
-        "pants": 170,
-        "shoes": 340,
-        "shorts": 170,
-        "shirt": 0,
-        "skirt": 170,
-        "sweater": 0,
-        "tie": 0,
-        "t-shirt": 0,
+        "coat": 85,
+        "dress": 85,
+        "hoodies": 85,
+        "jacket": 85,
+        "pants": 255,
+        "shoes": 425,
+        "shorts": 255,
+        "shirt": 85,
+        "skirt": 255,
+        "sweater": 85,
+        "tie": 85,
+        "t-shirt": 85,
     }
 
     images = []
@@ -113,6 +113,10 @@ def generate_outfit_image(clothes):
 
         # Resize image
         height = 170
+
+        if clothing_item["type"] == "shoes" or clothing_item["type"] == "cap":
+            height = 85
+
         width = int((height * image.width) / image.height)
         image = image.resize((width, height))
 
