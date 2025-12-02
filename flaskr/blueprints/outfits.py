@@ -1,16 +1,30 @@
 from flaskr.extensions import mongo
-from flaskr.helpers import dark_mode, handle_invalid_user_session, upload_image, generate_outfit_image
-from flask import render_template, request, make_response, session, redirect, Blueprint, current_app as app
+from flaskr.helpers import (
+    dark_mode,
+    handle_invalid_user_session,
+    upload_image,
+    generate_outfit_image,
+)
+from flask import (
+    render_template,
+    request,
+    make_response,
+    session,
+    redirect,
+    Blueprint,
+    current_app as app,
+)
 from bson.objectid import ObjectId
 import cloudinary, os, datetime
 
 bp = Blueprint("outfits", __name__, url_prefix="/outfits")
 
+
 @bp.route("/")
-def outfits ():
+def outfits():
     # If user logged in render template
     if session.get("id"):
-        # Get user document 
+        # Get user document
         user_id = session.get("id")
         user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
 
@@ -27,18 +41,22 @@ def outfits ():
         else:
             just_activated = True
 
-        data = dark_mode({
-            "outfits": outfits,
-            "just_activated": just_activated,
-            "activated": user["activation"]["activated"]
-        }, request.cookies)
+        data = dark_mode(
+            {
+                "outfits": outfits,
+                "just_activated": just_activated,
+                "activated": user["activation"]["activated"],
+            },
+            request.cookies,
+        )
         return render_template("outfits.html", data=data)
 
     # Otherwise, redirect to the home page
     return redirect("/")
 
+
 @bp.route("/<string:outfit_id>")
-def outfit (outfit_id):
+def outfit(outfit_id):
     # If user is logged in
     if session.get("id"):
         # Get user data
@@ -52,20 +70,24 @@ def outfit (outfit_id):
         outfit = {}
         for outfit in user["outfits"]:
             if str(outfit["_id"]) == outfit_id:
-                outfit = outfit 
+                outfit = outfit
                 break
 
         # Get outfit clothes
         for index, clothing_id in enumerate(outfit["clothes"]):
             for clothing_item in user["closet"]:
                 if str(clothing_item["_id"]) == clothing_id:
-                    outfit["clothes"][index] = clothing_item 
+                    outfit["clothes"][index] = clothing_item
 
-        data = dark_mode({
-            "outfit": outfit,
-            "activated": user["activation"]["activated"],
-        }, request.cookies)
+        data = dark_mode(
+            {
+                "outfit": outfit,
+                "activated": user["activation"]["activated"],
+            },
+            request.cookies,
+        )
         return render_template("outfit.html", data=data)
+
 
 @bp.route("/edit/<string:outfit_id>", methods=["GET", "POST"])
 def edit_outfit(outfit_id):
@@ -83,17 +105,20 @@ def edit_outfit(outfit_id):
             outfit = {}
             for outfit in user["outfits"]:
                 if str(outfit["_id"]) == outfit_id:
-                    outfit = outfit 
+                    outfit = outfit
                     break
 
-            data = dark_mode({
-                "name": outfit["name"],
-                "season": outfit["season"],
-                "image": outfit["image"],
-                "clothes": outfit["clothes"],
-                "closet": user["closet"],
-                "activated": user["activation"]["activated"],
-            }, request.cookies)
+            data = dark_mode(
+                {
+                    "name": outfit["name"],
+                    "season": outfit["season"],
+                    "image": outfit["image"],
+                    "clothes": outfit["clothes"],
+                    "closet": user["closet"],
+                    "activated": user["activation"]["activated"],
+                },
+                request.cookies,
+            )
             return render_template("edit-outfit.html", data=data)
 
         # Otherwise, redirect to the home page
@@ -114,7 +139,7 @@ def edit_outfit(outfit_id):
 
 
 @bp.route("/new", methods=["GET", "POST"])
-def create_outfit ():
+def create_outfit():
     if request.method == "GET":
         # If user logged in render template
         if session.get("id"):
@@ -125,10 +150,13 @@ def create_outfit ():
             if user == None:
                 return handle_invalid_user_session()
 
-            data = dark_mode({
-                "closet": user["closet"],
-                "activated": user["activation"]["activated"],
-            }, request.cookies)
+            data = dark_mode(
+                {
+                    "closet": user["closet"],
+                    "activated": user["activation"]["activated"],
+                },
+                request.cookies,
+            )
             return render_template("create-outfit.html", data=data)
 
         # Otherwise, redirect to the home page
@@ -147,22 +175,39 @@ def create_outfit ():
         if user == None:
             return handle_invalid_user_session()
 
-        # If required properties not added
+        # If required properties not added show error
         if "name" not in request.form or "season" not in request.form:
-            data = dark_mode({
-                "closet": user["closet"],
-                "error": True,
-                "activated": user["activation"]["activated"],
-                "name": request.form["name"],
-                "season": request.form["season"],
-            }, request.cookies)
+            data = dark_mode(
+                {
+                    "closet": user["closet"],
+                    "error": True,
+                    "activated": user["activation"]["activated"],
+                    "name": request.form["name"],
+                    "season": request.form["season"],
+                },
+                request.cookies,
+            )
             return render_template("create-outfit.html", data=data)
 
-        # Get request body 
+        # Get request body
         name = request.form["name"]
         season = request.form["season"]
         clothes = request.form.getlist("clothes")
         image_file = request.files["image"] if "image" in request.files else None
+
+        # If name, season or clothes list is empty show error
+        if len(name) == 0 or len(season) == 0 or len(clothes) == 0:
+            data = dark_mode(
+                {
+                    "closet": user["closet"],
+                    "error": True,
+                    "activated": user["activation"]["activated"],
+                    "name": request.form["name"],
+                    "season": request.form["season"],
+                },
+                request.cookies,
+            )
+            return render_template("create-outfit.html", data=data)
 
         # Initialize image source
         image_src = None
@@ -171,7 +216,7 @@ def create_outfit ():
         if image_file == None:
             # Get clothes details from user closet
             clothes_details = []
-            
+
             for clothing_id in clothes:
                 for clothing_item in user["closet"]:
                     if str(clothing_item["_id"]) == clothing_id:
@@ -180,7 +225,14 @@ def create_outfit ():
                         type_ = clothing_item["type"]
                         image = clothing_item["image"]
 
-                        clothes_details.append({ "public_id": public_id, "_id": _id, "type": type_, "image": image })
+                        clothes_details.append(
+                            {
+                                "public_id": public_id,
+                                "_id": _id,
+                                "type": type_,
+                                "image": image,
+                            }
+                        )
 
             # Order clothes by type
             clothes_details.sort(key=lambda x: x["type"])
@@ -189,29 +241,36 @@ def create_outfit ():
             image_file = generate_outfit_image(clothes_details)
 
         # Upload image to cloudinary
-        image_src = upload_image(os.environ["CLOUDINARY_OUTFITS_FOLDER"], image_file, app, False)
+        image_src = upload_image(
+            os.environ["CLOUDINARY_OUTFITS_FOLDER"], image_file, app, False
+        )
 
-        # Update closet array 
+        # Update closet array
         outfits = user["outfits"]
         new_outfit_id = ObjectId()
-        outfits.append({
-            "_id": new_outfit_id,
-            "name": name,
-            "season": season,
-            "image": image_src,
-            "clothes": clothes,
-            "created": datetime.datetime.now().strftime("%d/%m/%y"),
-        })
+        outfits.append(
+            {
+                "_id": new_outfit_id,
+                "name": name,
+                "season": season,
+                "image": image_src,
+                "clothes": clothes,
+                "created": datetime.datetime.now().strftime("%d/%m/%y"),
+            }
+        )
 
         # Update document with updated closet array
-        result = mongo.db.users.update_one({"_id": ObjectId(user_id)}, {"$set": {"outfits": outfits}})
-        
+        result = mongo.db.users.update_one(
+            {"_id": ObjectId(user_id)}, {"$set": {"outfits": outfits}}
+        )
+
         res = make_response({"message": "OK"}, 200)
         res.headers["HX-Redirect"] = f"/outfits/{new_outfit_id}?redirect"
         return res
 
+
 @bp.route("/filter", methods=["POST"])
-def filter_outfits ():
+def filter_outfits():
     if session.get("id"):
         # Get user document
         user_id = session.get("id")
@@ -221,27 +280,29 @@ def filter_outfits ():
             return handle_invalid_user_session()
 
         # Get request body
-        clothes = request.form["clothes"] 
+        clothes = request.form["clothes"]
         season = request.form["season"]
 
         # Filter outfits by clothes and season
         filtered_outfits = []
         for outfit in user["outfits"]:
-            if (
-                (int(clothes) == 0 or int(clothes) == len(outfit["clothes"])) and
-                (season == "all" or season == outfit["season"])
+            if (int(clothes) == 0 or int(clothes) == len(outfit["clothes"])) and (
+                season == "all" or season == outfit["season"]
             ):
                 filtered_outfits.append(outfit)
 
-        data = dark_mode({
-            "outfits": filtered_outfits,
-            "activated": user["activation"]["activated"],
-        }, request.cookies)
+        data = dark_mode(
+            {
+                "outfits": filtered_outfits,
+                "activated": user["activation"]["activated"],
+            },
+            request.cookies,
+        )
         return render_template("components/outfit.html", data=data)
 
 
 @bp.route("/delete/<string:outfit_id>", methods=["DELETE"])
-def delete_outfits (outfit_id):
+def delete_outfits(outfit_id):
     if session.get("id"):
         # Get user document
         user_id = session.get("id")
@@ -250,23 +311,31 @@ def delete_outfits (outfit_id):
         if user == None:
             return handle_invalid_user_session()
 
-        # Remove outfits from outfits list 
+        # Remove outfits from outfits list
         outfits = user["outfits"]
         for outfit in outfits:
             if str(outfit["_id"]) == outfit_id:
                 # Remove image from cloudinary
                 image_public_id = outfit["image"].split("/")[-1].split(".")[0]
-                cloudinary.uploader.destroy(os.path.join(os.environ["CLOUDINARY_OUTFITS_FOLDER"], image_public_id))
+                cloudinary.uploader.destroy(
+                    os.path.join(
+                        os.environ["CLOUDINARY_OUTFITS_FOLDER"], image_public_id
+                    )
+                )
 
                 outfits.remove(outfit)
 
-        # Save updated outfits 
-        result = mongo.db.users.update_one({"_id": ObjectId(user_id)}, {"$set": {"outfits": outfits}})
+        # Save updated outfits
+        result = mongo.db.users.update_one(
+            {"_id": ObjectId(user_id)}, {"$set": {"outfits": outfits}}
+        )
 
         # Return outfits html
-        data = dark_mode({
-            "outfits": outfits,
-            "activated": user["activation"]["activated"],
-        }, request.cookies)
+        data = dark_mode(
+            {
+                "outfits": outfits,
+                "activated": user["activation"]["activated"],
+            },
+            request.cookies,
+        )
         return render_template("components/outfit.html", data=data)
-
