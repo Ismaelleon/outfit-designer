@@ -53,7 +53,7 @@
 	<section class="flex justify-center items-center w-full h-screen fixed top-0 left-0 bg-zinc-950/50 z-40 hidden" id="clothes-dialog">
 		<section class="flex flex-col p-4 bg-white rounded w-full max-w-3xl max-h-[80%] dark:bg-zinc-900">
 			<header class="flex flex-row items-center">
-				<h2 class="text-lg font-medium">Select Clothes</h2>	
+				<h2 class="text-lg font-medium">Select Clothes</h2>
 				<button class="ml-auto close" id="close-button">
 					<i class="las la-times text-2xl"></i>
 				</button>
@@ -87,7 +87,7 @@
 				{% else %}
 					<h3 class="font-medium col-span-2 sm:col-span-4 text-center my-4">
 						You haven't added clothes yet!
-					</h3> 
+					</h3>
 				{% endif %}
 			</section>
 			<button class="w-full p-2 bg-zinc-950 text-white font-medium sm:text-sm rounded hover:bg-zinc-800 mt-2 dark:bg-white dark:text-black dark:hover:bg-zinc-200" id="save-button">
@@ -95,11 +95,11 @@
 			</button>
 		</section>
 	</section>
-	<script src="/static/js/edit-outfit.js"></script>
-	<!--% if data['clothes'] %>
+    {% if data['clothes'] %}
 		<script>
-			selectedClothes = '{{ data['clothes'] }}'
-			renderSelectedClothes();
+            // Set an array for the clothes that are selected on this outfit
+			let clothesToSelect = JSON.parse('{{ data['clothes'] }}'.replaceAll("&#39;", "\""));
 		</script>
-	<% endif %-->
+    {% endif %}
+	<script src="/static/js/edit-outfit.js"></script>
 {% endblock %}
