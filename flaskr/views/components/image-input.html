@@ -7,9 +7,9 @@
 <p class="col-start-2 col-end-3 row-start-1 row-end-3 flex flex-col mb-2">
 	<label for="image-input" 
 	{% if data['error'] == True %}
-		class="flex flex-row justify-center items-center border border-dashed border-red-500 rounded w-full p-4 sm:text-sm font-medium min-h-32 h-full cursor-pointer">
+		class="flex flex-row justify-center items-center border border-dashed border-red-500 rounded w-full p-4 sm:text-sm font-medium min-h-32 h-full cursor-pointer {% if data['image'] %}hidden{% endif %}">
 	{% else %}
-		class="flex flex-row justify-center items-center border border-dashed border-zinc-200 rounded w-full p-4 sm:text-sm font-medium min-h-32 h-full cursor-pointer dark:border-zinc-600">
+		class="flex flex-row justify-center items-center border border-dashed border-zinc-200 rounded w-full p-4 sm:text-sm font-medium min-h-32 h-full cursor-pointer dark:border-zinc-600 {% if data['image'] %}hidden{% endif %}">
 	{% endif %}
 
 		<i class="las la-file-image text-2xl mr-1"></i>
@@ -17,3 +17,23 @@
 	</label>
 	<input type="file" name="image" id="image-input" accept="image/jpg, image/jpeg, image/png" class="hidden">
 </p>
+{% if request.path.split("/")[2] == "edit" %}
+    <script>
+        /* 
+            Programatically set the file input value as an empty file named "same_image".
+            In case the user does not change the clothing item image, this empty file will
+            be sent in the request, and the server will know that the image did not change.
+        */
+        const fileInput = document.getElementById("image-input");
+
+        const fileContent = [""];
+        const fileName = "same_image";
+        const file = new File(fileContent, fileName);
+
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(file);
+
+        const fileList = dataTransfer.files;
+        fileInput.files = fileList;
+    </script>
+{% endif %}
