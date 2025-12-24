@@ -1053,11 +1053,6 @@ video {
   border-color: rgb(9 9 11 / 0.2);
 }
 
-.border-zinc-600{
-  --tw-border-opacity: 1;
-  border-color: rgb(82 82 91 / var(--tw-border-opacity, 1));
-}
-
 .bg-black{
   --tw-bg-opacity: 1;
   background-color: rgb(0 0 0 / var(--tw-bg-opacity, 1));
@@ -1098,6 +1093,10 @@ video {
 
 .bg-zinc-900\/50{
   background-color: rgb(24 24 27 / 0.5);
+}
+
+.bg-zinc-900\/80{
+  background-color: rgb(24 24 27 / 0.8);
 }
 
 .bg-zinc-950{
