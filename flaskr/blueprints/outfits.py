@@ -296,8 +296,8 @@ def create_outfit():
         clothes = request.form.getlist("clothes")
         image_file = request.files["image"] if "image" in request.files else None
 
-        # If name, season or clothes list is empty show error
-        if len(name) == 0 or len(season) == 0 or len(clothes) == 0:
+        # If name or season are empty return error
+        if len(name) == 0 or len(season) == 0:
             data = dark_mode(
                 {
                     "closet": user["closet"],
