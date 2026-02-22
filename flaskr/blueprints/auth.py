@@ -1,12 +1,22 @@
 import re, bcrypt, secrets
 from flaskr.extensions import mongo
 from flaskr.helpers import send_verification_mail, dark_mode
-from flask import render_template, request, make_response, session, redirect, g, Blueprint, current_app
+from flask import (
+    render_template,
+    request,
+    make_response,
+    session,
+    redirect,
+    g,
+    Blueprint,
+    current_app,
+)
 
 bp = Blueprint("auth", __name__, url_prefix="/auth")
 
+
 @bp.route("/sign-up", methods=["POST"])
-def sign_up ():
+def sign_up():
     # Get user data
     name = request.form["name"]
     email = request.form["email"]
@@ -15,7 +25,17 @@ def sign_up ():
     # Check for input lengths
     if len(name) < 4 or len(email) < 8 or len(password) < 4:
         data = {
-            "input-error": True,
+            "error": True,
+            "error-type": "too-short",
+            "name": name,
+            "email": email,
+            "password": password,
+        }
+        return render_template("components/signup-form.html", data=data)
+    elif len(name) > 20 or len(email) > 35 or len(password) > 35:
+        data = {
+            "error": True,
+            "error-type": "too-long",
             "name": name,
             "email": email,
             "password": password,
@@ -23,7 +43,7 @@ def sign_up ():
         return render_template("components/signup-form.html", data=data)
 
     # Check for user with same e-mail
-    result = mongo.db.users.find_one({ "email": email })
+    result = mongo.db.users.find_one({"email": email})
 
     if result != None:
         data = {
@@ -35,7 +55,9 @@ def sign_up ():
         return render_template("components/signup-form.html", data=data)
 
     # Encrypt password
-    hashed_password = bcrypt.hashpw(password.encode("ascii"), bcrypt.gensalt()).decode("ascii")
+    hashed_password = bcrypt.hashpw(password.encode("ascii"), bcrypt.gensalt()).decode(
+        "ascii"
+    )
 
     # Save new user
     new_user = {
@@ -44,14 +66,11 @@ def sign_up ():
         "password": hashed_password,
         "closet": [],
         "outfits": [],
-        "activation": {
-            "activated": False,
-            "code": secrets.token_urlsafe(16)
-        }
+        "activation": {"activated": False, "code": secrets.token_urlsafe(16)},
     }
 
     result = mongo.db.users.insert_one(new_user)
-    
+
     send_verification_mail(email, new_user["activation"]["code"], current_app)
 
     if result.acknowledged == False:
@@ -63,10 +82,11 @@ def sign_up ():
     # Redirect user to outfits page
     res = make_response({"message": "OK"}, 200)
     res.headers["HX-Redirect"] = "/outfits"
-    return res 
+    return res
+
 
 @bp.route("/log-in", methods=["POST"])
-def log_in ():
+def log_in():
     # Get user data
     email = request.form["email"]
     password = request.form["password"]
@@ -74,14 +94,23 @@ def log_in ():
     # Check for input lengths
     if len(email) < 8 or len(password) < 4:
         data = {
-            "input-error": True,
+            "error": True,
+            "error-type": "too-short",
+            "email": email,
+            "password": password,
+        }
+        return render_template("components/login-form.html", data=data)
+    elif len(email) > 35 or len(password) > 35:
+        data = {
+            "error": True,
+            "error-type": "too-long",
             "email": email,
             "password": password,
         }
         return render_template("components/login-form.html", data=data)
 
     # Search for user matching email address
-    result = mongo.db.users.find_one({ "email": re.compile(email, re.IGNORECASE) })
+    result = mongo.db.users.find_one({"email": re.compile(email, re.IGNORECASE)})
 
     if result == None:
         return make_response({"message": "Not Found"}, 404)
@@ -89,7 +118,8 @@ def log_in ():
     # Check if password doesn"t match
     if not bcrypt.checkpw(password.encode("ascii"), result["password"].encode("ascii")):
         data = {
-            "password-error": True,
+            "error": True,
+            "error-type": "incorrect-password",
             "email": email,
             "password": password,
         }
@@ -103,20 +133,21 @@ def log_in ():
     res.headers["HX-Redirect"] = "/outfits"
     return res
 
+
 @bp.route("/activate/<string:activation_code>")
 def activate_account(activation_code):
     # Find user with same activation code
-    user = mongo.db.users.find_one({ "activation": { "activated": False, "code": activation_code } })
+    user = mongo.db.users.find_one(
+        {"activation": {"activated": False, "code": activation_code}}
+    )
 
     if user == None:
         return redirect("/")
 
-    updated_activation = {
-        "activation": {
-            "activated": True
-        }
-    }
-    result = mongo.db.users.update_one({"_id": ObjectId(user["_id"])}, {"$set": updated_activation})
+    updated_activation = {"activation": {"activated": True}}
+    result = mongo.db.users.update_one(
+        {"_id": ObjectId(user["_id"])}, {"$set": updated_activation}
+    )
 
     return redirect("/outfits?activated=true")
 
@@ -128,16 +159,17 @@ def forgot_password():
 
     # Show an error if the e-mail is shorter than 3 characters
     # or if there's not a user with the e-mail received
-    user = mongo.db.users.find_one({ "email": email })
+    user = mongo.db.users.find_one({"email": email})
     if len(email) < 3 or user == None:
         data = dark_mode({"error": True, "email": email}, request.cookies)
         return render_template("components/forgot-password-form.html", data=data)
 
     # Generate a password reset code for the user with the e-mail
     reset_code = {
-        "code": secrets.token_urlsafe(16), # Save a random url-safe token
-        "user_id": user["_id"], # Save the user id
-        "expiresAt": datetime.datetime.utcnow() + datetime.timedelta(hours=24) # Make the reset code expire after 24 hours
+        "code": secrets.token_urlsafe(16),  # Save a random url-safe token
+        "user_id": user["_id"],  # Save the user id
+        "expiresAt": datetime.datetime.utcnow()
+        + datetime.timedelta(hours=24),  # Make the reset code expire after 24 hours
     }
 
     # Save the reset code
@@ -148,10 +180,7 @@ def forgot_password():
     template = env.get_template("password-reset-mail.html")
 
     # Run jinja2 on template
-    data = {
-        "reset_code": reset_code["code"],
-        "APP_URL": os.environ["APP_URL"]
-    }
+    data = {"reset_code": reset_code["code"], "APP_URL": os.environ["APP_URL"]}
     final_html = template.render(data=data)
 
     # Send password-reset e-mail
@@ -163,15 +192,18 @@ def forgot_password():
             sender=os.environ["MAIL_DEFAULT_SENDER"],
             subject="Reset your password",
             recipients=[email],
-            html=final_html
+            html=final_html,
         )
 
         mail.send(msg)
 
-        data = dark_mode({"success": True, "error": False, "email": email}, request.cookies)
+        data = dark_mode(
+            {"success": True, "error": False, "email": email}, request.cookies
+        )
         return render_template("components/forgot-password-form.html", data=data)
     except Exception as error:
         return f"Failed to send email: {error}"
+
 
 @bp.route("/reset-password", methods=["GET", "POST"])
 def reset_password():
@@ -182,10 +214,10 @@ def reset_password():
 
         return render_template("reset-password.html", data=data)
     elif request.method == "POST":
-        # Get the reset code from the request body 
-        reset_code = request.form["reset_code"] 
+        # Get the reset code from the request body
+        reset_code = request.form["reset_code"]
 
-        # Check if reset code is not present in body 
+        # Check if reset code is not present in body
         if reset_code == None:
             data = dark_mode({"error": True, "reset_code": reset_code}, request.cookies)
             return render_template("reset-password.html", data=data)
@@ -206,14 +238,20 @@ def reset_password():
 
         # Check that new password matches the confirmation
         if password != password_confirm:
-            data = dark_mode({"input-error": True, "reset_code": reset_code}, request.cookies)
+            data = dark_mode(
+                {"input-error": True, "reset_code": reset_code}, request.cookies
+            )
             return render_template("reset-password.html", data=data)
 
         # Hash the new password
-        hashed_password = bcrypt.hashpw(password.encode("ascii"), bcrypt.gensalt()).decode("ascii")
+        hashed_password = bcrypt.hashpw(
+            password.encode("ascii"), bcrypt.gensalt()
+        ).decode("ascii")
 
         # Update the user document
-        result = mongo.db.users.update_one({"_id": user_id}, {"$set": {"password": hashed_password}})
+        result = mongo.db.users.update_one(
+            {"_id": user_id}, {"$set": {"password": hashed_password}}
+        )
 
         # Remove the reset code from db
         mongo.db.reset_codes.delete_one(reset_code_doc)
@@ -222,13 +260,14 @@ def reset_password():
         res.headers["HX-Redirect"] = "/"
         return res
 
+
 @bp.route("/log-out", methods=["POST"])
-def log_out ():
+def log_out():
     if session.get("id"):
         # Remove user session
         session.pop("id", None)
 
         # Redirect user to index page
-        res = make_response({ "message": "OK" }, 200)
+        res = make_response({"message": "OK"}, 200)
         res.headers["HX-Redirect"] = "/"
         return res
