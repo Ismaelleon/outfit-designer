@@ -933,6 +933,10 @@ video {
   cursor: pointer;
 }
 
+.resize{
+  resize: both;
+}
+
 .auto-rows-max{
   grid-auto-rows: max-content;
 }
