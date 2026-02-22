@@ -151,6 +151,7 @@ def edit_outfit(outfit_id):
                 {
                     "closet": user["closet"],
                     "error": True,
+                    "error-type": "required-properties",
                     "activated": user["activation"]["activated"],
                     "name": request.form["name"],
                     "season": request.form["season"],
@@ -171,6 +172,22 @@ def edit_outfit(outfit_id):
                 {
                     "closet": user["closet"],
                     "error": True,
+                    "error-type": "required-properties",
+                    "activated": user["activation"]["activated"],
+                    "name": request.form["name"],
+                    "season": request.form["season"],
+                },
+                request.cookies,
+            )
+            return render_template("edit-outfit.html", data=data)
+
+        # If outfit name is too long return error
+        if len(name) > 35:
+            data = dark_mode(
+                {
+                    "closet": user["closet"],
+                    "error": True,
+                    "error-type": "too-long",
                     "activated": user["activation"]["activated"],
                     "name": request.form["name"],
                     "season": request.form["season"],
@@ -282,6 +299,7 @@ def create_outfit():
                 {
                     "closet": user["closet"],
                     "error": True,
+                    "error-type": "required-properties",
                     "activated": user["activation"]["activated"],
                     "name": request.form["name"],
                     "season": request.form["season"],
@@ -296,12 +314,28 @@ def create_outfit():
         clothes = request.form.getlist("clothes")
         image_file = request.files["image"] if "image" in request.files else None
 
-        # If name or season are empty return error
+        # If outfit name or season are empty return error
         if len(name) == 0 or len(season) == 0:
             data = dark_mode(
                 {
                     "closet": user["closet"],
                     "error": True,
+                    "error-type": "required-properties",
+                    "activated": user["activation"]["activated"],
+                    "name": request.form["name"],
+                    "season": request.form["season"],
+                },
+                request.cookies,
+            )
+            return render_template("create-outfit.html", data=data)
+
+        # If outfit name is too long return error
+        if len(name) > 35:
+            data = dark_mode(
+                {
+                    "closet": user["closet"],
+                    "error": True,
+                    "error-type": "too-long",
                     "activated": user["activation"]["activated"],
                     "name": request.form["name"],
                     "season": request.form["season"],

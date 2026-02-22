@@ -9,7 +9,7 @@
 				<section>
 					<p class="col-start-1 col-end-2 flex flex-col">
 						<label for="name-input" class="sm:text-sm font-medium mb-1">Name</label>
-						<input type="text" id="name-input" name="name" value="{{ data["name"] }}"
+						<input type="text" id="name-input" name="name" maxlength="35" value="{{ data["name"] }}"
 							{% if data['error'] == True %}
 								class="sm:text-sm p-2 border border-red-500 rounded mb-2 dark:bg-transparent">
 							{% else %}
@@ -43,8 +43,10 @@
 						Add Clothes
 					</section>
 				</section>
-				{% if data['error'] == True %}
-					<p class="text-sm text-red-500 col-start-1 col-end-2">Required parameters not filled</p>
+				{% if data['error-type'] == "required-parameters" %}
+					<p class="text-sm text-red-500 col-start-1 col-end-2">Required parameters not filled.</p>
+                {% elif data['error-type'] == "too-long" %}
+					<p class="text-sm text-red-500 col-start-1 col-end-2">Outfit name is too long.</p>
 				{% endif %}
 				<button class="w-full p-2 bg-zinc-950 text-white font-medium sm:text-sm rounded hover:bg-zinc-800 mt-2 col-start-1 col-end-2 dark:bg-white dark:text-black dark:hover:bg-zinc-200">Submit</button>
 			</form>
