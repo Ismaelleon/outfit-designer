@@ -14,42 +14,48 @@
 			{% if request.path[0:8] == '/outfits' %}
 			<a
 				href="/outfits"
-				class="text-2xl text-zinc-950 hover:text-zinc-950 sm:ml-5 flex flex-row items-center py-2 font-medium sm:text-sm dark:text-white dark:hover:text-white">
+				class="text-2xl text-zinc-950 hover:text-zinc-950 sm:ml-5 flex flex-row items-center py-2 font-medium sm:text-sm dark:text-white dark:hover:text-white"
+                x-on:click="loading = true">
 				<i class="las la-home text-xl mr-1"></i>
 				Outfits
 			</a>
 			{% else %}
 			<a
 				href="/outfits"
-				class="text-2xl text-zinc-600 hover:text-zinc-950 sm:ml-5 flex flex-row items-center py-2 sm:text-sm dark:text-zinc-300 dark:hover:text-white">
+				class="text-2xl text-zinc-600 hover:text-zinc-950 sm:ml-5 flex flex-row items-center py-2 sm:text-sm dark:text-zinc-300 dark:hover:text-white"
+                x-on:click="loading = true">
 				<i class="las la-home text-xl mr-1"></i>
 				Outfits
 			</a>
 			{% endif %} {% if request.path[0:7] == '/closet' %}
 			<a
 				href="/closet"
-				class="text-2xl text-zinc-950 hover:text-zinc-950 sm:ml-5 flex flex-row items-center py-2 font-medium sm:text-sm dark:text-white dark:hover:text-white">
+				class="text-2xl text-zinc-950 hover:text-zinc-950 sm:ml-5 flex flex-row items-center py-2 font-medium sm:text-sm dark:text-white dark:hover:text-white"
+                x-on:click="loading = true">
 				<i class="las la-suitcase text-xl mr-1"></i>
 				Closet
 			</a>
 			{% else %}
 			<a
 				href="/closet"
-				class="text-2xl text-zinc-600 hover:text-zinc-950 sm:ml-5 flex flex-row items-center py-2 sm:text-sm dark:text-zinc-300 dark:hover:text-white">
+				class="text-2xl text-zinc-600 hover:text-zinc-950 sm:ml-5 flex flex-row items-center py-2 sm:text-sm dark:text-zinc-300 dark:hover:text-white"
+                x-on:click="loading = true">
 				<i class="las la-suitcase text-xl mr-1"></i>
 				Closet
 			</a>
 			{% endif %} {% if request.path[0:8] == '/account' %}
 			<a
 				href="/account"
-				class="text-2xl text-zinc-950 hover:text-zinc-950 sm:ml-5 flex flex-row items-center py-2 font-medium sm:text-sm dark:text-white dark:hover:text-white">
+				class="text-2xl text-zinc-950 hover:text-zinc-950 sm:ml-5 flex flex-row items-center py-2 font-medium sm:text-sm dark:text-white dark:hover:text-white"
+                x-on:click="loading = true">
 				<i class="las la-user-circle text-xl mr-1"></i>
 				Profile
 			</a>
 			{% else %}
 			<a
 				href="/account"
-				class="text-2xl text-zinc-600 hover:text-zinc-950 sm:ml-5 flex flex-row items-center py-2 sm:text-sm dark:text-zinc-300 dark:hover:text-white">
+				class="text-2xl text-zinc-600 hover:text-zinc-950 sm:ml-5 flex flex-row items-center py-2 sm:text-sm dark:text-zinc-300 dark:hover:text-white"
+                x-on:click="loading = true">
 				<i class="las la-user-circle text-xl mr-1"></i>
 				Profile
 			</a>
@@ -57,4 +63,3 @@
 		</nav>
 	</section>
 </header>
-<script src="/static/js/navbar.js"></script>
