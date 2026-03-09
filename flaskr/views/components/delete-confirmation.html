@@ -12,8 +12,8 @@
         <button
             class="flex justify-center text-sm font-medium max-w-sm rounded bg-red-700 p-2 text-white border border-red-700 hover:bg-red-600"
             hx-swap="innerHTML transition:true"
-            x-effect="$el.setAttribute('hx-delete', '/outfits/delete/' + deletionId); htmx.process($el);"
-            hx-target="#outfits-list"
+            x-effect="$el.setAttribute('hx-delete', '{{ request.path }}delete/' + deletionId); htmx.process($el);"
+            hx-target="{{ '#outfits-list' if request.path == '/outfits/' else '#clothing-list' }}"
             x-on:click="deletionModal = false"
         >
             Delete

@@ -1,16 +1,19 @@
 {% extends "base.html" %}
 {% block content %}
-	<section class="w-full max-w-3xl pt-4 z-10">
+    <section class="w-full max-w-3xl pt-4 z-10" x-data="{ filtersMenu: false, deletionModal: false, deletionId: '' }">
 		<header class="flex flex-row justify-between items-center relative">
 			<h2 class="text-lg sm:text-base font-bold">Your Closet</h2>
 
 			<section class="flex flex-row">
-				<button class="flex flex-row items-center text-sm p-2 hover:bg-zinc-200 rounded min-w-16 dark:hover:bg-zinc-800" onclick="toggleFiltersMenu(event)">
+				<button class="flex flex-row items-center text-sm p-2 hover:bg-zinc-200 rounded min-w-16 dark:hover:bg-zinc-800"
+                    x-on:click="filtersMenu = !filtersMenu">
 					<i class="las la-filter text-xl mr-1"></i>
 					Filters
 				</button>	
-				<ul class="hidden absolute left-0 top-full translate-y-4 p-4 bg-zinc-200 rounded flex flex-col w-full col-span-2 sm:w-auto sm:left-auto sm:right-0 z-20 dark:bg-zinc-800" id="filters-menu">
-					<form hx-post="/closet/filter" hx-swap="innerHTML transition:true" hx-target="#clothing-list" class="flex flex-col" onsubmit="hideFiltersMenu()">
+				<ul class="absolute left-0 top-full translate-y-4 p-4 bg-zinc-200 rounded flex flex-col w-full col-span-2 sm:w-auto sm:left-auto sm:right-0 z-20 dark:bg-zinc-800"
+                    id="filters-menu"
+                    x-show="filtersMenu">
+					<form hx-post="/closet/filter" hx-swap="innerHTML transition:true" hx-target="#clothing-list" class="flex flex-col" x-bind:onsubmit="filtersMenu = false">
 						<label for="type-input" class="text-sm font-medium mb-1">Type</label>
 						<select name="type" id="type-input"
 							{% if data['error'] == True %}
@@ -93,7 +96,8 @@
 								<label for="color-cyan">Cyan</label>
 							</p>
 						</fieldset>
-						<button class="w-full p-2 bg-zinc-950 text-white font-medium text-sm rounded hover:bg-zinc-800 mt-2 col-start-1 col-end-2 dark:bg-white dark:text-black dark:hover:bg-zinc-200">Apply</button>
+						<button class="w-full p-2 bg-zinc-950 text-white font-medium text-sm rounded hover:bg-zinc-800 mt-2 col-start-1 col-end-2 dark:bg-white dark:text-black dark:hover:bg-zinc-200"
+                            x-on:click="filtersMenu = !filtersMenu">Apply</button>
 					</form>
 				</ul>
 				<a href="/closet/new" class="text-sm text-center font-medium text-white ml-5 p-2 bg-zinc-950 hover:bg-zinc-800 rounded min-w-16 flex flex-row items-center dark:bg-white dark:text-black dark:hover:bg-zinc-200" onclick="showLoadingBar()">
@@ -112,7 +116,6 @@
 				</h3>
 			{% endif %}
 		</section>
+        {% include 'components/delete-confirmation.html' %}
 	</section>
-	{% include 'components/delete-confirmation.html' %}
-	<script src="/static/js/closet.js"></script>
 {% endblock %}
