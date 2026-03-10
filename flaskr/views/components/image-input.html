@@ -1,11 +1,18 @@
-<section class="flex flex-col {% if not data['image'] %}hidden{% endif %} col-start-2 col-end-3 row-start-1 row-end-6 mb-2" id="image-preview">
+<section class="flex flex-col col-start-2 col-end-3 row-start-1 row-end-6 mb-2"
+    id="image-preview"
+    x-show="!showImageInputLabel">
 	<img src="{{ data['image'] }}" class="rounded mb-2 self-center max-h-[380px]">
-	<button class="self-end p-2 rounded-3xl border border-zinc-200 hover:bg-zinc-200 aspect-square flex justify-center items-center dark:border-zinc-600 dark:hover:bg-zinc-600">
+	<button class="self-end p-2 rounded-3xl border border-zinc-200 hover:bg-zinc-200 aspect-square flex justify-center items-center dark:border-zinc-600 dark:hover:bg-zinc-600"
+        x-on:click="event => {
+            event.preventDefault();
+            document.querySelector('#image-preview > img').setAttribute('src', '');
+            showImageInputLabel = true;
+        }">
 		<i class="las la-times text-2xl"></i>
 	</button>
 </section>
-<p class="col-start-2 col-end-3 row-start-1 row-end-3 flex flex-col mb-2">
-	<label for="image-input" 
+<p class="col-start-2 col-end-3 row-start-1 row-end-3 flex flex-col mb-2" x-show="showImageInputLabel">
+	<label for="image-input"
 	{% if data['error'] == True %}
 		class="flex flex-row justify-center items-center border border-dashed border-red-500 rounded w-full p-4 sm:text-sm font-medium min-h-32 h-full cursor-pointer {% if data['image'] %}hidden{% endif %}">
 	{% else %}
@@ -15,7 +22,12 @@
 		<i class="las la-file-image text-2xl mr-1"></i>
 		Add Image
 	</label>
-	<input type="file" name="image" id="image-input" accept="image/jpg, image/jpeg, image/png" class="hidden">
+	<input type="file" name="image" id="image-input" accept="image/jpg, image/jpeg, image/png" class="hidden"
+        x-on:change="() => {
+            document.querySelector('#image-preview > img')
+                .setAttribute('src', URL.createObjectURL(document.getElementById('image-input').files[0]));
+            showImageInputLabel = false;
+        }">
 </p>
 {% if request.path.split("/")[2] == "edit" %}
     <script>
