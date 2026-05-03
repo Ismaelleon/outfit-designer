@@ -3,33 +3,37 @@
 @tailwind components;
 @tailwind utilities;
 
+[x-cloak] {
+  display: none !important;
+}
+
 .htmx-request {
-	animation:
-		loadingWidth 0.25s forwards,
-		loadingColor 0.5s infinite;
+  animation:
+    loadingWidth 0.25s forwards,
+    loadingColor 0.5s infinite;
 }
 
 @keyframes loadingWidth {
-	0% {
-		width: 0%;
-	}
-	100% {
-		width: 100%;
-	}
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
 }
 
 @keyframes loadingColor {
-	0% {
-		opacity: 100%;
-	}
-	50% {
-		opacity: 75%;
-	}
-	100% {
-		opacity: 100%;
-	}
+  0% {
+    opacity: 100%;
+  }
+  50% {
+    opacity: 75%;
+  }
+  100% {
+    opacity: 100%;
+  }
 }
 
 @view-transition {
-	navigation: auto;
+  navigation: auto;
 }

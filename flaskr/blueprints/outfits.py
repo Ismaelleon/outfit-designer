@@ -314,8 +314,8 @@ def create_outfit():
         clothes = request.form.getlist("clothes")
         image_file = request.files["image"] if "image" in request.files else None
 
-        # If outfit name or season are empty return error
-        if len(name) == 0 or len(season) == 0:
+        # If outfit name, season or clothes is empty return error
+        if len(name) == 0 or len(season) == 0 or len(clothes) < 2:
             data = dark_mode(
                 {
                     "closet": user["closet"],
@@ -330,7 +330,7 @@ def create_outfit():
             return render_template("create-outfit.html", data=data)
 
         # If outfit name is too long return error
-        if len(name) > 35:
+        if len(name) > 20:
             data = dark_mode(
                 {
                     "closet": user["closet"],

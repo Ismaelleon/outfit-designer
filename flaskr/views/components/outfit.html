@@ -4,7 +4,7 @@
         x-data="{ showMenu: false }">
 		<img src={{ outfit['image'] }} alt="" class="w-full rounded mb-2">	
 		<header class="flex flex-row justify-between items-center">
-			<a href={{ '/outfits/{}'.format(outfit['_id']) }} class="text-base font-bold hover:underline" onclick="showLoadingBar()">{{ outfit['name'] }}</a>
+			<a href={{ '/outfits/{}'.format(outfit['_id']) }} class="text-base font-bold hover:underline break-words" onclick="showLoadingBar()">{{ outfit['name'] }}</a>
 			<button class="p-1 flex justify-center items-center relative z-0 aspect-square hover:bg-zinc-200 rounded-full dark:hover:bg-zinc-800"
                 x-on:click="showMenu = !showMenu">
 				<i class="las la-ellipsis-v text-lg z-0"></i>
