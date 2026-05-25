@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<section class="w-full max-w-3xl" x-data="
+    <section class="w-full max-w-3xl" x-data="
         { 
             useImage: true,
             imageSet: false,
@@ -14,14 +14,28 @@
                     : this.selectedClothes.splice(index, 1);
 
             },
+            removeImage() {
+                document.getElementById('image-input').value = '';
+                document.querySelector('#image-preview > img').setAttribute('src', '');
+
+                this.useImage = false;
+                this.imageSet = false;
+
+                const useImageSwitch = document.querySelector('#image-input-switch > input');
+                useImageSwitch.checked = false;
+            },
             saveClothing() {
                 this.renderedClothes = this.selectedClothes;
                 this.clothesDialog = false;
+
+                this.removeImage();
             },
             removeClothing(clothingId) {
                 const index = this.selectedClothes.indexOf(clothingId);
 
                 this.selectedClothes.splice(index, 1);
+
+                this.removeImage();
             },
             // Keep working on migrating this function from create-outfit.js
             submitForm() {
@@ -94,8 +108,8 @@
                         {% include 'components/image-input.html' %}
                     </section>
                     <section class="grid grid-cols-2 gap-2 flex-col w-full col-start-2 col-end-3 row-start-1 row-end-5" id="clothes-list">
-                        <template x-for="clothingId in renderedClothes" :key="clothingId">
-                            <input type="checkbox" name="clothes" :value="clothingId" checked class="hidden" />
+                        <template x-for="clothingId in renderedClothes" x-bind:key="clothingId">
+                            <input type="checkbox" name="clothes" x-bind:value="clothingId" checked class="hidden" />
                         </template>
                         {% for clothing_item in data['closet'] %}
                             <section class="flex items-center rounded border aspect-[3/4] relative border-zinc-200 dark:border-zinc-600 p-2" 
