@@ -3,6 +3,7 @@
 	<section class="w-full max-w-3xl pt-4"
     x-data="{
         showImageInputLabel: {{ (not data['image']) | string | lower }},
+        useImage: true,
         imageSet: {{ ('image' in data) | string | lower }},
     }">
 		<header class="flex flex-row justify-between items-center mt-2">
