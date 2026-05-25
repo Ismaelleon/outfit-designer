@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
-	<section class="w-full max-w-3xl pt-4">
+	<section class="w-full max-w-3xl pt-4"
+    x-data="{
+        showImageInputLabel: {{ (not data['image']) | string | lower }},
+        imageSet: {{ ('image' in data) | string | lower }},
+    }">
 		<header class="flex flex-row justify-between items-center mt-2">
 			<h2 class="text-lg sm:text-base font-bold">Add clothes</h2>
 		</header>
@@ -106,5 +110,4 @@
 			</form>
 		</section>
 	</section>
-	<script src="/static/js/add-clothes.js"></script>
 {% endblock %}
