@@ -26,7 +26,7 @@
 				</ul>
 			</button>
 		</header>
-		{% if data['clothes']|length > 0 %}
+		{% if outfit['clothes']|length > 0 %}
 			<span class="text-sm"><span class="font-medium">Clothes:</span> {{ outfit['clothes']|length }}</span>
 		{% endif %}
 		<span class="text-sm"><span class="font-medium">Season:</span> {{ outfit['season'].capitalize() }} </span>
