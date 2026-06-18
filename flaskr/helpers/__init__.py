@@ -6,15 +6,40 @@ from werkzeug.utils import secure_filename
 from flask import session, redirect
 from jinja2 import Environment, FileSystemLoader
 
+
 def dark_mode(data, cookies):
     if "dark-mode" in cookies and cookies["dark-mode"] == "true":
         data["dark-mode"] = True
 
     return data
 
+
 def handle_invalid_user_session():
     session.clear()
     return redirect("/")
+
+
+def validate_outfit_form(request):
+    # If required fields are not added show error
+    errors = []
+    required_fields = {
+        "name": lambda: request.form.get("name", "").strip(),
+        "season": lambda: request.form.get("season", "").strip(),
+        "clothes": lambda: request.form.getlist("clothes"),
+    }
+
+    # If outfits uses an image, add it to the required fields
+    if "use-image" in request.form:
+        required_fields["image"] = lambda: request.files.get("image")
+
+    # Check for field in request body, if not present, add field to errors list
+    for field, getter in required_fields.items():
+        field_value = getter()
+        if not field_value:
+            errors.append(field)
+
+    return errors
+
 
 def send_verification_mail(email, activation_code, app):
     # Open verification mail file
@@ -22,41 +47,38 @@ def send_verification_mail(email, activation_code, app):
     template = env.get_template("verification-mail.html")
 
     # Run jinja2 on template
-    data = {
-        "activation_code": activation_code,
-        "APP_URL": os.environ["APP_URL"]
-    }
+    data = {"activation_code": activation_code, "APP_URL": os.environ["APP_URL"]}
     final_html = template.render(data=data)
 
     payload = {
-        "from": {
-            "email": os.environ["MAIL_DEFAULT_SENDER"],
-            "name": "Outfit Designer"
-        },
-        "to": [
-            { "email": email }
-        ],
+        "from": {"email": os.environ["MAIL_DEFAULT_SENDER"], "name": "Outfit Designer"},
+        "to": [{"email": email}],
         "subject": "Activate your account",
-        "html": final_html
+        "html": final_html,
     }
 
     headers = {
         "Authorization": "Bearer {}".format(os.environ["MAIL_API_TOKEN"]),
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
     }
 
     try:
-        res = requests.request("POST", os.environ["MAIL_API_URL"], headers=headers, json=payload)
+        res = requests.request(
+            "POST", os.environ["MAIL_API_URL"], headers=headers, json=payload
+        )
 
         if res.status_code != 200:
             print("Failed to send email:", res.reason)
     except Exception as e:
         print("Exception during email sending:", str(e))
 
+
 def upload_image(folder, image_file, app, remove_background):
     # Save image file
     image_filename = secure_filename(str(uuid.uuid4()))
-    image_file_path = os.path.join(os.getcwd(), app.config["UPLOAD_FOLDER"], image_filename)
+    image_file_path = os.path.join(
+        os.getcwd(), app.config["UPLOAD_FOLDER"], image_filename
+    )
 
     # If image has no filename to extract the extension
     if not hasattr(image_file, "filename"):
@@ -79,13 +101,16 @@ def upload_image(folder, image_file, app, remove_background):
     img.save(image_file_path, img.format, quality=100)
 
     # Upload image to cloudinary
-    result = cloudinary.uploader.upload(image_file_path, public_id=image_filename, overwrite=False, folder=folder)
+    result = cloudinary.uploader.upload(
+        image_file_path, public_id=image_filename, overwrite=False, folder=folder
+    )
     image_src = result["secure_url"]
 
     # Delete image file
     os.remove(image_file_path)
 
     return image_src
+
 
 def generate_outfit_image(clothes):
     # Clothing position by type
@@ -139,5 +164,4 @@ def generate_outfit_image(clothes):
         # Paste the next image over the first one
         images[0].paste(img, (x_position, y_position[clothes[i]["type"]]), img)
 
-    
     return images[0]

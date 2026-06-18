@@ -4,6 +4,7 @@ from flaskr.helpers import (
     handle_invalid_user_session,
     upload_image,
     generate_outfit_image,
+    validate_outfit_form,
 )
 from flask import (
     render_template,
@@ -120,6 +121,7 @@ def edit_outfit(outfit_id):
                 },
                 request.cookies,
             )
+
             return render_template("edit-outfit.html", data=data)
 
         # Otherwise, redirect to the home page
@@ -270,6 +272,7 @@ def create_outfit():
 
             data = dark_mode(
                 {
+                    "use-image": False,
                     "closet": user["closet"],
                     "activated": user["activation"]["activated"],
                 },
@@ -293,16 +296,20 @@ def create_outfit():
         if user is None:
             return handle_invalid_user_session()
 
-        # If required properties not added show error
-        if "name" not in request.form or "season" not in request.form:
+        print(request.form)
+
+        errors = validate_outfit_form(request)
+
+        if len(errors) > 0:
             data = dark_mode(
                 {
                     "closet": user["closet"],
-                    "error": True,
-                    "error-type": "required-properties",
+                    "errors": errors,
                     "activated": user["activation"]["activated"],
                     "name": request.form["name"],
                     "season": request.form["season"],
+                    "use-image": "use-image" in request.form,
+                    "clothes": request.form.getlist("clothes"),
                 },
                 request.cookies,
             )
@@ -313,36 +320,6 @@ def create_outfit():
         season = request.form["season"]
         clothes = request.form.getlist("clothes")
         image_file = request.files["image"] if "image" in request.files else None
-
-        # If outfit name, season or clothes is empty return error
-        if len(name) == 0 or len(season) == 0 or len(clothes) < 2:
-            data = dark_mode(
-                {
-                    "closet": user["closet"],
-                    "error": True,
-                    "error-type": "required-properties",
-                    "activated": user["activation"]["activated"],
-                    "name": request.form["name"],
-                    "season": request.form["season"],
-                },
-                request.cookies,
-            )
-            return render_template("create-outfit.html", data=data)
-
-        # If outfit name is too long return error
-        if len(name) > 20:
-            data = dark_mode(
-                {
-                    "closet": user["closet"],
-                    "error": True,
-                    "error-type": "too-long",
-                    "activated": user["activation"]["activated"],
-                    "name": request.form["name"],
-                    "season": request.form["season"],
-                },
-                request.cookies,
-            )
-            return render_template("create-outfit.html", data=data)
 
         # Initialize image source
         image_src = None

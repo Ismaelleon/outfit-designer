@@ -2,17 +2,18 @@
 {% block content %}
     <section class="w-full max-w-3xl" x-data="
         { 
-            useImage: true,
+            useImage: {{ ('use-image' in data and data['use-image']) | string | lower }},
             imageSet: false,
             clothesDialog: false,
-            selectedClothes: [],
-            renderedClothes: [],
+            selectedClothes: {{ (data['clothes'] if 'clothes' in data else []) | map('string') | list }},
+            renderedClothes: {{ (data['clothes'] if 'clothes' in data else []) | map('string') | list }},
             toggleClothing(clothingId) {
                 const index = this.selectedClothes.indexOf(clothingId);
                 index === -1
                     ? this.selectedClothes.push(clothingId)
                     : this.selectedClothes.splice(index, 1);
-
+                
+                this.checkForm();
             },
             removeImage() {
                 document.getElementById('image-input').value = '';
@@ -37,34 +38,46 @@
 
                 this.removeImage();
             },
-            // Keep working on migrating this function from create-outfit.js
-            submitForm() {
-                const useImageSwitch = document.querySelector('#image-input-switch > input');
-                const imageInput = document.getElementById('image-input');
-                const errorMsgExists = document.getElementById('error-msg') !== null;
+            checkForm(event) {
+                let nameInput = document.getElementById('name-input'),
+                    imageInput = document.getElementById('image-input'),
+                    imageLabel = document.querySelector('label[for=\'image-input\''),
+                    clothesLabel = document.getElementById('clothes-label'),
+                    errorMsg = document.getElementById('error-msg'),
+                    errors = false;
 
-                // Show error message if useImage = true, image input is empty
-                if (useImageSwitch.checked && imageInput.files.length === 0) {
-                    // Prevent default behaviour
+                errorMsg.classList.add('hidden');
+
+                // If outfit name is empty
+                if (nameInput.value.length < 1 && event === undefined) {
+                    nameInput.className = 'sm:text-sm p-2 border border-red-500 rounded mb-2 dark:bg-transparent';
+                    errorMsg.classList.remove('hidden');
+                    errors = true;
+                } else {
+                    nameInput.className = 'sm:text-sm p-2 border border-zinc-200 rounded mb-2 dark:bg-transparent dark:border-zinc-600';
+                }
+
+                // If use image is true but no image is uploaded
+                if (this.useImage && imageInput.files.length === 0 && event === undefined) {
+                    imageLabel.classList = 'flex flex-row justify-center items-center border border-dashed border-red-500 rounded w-full p-4 sm:text-sm font-medium min-h-32 h-full cursor-pointer';
+                    errorMsg.classList.remove('hidden');
+                    errors = true;
+                } else {
+                    imageLabel.classList = 'flex flex-row justify-center items-center border border-dashed border-zinc-200 rounded w-full p-4 sm:text-sm font-medium min-h-32 h-full cursor-pointer dark:border-zinc-600';
+                }
+                
+                // If less than 2 clothing elements are selected
+                if (this.selectedClothes.length < 2 && event === undefined) {
+                    clothesLabel.classList = 'flex flex-row justify-center items-center border border-dashed border-red-500 rounded w-full col-start-1 col-end-3 p-4 sm:text-sm mb-2 font-medium max-h-32 h-full cursor-pointer';
+                    errorMsg.classList.remove('hidden');
+                    errors = true;
+                } else {
+                    clothesLabel.classList = 'flex flex-row justify-center items-center border border-dashed border-zinc-200 rounded w-full col-start-1 col-end-3 p-4 sm:text-sm mb-2 font-medium max-h-32 h-full cursor-pointer dark:border-zinc-600';
+                }
+
+                // If there's errors, do not send the request
+                if (errors && event !== undefined) {
                     event.preventDefault();
-
-                    // Set image label border to red
-                    const inputLabelEl = document.querySelector('label[for=\'image-input\']');
-                    inputLabelEl.classList.remove('border-zinc-200', 'dark:border-zinc-600');
-                    inputLabelEl.classList.add('border-red-500', 'dark:border-red-500');
-
-                    if (!errorMsgExists) {
-                        // Add error text
-                        const errorEl = document.createElement('p');
-                        errorEl.setAttribute('id', 'error-msg');
-                        errorEl.innerText = 'Required parameters not filled';
-                        errorEl.className = 'text-sm text-red-500 col-start-1 col-end-2';
-
-                        const form = document.querySelector('form'),
-                            submitButton = document.getElementById('submit-form');
-
-                        form.insertBefore(errorEl, submitButton);
-                    }
                 }
             },
         }
@@ -74,12 +87,12 @@
                 <h2 class="text-lg sm:text-base font-bold">Create outfit</h2>
             </header>
             <section class="my-4">
-                <form class="flex flex-col sm:grid sm:gap-3 sm:grid-cols-2" hx-post="/outfits/new" hx-encoding="multipart/form-data" hx-swap="outerHTML transition:true" hx-target="#body">
+                <form class="flex flex-col sm:grid sm:gap-3 sm:grid-cols-2" hx-post="/outfits/new" hx-encoding="multipart/form-data" hx-swap="outerHTML transition:true" hx-target="#body" x-on:change="checkForm($event)">
                     <section>
                         <p class="col-start-1 col-end-2 flex flex-col">
                             <label for="name-input" class="sm:text-sm font-medium mb-1">Name</label>
                             <input type="text" id="name-input" name="name" maxlength="20" value="{{ data["name"] }}"
-                                {% if data['error'] == True %}
+                                {% if 'name' in data['errors'] %}
                                     class="sm:text-sm p-2 border border-red-500 rounded mb-2 dark:bg-transparent">
                                 {% else %}
                                     class="sm:text-sm p-2 border border-zinc-200 rounded mb-2 dark:bg-transparent dark:border-zinc-600">
@@ -88,7 +101,7 @@
                         <p class="col-start-1 col-end-2 flex flex-col">
                             <label for="season-input" class="sm:text-sm font-medium mb-1">Season</label>
                             <select name="season" id="season-input"
-                                {% if data['error'] == True %}
+                                {% if 'season' in data['errors'] %}
                                     class="sm:text-sm p-2 border border-red-500 rounded mb-3 bg-white dark:bg-transparent">
                                 {% else %}
                                     class="sm:text-sm p-2 border border-zinc-200 rounded mb-3 bg-white dark:bg-transparent dark:border-zinc-600">
@@ -111,24 +124,45 @@
                         <template x-for="clothingId in renderedClothes" x-bind:key="clothingId">
                             <input type="checkbox" name="clothes" x-bind:value="clothingId" checked class="hidden" />
                         </template>
-                        {% for clothing_item in data['closet'] %}
-                            <section class="flex items-center rounded border aspect-[3/4] relative border-zinc-200 dark:border-zinc-600 p-2" 
-                                id={{ clothing_item['_id'] }}
-                                style="display: none"
-                                x-show="renderedClothes.includes('{{ clothing_item['_id'] }}')">
-                                <button class="absolute top-0 right-0 p-2 bg-transparent border-transparent"
-                                        x-on:click="removeClothing('{{ clothing_item['_id'] }}')"
-                                    type="button">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 pointer-events-none">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" class="pointer-events-none" />
-                                    </svg>
+                        {# If response data has 'clothes' list, render elements from that list #}
+                        {% if 'clothes' in data %}
+                            {% for clothingId in data['clothes'] %}
+                                <section class="flex items-center rounded border aspect-[3/4] relative border-zinc-200 dark:border-zinc-600 p-2" 
+                                    id="{{ clothingId | string }}">
+                                    <button class="absolute top-0 right-0 p-2 bg-transparent border-transparent"
+                                            x-on:click="removeClothing('{{ clothingId }}')"
+                                        type="button">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 pointer-events-none">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" class="pointer-events-none" />
+                                        </svg>
+                                    </button>
 
-                                </button>
-                                <img src={{ clothing_item['image'] }} />
-                            </section>
-                        {% endfor %}
-                        <section x-on:click="clothesDialog = !clothesDialog"
-                            {% if data['error'] == True %}
+                                    {% for clothing_item in data['closet'] %}
+                                        {% if clothingId | string == clothing_item['_id'] | string %}
+                                            <img src={{ clothing_item['image'] }} />
+                                        {% endif %}
+                                    {% endfor %}
+                                </section>
+                            {% endfor %}
+                        {# Otherwise, render elements from the user closet (all items are hidden on page render since no clothes are selected) #}
+                        {% else %}
+                            {% for clothing_item in data['closet'] %}
+                                <section class="flex items-center rounded border aspect-[3/4] relative border-zinc-200 dark:border-zinc-600 p-2" 
+                                    id="{{ clothing_item['_id'] | string }}"
+                                    x-show="renderedClothes.includes('{{ clothing_item['_id'] | string }}')">
+                                    <button class="absolute top-0 right-0 p-2 bg-transparent border-transparent"
+                                            x-on:click="removeClothing('{{ clothing_item['_id'] }}')"
+                                        type="button">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 pointer-events-none">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" class="pointer-events-none" />
+                                        </svg>
+                                    </button>
+                                    <img src={{ clothing_item['image'] }} />
+                                </section>
+                            {% endfor %}
+                        {% endif %}
+                        <section x-on:click="clothesDialog = !clothesDialog" id="clothes-label"
+                            {% if 'clothes' in data['errors'] %}
                                 class="flex flex-row justify-center items-center border border-dashed border-red-500 rounded w-full col-start-1 col-end-3 p-4 sm:text-sm mb-2 font-medium max-h-32 h-full cursor-pointer">
                             {% else %}
                                 class="flex flex-row justify-center items-center border border-dashed border-zinc-200 rounded w-full col-start-1 col-end-3 p-4 sm:text-sm mb-2 font-medium max-h-32 h-full cursor-pointer dark:border-zinc-600">
@@ -137,13 +171,17 @@
                             Add Clothes
                         </section>
                     </section>
-                    {% if data['error-type'] == "required-properties" %}
-                        <p class="text-sm text-red-500 col-start-1 col-end-2" id="error-msg">Required parameters not filled.</p>
-                    {% elif data['error-type'] == "too-long" %}
-                        <p class="text-sm text-red-500 col-start-1 col-end-2">Outfit name is too long.</p>
-                    {% endif %}
-                    <button id="submit-form" class="w-full p-2 bg-zinc-950 text-white font-medium sm:text-sm rounded hover:bg-zinc-800 mt-2 col-start-1 col-end-2 dark:bg-white dark:text-black dark:hover:bg-zinc-200"
-                        x-on:click="submitForm()">Submit</button>
+                    <p  id="error-msg"
+                        {% if 'errors' in data and data['errors'] | length > 0 %}
+                            class="text-sm text-red-500 col-start-1 col-end-2">
+                        {% else %}
+                            class="text-sm text-red-500 col-start-1 col-end-2 hidden">
+                        {% endif %}
+                        Required parameters not filled.
+                    </p>
+                    <button class="w-full p-2 bg-zinc-950 text-white font-medium sm:text-sm rounded hover:bg-zinc-800 mt-2 col-start-1 col-end-2 dark:bg-white dark:text-black dark:hover:bg-zinc-200" x-on:click="checkForm($event)">
+                        Submit
+                    </button>
                 </form>
             </section>
         </section>
