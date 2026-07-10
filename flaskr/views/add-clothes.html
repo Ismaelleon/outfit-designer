@@ -1,11 +1,64 @@
 {% extends "base.html" %}
 {% block content %}
-<section class="w-full max-w-3xl pt-4" x-data="{ showImageInputLabel: {{ (not data['image']) | string | lower }} }">
+<section class="w-full max-w-3xl pt-4"
+    x-data="{
+        showImageInputLabel: {{ (not data['image']) | string | lower }},
+        imageSet: false,
+        useImage: true,
+        checkForm(event) {
+            let nameInput = document.getElementById('name-input'),
+                brandInput = document.getElementById('brand-input'),
+                imageInput = document.getElementById('image-input'),
+                imageLabel = document.querySelector('label[for=\'image-input\''),
+                colorCheckboxes = document.querySelectorAll('input[name=\'color\']'),
+                errorMsg = document.getElementById('error-msg'),
+                errors = false;
+
+                // If clothing item name is empty
+                if (nameInput.value.length < 1 && event !== undefined) {
+                    nameInput.className = 'sm:text-sm p-2 border border-red-500 rounded mb-2 dark:bg-transparent';
+                    errors = true;
+                } else {
+                    nameInput.className = 'sm:text-sm p-2 border border-zinc-200 rounded mb-2 dark:bg-transparent dark:border-zinc-600';
+                }
+
+                // If clothing item brand is empty
+                if (brandInput.value.length < 1 && event !== undefined) {
+                    brandInput.className = 'sm:text-sm p-2 border border-red-500 rounded mb-2 dark:bg-transparent';
+                    errors = true;
+                } else {
+                    brandInput.className = 'sm:text-sm p-2 border border-zinc-200 rounded mb-2 dark:bg-transparent dark:border-zinc-600';
+                }
+
+                // If clothing item colors not selected
+                let selectedColors = false;
+                for (let colorCheckbox of colorCheckboxes) {
+                    if (colorCheckbox.checked) {
+                        selectedColors = true;
+                    }
+                }
+                if (!selectedColors) {
+                    errors = true;
+                }
+
+                // If clothing item image is not selected
+                if (imageInput.files.length === 0 && event !== undefined) {
+                    imageLabel.classList = 'flex flex-row justify-center items-center border border-dashed border-red-500 rounded w-full p-4 sm:text-sm font-medium min-h-32 h-full cursor-pointer';
+                    errors = true;
+                }
+
+                // If there's errors, do not send the request and show error message
+                if (errors && event !== undefined) {
+                    event.preventDefault();
+                    errorMsg.classList.remove('hidden');
+                }
+        }
+    }">
 		<header class="flex flex-row justify-between items-center mt-2">
 			<h2 class="text-lg sm:text-base font-bold">Add clothes</h2>
 		</header>
 		<section class="my-4">
-			<form class="flex sm:grid sm:grid-cols-2 gap-3 flex-col" hx-post="/closet/new" hx-encoding="multipart/form-data" hx-swap="outerHTML transition:true" hx-target="#body" hx-on::after-request="updateProgress()">
+			<form class="flex sm:grid sm:grid-cols-2 gap-3 flex-col" hx-post="/closet/new" hx-encoding="multipart/form-data" hx-swap="outerHTML transition:true" hx-target="#body" x-on:change="checkForm($event)">
 				<p class="col-start-1 col-end-2 flex flex-col">
 					<label for="name-input" class="sm:text-sm font-medium mb-1">Name</label>
 					<input type="text" id="name-input" name="name" value="{{ data["name"] }}"
@@ -99,10 +152,18 @@
 					</p>
 				</fieldset>
 				{% include 'components/image-input.html' %}
+                <p id="error-msg"
+                        {% if data['error'] == True %}
+                            class="text-sm text-red-500 col-start-1 col-end-2">
+                        {% else %}
+                            class="text-sm text-red-500 col-start-1 col-end-2 hidden">
+                        {% endif %}
+
+                    Required parameters not filled
+                </p>
 				{% if data['error'] == True %}
-					<p class="text-sm text-red-500 col-start-1 col-end-2">Required parameters not filled</p>
 				{% endif %}
-				<button class="w-full p-2 bg-zinc-950 text-white font-medium sm:text-sm rounded hover:bg-zinc-800 mt-2 col-start-1 col-end-2 dark:bg-white dark:text-black dark:hover:bg-zinc-200">Submit</button>
+				<button class="w-full p-2 bg-zinc-950 text-white font-medium sm:text-sm rounded hover:bg-zinc-800 mt-2 col-start-1 col-end-2 dark:bg-white dark:text-black dark:hover:bg-zinc-200" x-on:click="checkForm($event)">Submit</button>
 			</form>
 		</section>
 	</section>
