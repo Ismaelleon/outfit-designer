@@ -51,7 +51,6 @@
                 // If outfit name is empty
                 if (nameInput.value.length < 1 && event !== undefined) {
                     nameInput.className = 'sm:text-sm p-2 border border-red-500 rounded mb-2 dark:bg-transparent';
-                    errorMsg.classList.remove('hidden');
                     errors = true;
                 } else {
                     nameInput.className = 'sm:text-sm p-2 border border-zinc-200 rounded mb-2 dark:bg-transparent dark:border-zinc-600';
@@ -60,7 +59,6 @@
                 // If use image is true but no image is uploaded
                 if (this.useImage && imageInput.files.length === 0 && event !== undefined) {
                     imageLabel.classList = 'flex flex-row justify-center items-center border border-dashed border-red-500 rounded w-full p-4 sm:text-sm font-medium min-h-32 h-full cursor-pointer';
-                    errorMsg.classList.remove('hidden');
                     errors = true;
                 } else {
                     imageLabel.classList = 'flex flex-row justify-center items-center border border-dashed border-zinc-200 rounded w-full p-4 sm:text-sm font-medium min-h-32 h-full cursor-pointer dark:border-zinc-600';
@@ -69,15 +67,15 @@
                 // If less than 2 clothing elements are selected
                 if (this.selectedClothes.length < 2 && event !== undefined) {
                     clothesLabel.classList = 'flex flex-row justify-center items-center border border-dashed border-red-500 rounded w-full col-start-1 col-end-3 p-4 sm:text-sm mb-2 font-medium max-h-32 h-full cursor-pointer';
-                    errorMsg.classList.remove('hidden');
                     errors = true;
                 } else {
                     clothesLabel.classList = 'flex flex-row justify-center items-center border border-dashed border-zinc-200 rounded w-full col-start-1 col-end-3 p-4 sm:text-sm mb-2 font-medium max-h-32 h-full cursor-pointer dark:border-zinc-600';
                 }
 
-                // If there's errors, do not send the request
+                // If there's errors, do not send the request and show error message
                 if (errors && event !== undefined) {
                     event.preventDefault();
+                    errorMsg.classList.remove('hidden');
                 }
             },
         }
