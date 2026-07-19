@@ -1,10 +1,13 @@
 import os, requests, uuid, cloudinary.utils, cloudinary.uploader
 from PIL import Image
 from io import BytesIO
-from rembg import remove
+from rembg import remove, new_session
 from werkzeug.utils import secure_filename
 from flask import session, redirect
 from jinja2 import Environment, FileSystemLoader
+
+# create a rembg session once insetad of per every request
+rembg_session = new_session("u2netp")  # smaller model (uses ~5mb)
 
 
 def dark_mode(data, cookies):
@@ -90,10 +93,13 @@ def upload_image(folder, image_file, app, remove_background):
 
     # Remove image background
     if remove_background:
-        image_file = open(image_file_path, "rb").read()
-        image_bg_removed = remove(image_file)
-        image_file = open(image_file_path, "wb")
-        image_file.write(image_bg_removed)
+        with open(image_file_path, "rb") as f:
+            image_file = f.read()
+
+        image_bg_removed = remove(image_file, session=rembg_session)
+
+        with open(image_file_path, "wb") as f:
+            f.write(image_bg_removed)
 
     # Scale image (max width or height 500px) for better upload time
     img = Image.open(image_file_path)
