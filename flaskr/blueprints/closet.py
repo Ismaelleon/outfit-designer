@@ -286,6 +286,17 @@ def edit_clothing_item(clothing_id):
                 if image_src == "":
                     image_src = clothing_item["image"]
 
+                # If image was updated, remove previous image
+                if image_file.filename != "same_image":
+                    image_public_id = (
+                        clothing_item["image"].split("/")[-1].split(".")[0]
+                    )
+                    cloudinary.uploader.destroy(
+                        os.path.join(
+                            os.environ["CLOUDINARY_CLOSET_FOLDER"], image_public_id
+                        )
+                    )
+
                 user["closet"][index] = {
                     "_id": clothing_id,
                     "name": name,
