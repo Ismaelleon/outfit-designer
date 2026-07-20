@@ -135,7 +135,9 @@ def upload_image(folder, image_file, app, remove_background, get_dominant_colors
                     min_colors[key_] = name
 
                 dominant_colors[index] = min_colors[min(min_colors.keys())]
-        print(dominant_colors)
+
+        # Remove repeated colors
+        dominant_colors = set(dominant_colors)
 
     # Upload image to cloudinary
     result = cloudinary.uploader.upload(
