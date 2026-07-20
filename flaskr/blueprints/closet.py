@@ -263,6 +263,7 @@ def edit_clothing_item(clothing_id):
             is not "same_image", the image_src variable will be updated.
         """
         image_src = ""
+        dominant_colors = []
         if image_file.filename != "same_image":
             # Upload image to cloudinary
             image_src, dominant_colors = upload_image(
