@@ -1,10 +1,12 @@
 import os, requests, uuid, cloudinary.utils, cloudinary.uploader
+import webcolors
 from PIL import Image
 from io import BytesIO
 from rembg import remove, new_session
 from werkzeug.utils import secure_filename
 from flask import session, redirect
 from jinja2 import Environment, FileSystemLoader
+from colorthief import ColorThief
 
 # create a rembg session once insetad of per every request
 rembg_session = new_session("u2netp")  # smaller model (uses ~5mb)
@@ -76,7 +78,7 @@ def send_verification_mail(email, activation_code, app):
         print("Exception during email sending:", str(e))
 
 
-def upload_image(folder, image_file, app, remove_background):
+def upload_image(folder, image_file, app, remove_background, get_dominant_colors=False):
     # Save image file
     image_filename = secure_filename(str(uuid.uuid4()))
     image_file_path = os.path.join(
@@ -106,6 +108,35 @@ def upload_image(folder, image_file, app, remove_background):
     img.thumbnail((500, 500))
     img.save(image_file_path, img.format, quality=100)
 
+    if get_dominant_colors:
+        color_thief = ColorThief(image_file_path)
+
+        dominant_colors = color_thief.get_palette(color_count=2)
+
+        # Convert color from rgb to text
+        for index, color in enumerate(dominant_colors):
+            try:
+                # Try translating rgb to color name
+                dominant_colors[index] = webcolors.rgb_to_name(color)
+            except:
+                min_colors = {}
+
+                # Get nearest color on the HTML4 specification
+                for name in webcolors.names("html4"):
+                    key = webcolors.name_to_hex(name)
+
+                    r, g, b = webcolors.hex_to_rgb(key)
+
+                    red_distance = (r - color[0]) ** 2
+                    green_distance = (g - color[1]) ** 2
+                    blue_distance = (b - color[2]) ** 2
+
+                    key_ = red_distance + green_distance + blue_distance
+                    min_colors[key_] = name
+
+                dominant_colors[index] = min_colors[min(min_colors.keys())]
+        print(dominant_colors)
+
     # Upload image to cloudinary
     result = cloudinary.uploader.upload(
         image_file_path, public_id=image_filename, overwrite=False, folder=folder
@@ -114,6 +145,9 @@ def upload_image(folder, image_file, app, remove_background):
 
     # Delete image file
     os.remove(image_file_path)
+
+    if get_dominant_colors:
+        return image_src, dominant_colors
 
     return image_src
 

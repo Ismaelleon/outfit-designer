@@ -107,7 +107,6 @@ def add_clothes():
         if (
             "name" not in request.form
             or "type" not in request.form
-            or "color" not in request.form
             or "image" not in request.files
         ):
             data = dark_mode(
@@ -117,7 +116,6 @@ def add_clothes():
                     "name": request.form["name"],
                     "type": request.form["type"],
                     "brand": request.form["brand"],
-                    "colors": request.form.getlist("color"),
                 },
                 request.cookies,
             )
@@ -127,7 +125,6 @@ def add_clothes():
         name = request.form["name"]
         clothing_type = request.form["type"]
         brand = request.form["brand"]
-        colors = request.form.getlist("color")
         image_file = request.files["image"]
 
         # If user does not select a file
@@ -139,15 +136,14 @@ def add_clothes():
                     "name": name,
                     "type": clothing_type,
                     "brand": brand,
-                    "colors": colors,
                 },
                 request.cookies,
             )
             return render_template("add-clothes.html", data=data)
 
         # Upload image to cloudinary
-        image_src = upload_image(
-            os.environ["CLOUDINARY_CLOSET_FOLDER"], image_file, current_app, True
+        image_src, dominant_colors = upload_image(
+            os.environ["CLOUDINARY_CLOSET_FOLDER"], image_file, current_app, True, True
         )
 
         # Update closet array
@@ -159,7 +155,7 @@ def add_clothes():
                 "name": name,
                 "type": clothing_type,
                 "brand": brand,
-                "colors": colors,
+                "colors": dominant_colors,
                 "image": image_src,
             }
         )
@@ -226,7 +222,6 @@ def edit_clothing_item(clothing_id):
         if (
             "name" not in request.form
             or "type" not in request.form
-            or "color" not in request.form
             or "image" not in request.files
         ):
             data = dark_mode(
@@ -237,7 +232,6 @@ def edit_clothing_item(clothing_id):
                     "name": request.form["name"],
                     "type": request.form["type"],
                     "brand": request.form["brand"],
-                    "colors": request.form.getlist("color"),
                 },
                 request.cookies,
             )
@@ -247,7 +241,6 @@ def edit_clothing_item(clothing_id):
         name = request.form["name"]
         clothing_type = request.form["type"]
         brand = request.form["brand"]
-        colors = request.form.getlist("color")
         image_file = request.files["image"]
 
         # If user does not select a file
@@ -260,7 +253,6 @@ def edit_clothing_item(clothing_id):
                     "name": name,
                     "type": clothing_type,
                     "brand": brand,
-                    "colors": colors,
                 },
                 request.cookies,
             )
@@ -273,8 +265,12 @@ def edit_clothing_item(clothing_id):
         image_src = ""
         if image_file.filename != "same_image":
             # Upload image to cloudinary
-            image_src = upload_image(
-                os.environ["CLOUDINARY_CLOSET_FOLDER"], image_file, current_app, True
+            image_src, dominant_colors = upload_image(
+                os.environ["CLOUDINARY_CLOSET_FOLDER"],
+                image_file,
+                current_app,
+                True,
+                True,
             )
 
         # Update closet array
@@ -302,7 +298,7 @@ def edit_clothing_item(clothing_id):
                     "name": name,
                     "type": clothing_type,
                     "brand": brand,
-                    "colors": colors,
+                    "colors": dominant_colors,
                     "image": image_src
                     if image_src != "same_image"
                     else clothing_item["image"],
