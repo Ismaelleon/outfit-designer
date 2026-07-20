@@ -917,10 +917,6 @@ video {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-.grid-cols-3{
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
 .flex-row{
   flex-direction: row;
 }
@@ -947,10 +943,6 @@ video {
 
 .justify-around{
   justify-content: space-around;
-}
-
-.gap-1{
-  gap: 0.25rem;
 }
 
 .gap-2{
@@ -1256,54 +1248,6 @@ video {
 .text-zinc-950{
   --tw-text-opacity: 1;
   color: rgb(9 9 11 / var(--tw-text-opacity, 1));
-}
-
-.accent-black{
-  accent-color: #000;
-}
-
-.accent-blue-600{
-  accent-color: #2563eb;
-}
-
-.accent-cyan-600{
-  accent-color: #0891b2;
-}
-
-.accent-green-600{
-  accent-color: #16a34a;
-}
-
-.accent-orange-600{
-  accent-color: #ea580c;
-}
-
-.accent-pink-600{
-  accent-color: #db2777;
-}
-
-.accent-purple-600{
-  accent-color: #9333ea;
-}
-
-.accent-red-600{
-  accent-color: #dc2626;
-}
-
-.accent-yellow-400{
-  accent-color: #facc15;
-}
-
-.accent-yellow-950{
-  accent-color: #422006;
-}
-
-.accent-zinc-200{
-  accent-color: #e4e4e7;
-}
-
-.accent-zinc-400{
-  accent-color: #a1a1aa;
 }
 
 .shadow-2xl{
@@ -1615,6 +1559,10 @@ video {
 
   .sm\:flex-row{
     flex-direction: row;
+  }
+
+  .sm\:items-start{
+    align-items: flex-start;
   }
 
   .sm\:gap-3{

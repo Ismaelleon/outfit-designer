@@ -46,7 +46,7 @@
 			<h2 class="text-lg sm:text-base font-bold">Add clothes</h2>
 		</header>
 		<section class="my-4">
-            <form class="flex sm:grid sm:grid-cols-2 gap-3 flex-col items-start" hx-post={{ "/closet/edit/" + data["_id"] }} hx-encoding="multipart/form-data" hx-swap="outerHTML transition:true" hx-target="#body" x-on:change="checkForm($event)">
+            <form class="flex sm:grid sm:grid-cols-2 gap-3 flex-col sm:items-start" hx-post={{ "/closet/edit/" + data["_id"] }} hx-encoding="multipart/form-data" hx-swap="outerHTML transition:true" hx-target="#body" x-on:change="checkForm($event)">
                 <section class="flex flex-col gap-3">
                     <p class="col-start-1 col-end-2 flex flex-col">
                         <label for="name-input" class="sm:text-sm font-medium mb-1">Name</label>
