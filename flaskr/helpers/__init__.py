@@ -142,6 +142,9 @@ def upload_image(folder, image_file, app, remove_background, get_dominant_colors
         # Convert back into list (mongodb's bson does not support sets)
         dominant_colors = list(dominant_colors)
 
+        # Sort colors alphabetically
+        dominant_colors.sort()
+
     # Upload image to cloudinary
     result = cloudinary.uploader.upload(
         image_file_path, public_id=image_filename, overwrite=False, folder=folder
